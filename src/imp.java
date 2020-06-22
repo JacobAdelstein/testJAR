@@ -9,20 +9,12 @@ import java.io.*;
 
 public class imp {
 
-
     public static double[] feretCol;
 
 
-
-
-
-    public static double[] impmethod(settings currentSettings, JFrame aquirebutton)  {
+    public static double[] impmethod(settings currentSettings)  {
 
         //Print out settings
-
-
-
-
 
 
         try {
@@ -85,7 +77,7 @@ public class imp {
         }
 
 
-        Image capture = cameracontrol.captureclass(aquirebutton);
+        Image capture = cameracontrol.captureclass();
 
 
 

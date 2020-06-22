@@ -1,18 +1,14 @@
 [WindowTitle]=Potomac Inspect BETA
-[sizeMin]=300
+[sizeMin]=3
 [sizeMax]=Infinity
-[circularityMin]=0.5
+[circularityMin]=0.75
 [circularityMax]=1.00
-[lowerThreshold]=210
-[upperThreshold]=255
-[blackBackground]=true
-[distance]=1
-[known]=1
+[lowerThreshold]=0
+[upperThreshold]=60
+[blackBackground]=False
+[distance]=33.75
+[known]=50
 [pixel]=1
-
-#[distance]=33.75
-#[known]=50
-#[pixel]=1
-
 [feretMin]=0
 [feretMax]=99999
+

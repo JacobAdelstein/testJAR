@@ -12,8 +12,8 @@ import java.util.Arrays;
 //Actionevent for bringing up image
 
 public class guiextension extends gui {
-
-    public static JFrame imageaction(JFrame main, settings currentSettings,  JLabel check1, JLabel check2, JLabel check3, JLabel check4, JLabel check5, JFrame aquirebutton, JFrame resultspanel, JPanel Passfail, JLabel Below) throws IOException {
+   static boolean toplefter;
+    public static JFrame imageaction(settings currentSettings) throws IOException {
 
         //topleftimagebutton
         JButton topleftimage = new JButton("top right image");
@@ -58,7 +58,7 @@ public class guiextension extends gui {
         bottomrightimage.setBounds(620, 300, 50, 50);
         main.getContentPane().add(bottomrightimage);
 
-        JFrame resultspage = new JFrame("Results Page");
+        JFrame resultspage = new JFrame("Saved Results");
 
         resultspage.setSize(875, 420);
 
@@ -81,18 +81,26 @@ public class guiextension extends gui {
 
                 try {
 
-                    imageactioner(resultspage);
+                    resultspage.getContentPane().removeAll();
+                    resultspage.repaint();
+
+
+                    double ph[] = checkxbox(currentSettings);
+                     toplefter = true;
+
+
+                    if (toplefter = true) {
 
 
 
-                  double ph[] = checkxbox(currentSettings,check1, check2,  check3, check4, check5,  aquirebutton,  resultspanel, Passfail, Below);
-
-                    JLabel displaytl = new JLabel("Results" + "" + Arrays.toString(ph));   // Make a JLabel;
-                    displaytl.setBounds(20, 100, 198, 153);
-                    resultspage.getContentPane().add(displaytl);
+                        imageactioner(resultspage);
 
 
 
+                        JLabel displaytl = new JLabel("Results" + "" + Arrays.toString(ph));   // Make a JLabel;
+                        displaytl.setBounds(20, 100, 198, 153);
+                        resultspage.getContentPane().add(displaytl);
+                    }
 
 
 
@@ -101,6 +109,8 @@ public class guiextension extends gui {
                     e.printStackTrace();
                 }
 
+
+                toplefter = false;
                 }
 
 
@@ -116,18 +126,18 @@ public class guiextension extends gui {
 
                 try {
 
+
                     resultspage.getContentPane().removeAll();
                     resultspage.repaint();
 
                     imageactioner(resultspage);
 
 
-
-                    double ph[] =   checkxbox(currentSettings,check1, check2,  check3, check4, check5,  aquirebutton,  resultspanel, Passfail, Below);
-
+                    double ph[] =   checkxbox(currentSettings);
 
 
-                    JLabel displaybl = new JLabel(Arrays.toString(ph));   // Make a JLabel;
+
+                    JLabel displaybl = new JLabel(Arrays.toString(ph ));   // Make a JLabel;
 
                     displaybl.setBounds(50, 200, 500, 500);
                     resultspage.getContentPane().add(displaybl);
@@ -151,9 +161,13 @@ public class guiextension extends gui {
 
                 try {
 
+
                     imageactioner(resultspage);
 
-                    double ph[] = checkxbox(currentSettings,check1, check2,  check3, check4, check5,  aquirebutton,  resultspanel, Passfail, Below);
+                    resultspage.getContentPane().removeAll();
+                    resultspage.repaint();
+
+                    double ph[] = checkxbox(currentSettings);
 
                     JLabel displayci = new JLabel("Results" + "" + Arrays.toString(ph));   // Make a JLabel;
                     displayci.setBounds(20, 300, 198, 153);
@@ -176,8 +190,16 @@ public class guiextension extends gui {
 
                 try {
 
+
                     imageactioner(resultspage);
-                    double ph[] = checkxbox(currentSettings,check1, check2,  check3, check4, check5,  aquirebutton,  resultspanel, Passfail, Below);
+
+
+
+                    resultspage.getContentPane().removeAll();
+                    resultspage.repaint();
+
+
+                    double ph[] = checkxbox(currentSettings);
 
                     JLabel displaytr= new JLabel("Results" + "" + Arrays.toString(ph));   // Make a JLabel;
                     displaytr.setBounds(20, 400, 198, 153);
@@ -200,9 +222,15 @@ public class guiextension extends gui {
 
                 try {
 
+
                     imageactioner(resultspage);
 
-                    double ph[] = checkxbox(currentSettings,check1, check2,  check3, check4, check5,  aquirebutton,  resultspanel, Passfail, Below);
+
+                    resultspage.getContentPane().removeAll();
+                    resultspage.repaint();
+
+
+                    double ph[] = checkxbox(currentSettings);
 
                     JLabel displaybr = new JLabel("Results" + "" + Arrays.toString(ph));   // Make a JLabel;
                     displaybr.setBounds(20, 100, 198, 153);

@@ -15,23 +15,25 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
+
 public class gui extends imp{
     private static boolean toplefttf;
     private static boolean toprighttf;
     private static boolean centeraccess;
     private static boolean bottomrighttf;
     private static boolean bottomlefttf;
-    private static boolean aquirebuttontf;
-
     private static boolean checktopleft;
     private static boolean checkbottomleft;
     private static boolean checkcenteraccess;
     private static boolean checkbottomright;
     private static boolean checktopright;
     private static int passvariable;
-
-
-
+    static JFrame resultspanel = new JFrame("Results Panel");
+    static JPanel Passfail = new JPanel();
+    static JLabel Below = new JLabel("The Limit is below the FeretMin!");
+    public static boolean aquirebuttontf;
+    public static settings currentSettings = new settings();
+    static JFrame main = new JFrame("JFrame with a JPanel");
 
     public static void main(String[] args) throws IOException {
 
@@ -39,15 +41,10 @@ public class gui extends imp{
         System.out.println("Driver set");
 
 
-
-
-
-
 //First JFrame that appears
 //Some Initialization
-        settings currentSettings = new settings();
 
-        JFrame main = new JFrame("JFrame with a JPanel");
+
         JPanel Button1 = new JPanel();// Make a JPanel;
         Button1.setBounds(100, 30, 400, 40);
         main.setSize(875, 420);
@@ -58,12 +55,10 @@ public class gui extends imp{
         JLabel jl = new JLabel();
 
 
+        InputStream in = gui.class.getResourceAsStream("logo/newpotomac.png");
 
-       InputStream in = gui.class.getResourceAsStream("logo/newpotomac.png");
-
-    BufferedImage myImg = ImageIO.read(in);
-    jl.setIcon(new ImageIcon(myImg));
-
+        BufferedImage myImg = ImageIO.read(in);
+        jl.setIcon(new ImageIcon(myImg));
 
 
         main.getContentPane().add(Image);
@@ -94,79 +89,22 @@ public class gui extends imp{
         bottomright.setBounds(700, 300, 100, 50);
         main.getContentPane().add(bottomright);
 
-        JFrame aquirebutton = new JFrame("aquirebutton");
-        aquirebutton.setSize(400, 70);
-         JButton thebutton = new JButton("Aquire");
-        aquirebutton.getContentPane().add(thebutton);
+
+
 
 //The results panel
-        JFrame resultspanel = new JFrame("Results Panel");
+
         resultspanel.setSize(1000, 600);
         JPanel results1 = new JPanel();// Make a JPanel;
         results1.setBounds(20, 30, 400, 40);
         JLabel Above = new JLabel("The Limit Exceeds the FeretMax!");   // Make a JLabel;
         Above.setForeground(Color.red);
         Above.setFont(new Font("Serif", Font.PLAIN, 20));
-        JLabel Below = new JLabel("The Limit is below the FeretMin!");   // Make a JLabel;
         Below.setForeground(Color.red);
         Below.setFont(new Font("Serif", Font.PLAIN, 20));
-        JPanel Passfail = new JPanel();
         resultspanel.getContentPane().add(Passfail);  // Add Passfail to JFrame f
         Passfail.setBounds(20, 300, 800, 500);
         resultspanel.getContentPane().add(results1);
-
-
-
-
-//Panel for pass fail check mark graphics
-//Top left
-        JPanel Icon1 = new JPanel();
-
-        JLabel check1 = new JLabel();
-
-        main.getContentPane().add(Icon1);
-        Icon1.add(check1);
-        Icon1.setBounds(120, 145, 80, 60);
-
-//Bottom left
-        JPanel Icon2 = new JPanel();
-
-        JLabel check2 = new JLabel();
-
-        main.getContentPane().add(Icon2);
-        Icon2.add(check2);
-        Icon2.setBounds(120, 300, 80, 60);
-
-
-//Top right
-        JPanel Icon3 = new JPanel();
-
-        JLabel check3 = new JLabel();
-
-        main.getContentPane().add(Icon3);
-        Icon3.add(check3);
-        Icon3.setBounds(620, 145, 80, 60);
-
-
-//Bottom right
-
-        JPanel Icon4 = new JPanel();
-
-        JLabel check4 = new JLabel();
-
-        main.getContentPane().add(Icon4);
-        Icon4.add(check4);
-        Icon4.setBounds(620, 300, 80, 60);
-
-
-//Center
-        JPanel Icon5 = new JPanel();
-
-        JLabel check5 = new JLabel();
-
-        main.getContentPane().add(Icon5);
-        Icon5.add(check5);
-        Icon5.setBounds(362, 300, 80, 60);
 
 
 //Top Left Button Action Listener
@@ -179,11 +117,12 @@ public class gui extends imp{
                 checktopleft = true;
 
 
-                cameracontrol.returner(aquirebutton);
+                cameracontrol.returner();
 
                 try {
-
-                    idk(main, currentSettings,  check1, check2, check3, check4, check5,  aquirebutton,  resultspanel,  Passfail,  Below);
+                    cameracontrol.setsizegetcontent();
+                    cameracontrol.buttonevent();
+                    idk(currentSettings);
 
 
                 } catch (IOException ioException) {
@@ -202,12 +141,12 @@ public class gui extends imp{
                 //delegate to event handler method
                 toprighttf = true;
                 checktopright = true;
-                cameracontrol.returner(aquirebutton);
+                cameracontrol.returner();
 
 
                 try {
 
-                    idk(main, currentSettings,  check1, check2, check3, check4, check5,  aquirebutton,  resultspanel,  Passfail,  Below);
+                    idk(currentSettings);
 
 
                 } catch (IOException ioException) {
@@ -226,10 +165,11 @@ public class gui extends imp{
                 centeraccess = true;
                 checkcenteraccess = true;
 
-                cameracontrol.returner(aquirebutton);
+                cameracontrol.returner();
+
                 try {
 
-                    idk(main, currentSettings,  check1, check2, check3, check4, check5,  aquirebutton,  resultspanel,  Passfail,  Below);
+                    idk(currentSettings);
 
 
                 } catch (IOException ioException) {
@@ -248,10 +188,11 @@ public class gui extends imp{
                 bottomrighttf = true;
                 checkbottomright = true;
 
-                cameracontrol.returner(aquirebutton);
+                cameracontrol.returner();
+
                 try {
 
-                    idk(main, currentSettings,  check1, check2, check3, check4, check5,  aquirebutton,  resultspanel,  Passfail,  Below);
+                    idk(currentSettings);
 
 
                 } catch (IOException ioException) {
@@ -271,11 +212,12 @@ public class gui extends imp{
                 bottomlefttf = true;
                 checkbottomleft = true;
 
-                cameracontrol.returner(aquirebutton);
+                cameracontrol.returner();
+
 
                 try {
 
-                    idk(main, currentSettings,  check1, check2, check3, check4, check5,  aquirebutton,  resultspanel,  Passfail,  Below);
+                    idk(currentSettings);
 
 
                 } catch (IOException ioException) {
@@ -286,58 +228,22 @@ public class gui extends imp{
 
             }
         });
-
-
-//Acquire button action listener
-
-        thebutton.addActionListener(new ActionListener() {
-
-
-            @Override
-            public void actionPerformed(ActionEvent b) {
-                //delegate to event handler method
-
-                aquirebuttontf = true;
-
-
-
-                try {
-
-                    acquirehandler(currentSettings, resultspanel, Passfail, Below, aquirebutton);
-                    checkxbox(currentSettings,check1, check2,  check3, check4, check5,  aquirebutton,  resultspanel, Passfail, Below);
-
-
-
-
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
-
-
-            }
-        });
-
 
     }
-
 
 
 //Button ActionEvent method for Main frame buttons
 
 
 
-
     // Button ActionEvent for acquire button
-    public static double[] acquirehandler(settings currentSettings, JFrame resultspanel, JPanel Passfail, JLabel Below, JFrame aquirebutton) throws IOException {
+    public static double[] acquirehandler(settings currentSettings) throws IOException {
+
 
         FileWriter myWriter = new FileWriter("C:/Users/Admin/IdeaProjects/testJAR/Results/savedresults.txt", true);
         resultspanel.setVisible(true);
 
-        impmethod(currentSettings, aquirebutton);
-
-
-
-
+        impmethod(currentSettings);
 
 
         SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
@@ -438,6 +344,8 @@ public class gui extends imp{
 
             }
 
+
+
         }
         myWriter.close();
         toplefttf = false;
@@ -450,16 +358,68 @@ public class gui extends imp{
 return feretCol;
     }
 
-    public static void idk(JFrame main, settings currentSettings, JLabel check1, JLabel check2, JLabel check3, JLabel check4, JLabel check5, JFrame aquirebutton, JFrame resultspanel, JPanel Passfail, JLabel Below) throws IOException {
+    public static void idk(settings currentSettings) throws IOException {
 
-        guiextension.imageaction(main, currentSettings,  check1, check2, check3, check4, check5,  aquirebutton,  resultspanel,  Passfail,  Below);
+        guiextension.imageaction(currentSettings);
 
     }
 
     //This method handles the graphic checkbox and x-box on the main Jframe
-    public static double[] checkxbox(settings currentSettings, JLabel check1, JLabel check2, JLabel check3, JLabel check4, JLabel check5, JFrame aquirebutton, JFrame resultspanel, JPanel Passfail, JLabel Below) throws IOException {
+    public static double[] checkxbox(settings currentSettings) throws IOException {
          double[] ph = {0};
-//import feretcol
+         double[] phtl = {0};
+         double[] phbl = {0};
+
+        //Panel for pass fail check mark graphics
+//Top left
+        JPanel Icon1 = new JPanel();
+
+        JLabel check1 = new JLabel();
+
+        main.getContentPane().add(Icon1);
+        Icon1.add(check1);
+        Icon1.setBounds(120, 145, 80, 60);
+
+//Bottom left
+        JPanel Icon2 = new JPanel();
+
+        JLabel check2 = new JLabel();
+
+        main.getContentPane().add(Icon2);
+        Icon2.add(check2);
+        Icon2.setBounds(120, 300, 80, 60);
+
+
+//Top right
+        JPanel Icon3 = new JPanel();
+
+        JLabel check3 = new JLabel();
+
+        main.getContentPane().add(Icon3);
+        Icon3.add(check3);
+        Icon3.setBounds(620, 145, 80, 60);
+
+
+//Bottom right
+
+        JPanel Icon4 = new JPanel();
+
+        JLabel check4 = new JLabel();
+
+        main.getContentPane().add(Icon4);
+        Icon4.add(check4);
+        Icon4.setBounds(620, 300, 80, 60);
+
+
+//Center
+        JPanel Icon5 = new JPanel();
+
+        JLabel check5 = new JLabel();
+
+        main.getContentPane().add(Icon5);
+        Icon5.add(check5);
+        Icon5.setBounds(362, 300, 80, 60);
+
 
 
 //iterate through curr
@@ -492,7 +452,6 @@ return feretCol;
                             ph[passvariable] = curr;
 
 
-
                         }
                         if (checkbottomleft == true) {
                             InputStream in = gui.class.getResourceAsStream("pictures/redchecmark.png");
@@ -503,6 +462,7 @@ return feretCol;
 
                             ph = new double[passvariable + 1];
                             ph[passvariable] = curr;
+
 
                         }
                         if (checkcenteraccess == true) {
@@ -525,6 +485,7 @@ return feretCol;
 
                             ph = new double[passvariable + 1];
                             ph[passvariable] = curr;
+
 
                         }
                         if (checkbottomright == true) {
