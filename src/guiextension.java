@@ -157,9 +157,9 @@ public class guiextension extends gui {
 
             @Override
             public void actionPerformed(ActionEvent b) {
+                try {
                 //delegate to event handler method
 
-                try {
 
 
                     imageactioner(resultspage);

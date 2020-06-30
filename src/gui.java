@@ -1,4 +1,5 @@
 import com.github.sarxos.webcam.Webcam;
+import com.github.sarxos.webcam.WebcamPanel;
 import com.github.sarxos.webcam.ds.civil.LtiCivilDriver;
 
 import javax.imageio.ImageIO;
@@ -17,28 +18,58 @@ import java.util.Date;
 
 
 public class gui extends imp{
-    private static boolean toplefttf;
-    private static boolean toprighttf;
-    private static boolean centeraccess;
-    private static boolean bottomrighttf;
-    private static boolean bottomlefttf;
-    private static boolean checktopleft;
-    private static boolean checkbottomleft;
-    private static boolean checkcenteraccess;
-    private static boolean checkbottomright;
-    private static boolean checktopright;
+
     private static int passvariable;
     static JFrame resultspanel = new JFrame("Results Panel");
     static JPanel Passfail = new JPanel();
     static JLabel Below = new JLabel("The Limit is below the FeretMin!");
-    public static boolean aquirebuttontf;
     public static settings currentSettings = new settings();
     static JFrame main = new JFrame("JFrame with a JPanel");
+    public static measurementsCol submission;
+
+    public Image acquire(cameraControl camera) {
+        JButton acquireButton = new JButton("Acquire");
+        JFrame acquireFrame = new JFrame("AcquireButton");
+        acquireFrame.setSize(400, 70);
+        acquireFrame.getContentPane().add(acquireButton);
+        acquireFrame.setVisible(false);
+
+        WebcamPanel panel = camera.getPanel();
+        JFrame window = new JFrame("Live View");
+        window.add(panel);
+        window.setResizable(true);
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        window.pack();
+        window.setVisible(true);
+        window.setSize(1360, 768);
+
+        acquireButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Image capture = camera.getImage();
+
+                JFrame ImpShow = new JFrame();
+                ImpShow.setSize(800, 600);
+                JLabel impshowlabel = new JLabel();
+                ImpShow.getContentPane().add(impshowlabel);
+                impshowlabel.setIcon(new ImageIcon(capture));
+                ImpShow.setVisible(true);
+
+
+
+            }
+
+        });
+
+
+    }
 
     public static void main(String[] args) throws IOException {
 
-        Webcam.setDriver(new LtiCivilDriver());
-        System.out.println("Driver set");
+
+
+
+        cameraControl camera = new cameraControl();
 
 
 //First JFrame that appears
@@ -49,6 +80,7 @@ public class gui extends imp{
         Button1.setBounds(100, 30, 400, 40);
         main.setSize(875, 420);
         main.setLayout(null);
+        main.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         JPanel Image = new JPanel();
 
@@ -92,6 +124,9 @@ public class gui extends imp{
 
 
 
+
+
+
 //The results panel
 
         resultspanel.setSize(1000, 600);
@@ -108,27 +143,39 @@ public class gui extends imp{
 
 
 //Top Left Button Action Listener
+        measurements topLeft = new measurements(1);
+
+
+
+
+
+
         topleft.addActionListener(new ActionListener() {
-            @Override
+             @Override
             public void actionPerformed(ActionEvent e) {
                 //delegate to event handler method
+                Integer position = 1;
 
-                toplefttf = true;
-                checktopleft = true;
-
-
-                cameracontrol.returner();
-
-                try {
-                    cameracontrol.setsizegetcontent();
-                    cameracontrol.buttonevent();
-                    idk(currentSettings);
+                camera.startLive(position);
+                 try {
+                     wait();
+                 } catch (InterruptedException interruptedException) {
+                     interruptedException.printStackTrace();
+                 }
 
 
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-
-                }
+//                cameracontrol.returner();
+//
+//                try {
+//                    cameracontrol.setsizegetcontent();
+//                    cameracontrol.buttonevent();
+//                    idk(currentSettings);
+//
+//
+//                } catch (IOException ioException) {
+//                    ioException.printStackTrace();
+//
+//                }
 
 
             }
@@ -139,10 +186,9 @@ public class gui extends imp{
             @Override
             public void actionPerformed(ActionEvent e) {
                 //delegate to event handler method
-                toprighttf = true;
-                checktopright = true;
-                cameracontrol.returner();
 
+//                cameracontrol.returner();
+//                position = 2;
 
                 try {
 
@@ -162,11 +208,9 @@ public class gui extends imp{
             @Override
             public void actionPerformed(ActionEvent e) {
                 //delegate to event handler method
-                centeraccess = true;
-                checkcenteraccess = true;
 
-                cameracontrol.returner();
-
+//                cameracontrol.returner();
+//            position = 3;
                 try {
 
                     idk(currentSettings);
@@ -185,10 +229,10 @@ public class gui extends imp{
             @Override
             public void actionPerformed(ActionEvent e) {
                 //delegate to event handler method
-                bottomrighttf = true;
-                checkbottomright = true;
 
-                cameracontrol.returner();
+//                position = 4;
+
+//                cameracontrol.returner();
 
                 try {
 
@@ -209,11 +253,10 @@ public class gui extends imp{
             @Override
             public void actionPerformed(ActionEvent e) {
                 //delegate to event handler method
-                bottomlefttf = true;
-                checkbottomleft = true;
 
-                cameracontrol.returner();
+//                cameracontrol.returner();
 
+//                position = 5;
 
                 try {
 
@@ -246,7 +289,7 @@ public class gui extends imp{
         impmethod(currentSettings);
 
 
-        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
         Date date = new Date(System.currentTimeMillis());
 
 
@@ -282,80 +325,83 @@ public class gui extends imp{
             }
 
 
-//TOP LEFT HANDLER FOR SAVING DATA TO RESULTS -- TOP LEFT HANDLER FOR SAVING DATA TO RESULTS -- TOP LEFT HANDLER FOR SAVING DATA TO RESULTS
+////TOP LEFT HANDLER FOR SAVING DATA TO RESULTS -- TOP LEFT HANDLER FOR SAVING DATA TO RESULTS -- TOP LEFT HANDLER FOR SAVING DATA TO RESULTS
+//
+//
+//            if (toplefttf == true & aquirebuttontf == true) {
+//
+//
+//
+//                myWriter.write(formatter.format(date)+  " " + "Top Left!" + "" + " " + curr +  "\n");
+//
+//
+//
+//            }
+//
+//
+////TOP RIGHT HANDLER FOR SAVING DATA TO RESULTS -- TOP RIGHT HANDLER FOR SAVING DATA TO RESULTS -- TOP RIGHT HANDLER FOR SAVING DATA TO RESULTS
+//
+//
+//            if (toprighttf == true & aquirebuttontf == true) {
+//
+//
+//
+//                myWriter.write(formatter.format(date)+ " " +"Top Right!" + " " + curr + "\n");
+//
+//            }
+//
+//
+//            //CENTER HANDLER FOR SAVING DATA TO RESULTS -- CENTER HANDLER FOR SAVING DATA TO RESULTS -- CENTER HANDLER FOR SAVING DATA TO RESULTS
+//
+//
+//            if (centeraccess == true & aquirebuttontf == true) {
+//
+//
+//
+//                myWriter.write(formatter.format(date)+ " " + "Center Access" + " " + curr + "\n");
+//
+//            }
+//
+//
+//            //BOTTOM RIGHT HANDLER FOR SAVING DATA TO RESULTS -- BOTTOM RIGHT FOR SAVING DATA TO RESULTS -- BOTTOM RIGHT FOR SAVING DATA TO RESULTS
+//
+//
+//            if (bottomrighttf == true & aquirebuttontf == true) {
+//
+//
+//
+//                myWriter.write(formatter.format(date) + " " + "Top Left!" + " " + curr +  "\n");
+//
+//            }
+//
+//
+//            //BOTTOM KEFT HANDLER FOR SAVING DATA TO RESULTS -- BOTTOM LEFT FOR SAVING DATA TO RESULTS -- BOTTOM LEFT FOR SAVING DATA TO RESULTS
+//
+//
+//            if (bottomlefttf == true & aquirebuttontf == true) {
+//
+//
+//
+//                myWriter.write(formatter.format(date) + " " + "Bottom Left!" + " " + curr + "\n");
+//
+//
+//            }
+//
+//
+//
+//        }
+//        myWriter.close();
+//        toplefttf = false;
+//        bottomlefttf = false;
+//        centeraccess = false;
+//        toprighttf = false;
+//        bottomrighttf = false;
 
-
-            if (toplefttf == true & aquirebuttontf == true) {
-
-
-
-                myWriter.write(formatter.format(date)+  " " + "Top Left!" + "" + " " + curr +  "\n");
-
-
-
-            }
-
-
-//TOP RIGHT HANDLER FOR SAVING DATA TO RESULTS -- TOP RIGHT HANDLER FOR SAVING DATA TO RESULTS -- TOP RIGHT HANDLER FOR SAVING DATA TO RESULTS
-
-
-            if (toprighttf == true & aquirebuttontf == true) {
-
-
-
-                myWriter.write(formatter.format(date)+ " " +"Top Right!" + " " + curr + "\n");
-
-            }
-
-
-            //CENTER HANDLER FOR SAVING DATA TO RESULTS -- CENTER HANDLER FOR SAVING DATA TO RESULTS -- CENTER HANDLER FOR SAVING DATA TO RESULTS
-
-
-            if (centeraccess == true & aquirebuttontf == true) {
-
-
-
-                myWriter.write(formatter.format(date)+ " " + "Center Access" + " " + curr + "\n");
-
-            }
-
-
-            //BOTTOM RIGHT HANDLER FOR SAVING DATA TO RESULTS -- BOTTOM RIGHT FOR SAVING DATA TO RESULTS -- BOTTOM RIGHT FOR SAVING DATA TO RESULTS
-
-
-            if (bottomrighttf == true & aquirebuttontf == true) {
-
-
-
-                myWriter.write(formatter.format(date) + " " + "Top Left!" + " " + curr +  "\n");
-
-            }
-
-
-            //BOTTOM KEFT HANDLER FOR SAVING DATA TO RESULTS -- BOTTOM LEFT FOR SAVING DATA TO RESULTS -- BOTTOM LEFT FOR SAVING DATA TO RESULTS
-
-
-            if (bottomlefttf == true & aquirebuttontf == true) {
-
-
-
-                myWriter.write(formatter.format(date) + " " + "Bottom Left!" + " " + curr + "\n");
-
-
-            }
-
-
-
+            System.out.println(feretCol.length);
         }
-        myWriter.close();
-        toplefttf = false;
-        bottomlefttf = false;
-        centeraccess = false;
-        toprighttf = false;
-        bottomrighttf = false;
+            return feretCol;
 
-        System.out.println(feretCol.length);
-return feretCol;
+
     }
 
     public static void idk(settings currentSettings) throws IOException {
@@ -438,22 +484,10 @@ return feretCol;
 
 
                     if (greaterthan > 0) {
-
+/*
 //if the button has been clicked on and part is outside parameters, show a red x
-                        if (checktopleft == true) {
-
-                            InputStream in = gui.class.getResourceAsStream("pictures/redchecmark.png");
-
-                            BufferedImage myImg = ImageIO.read(in);
-
-                            check1.setIcon(new ImageIcon(myImg));
-
-                            ph = new double[passvariable + 1];
-                            ph[passvariable] = curr;
-
-
-                        }
-                        if (checkbottomleft == true) {
+                        if ()
+                        if () {
                             InputStream in = gui.class.getResourceAsStream("pictures/redchecmark.png");
 
                             BufferedImage myImg = ImageIO.read(in);
@@ -465,7 +499,7 @@ return feretCol;
 
 
                         }
-                        if (checkcenteraccess == true) {
+                        if () {
                             InputStream in = gui.class.getResourceAsStream("pictures/redchecmark.png");
 
                             BufferedImage myImg = ImageIO.read(in);
@@ -476,7 +510,7 @@ return feretCol;
                             ph[passvariable] = curr;
 
                         }
-                        if (checktopright == true) {
+                        if () {
                             InputStream in = gui.class.getResourceAsStream("pictures/redchecmark.png");
 
                             BufferedImage myImg = ImageIO.read(in);
@@ -488,7 +522,7 @@ return feretCol;
 
 
                         }
-                        if (checkbottomright == true) {
+                        if () {
                             InputStream in = gui.class.getResourceAsStream("pictures/redchecmark.png");
 
                             BufferedImage myImg = ImageIO.read(in);
@@ -508,7 +542,7 @@ return feretCol;
 
                     if (lessthan > 0) {
 //if the button has been clicked on and part is outside parameters, show a red x
-                        if (checktopleft == true) {
+                        if () {
                             InputStream in = gui.class.getResourceAsStream("pictures/redcheckmark.png");
                             BufferedImage myImg = ImageIO.read(in);
                             check1.setIcon(new ImageIcon(myImg));
@@ -518,7 +552,7 @@ return feretCol;
 
 
                         }
-                        if (checkbottomleft == true) {
+                        if () {
                             InputStream in = gui.class.getResourceAsStream("pictures/redcheckmark.png");
                             BufferedImage myImg = ImageIO.read(in);
                             check2.setIcon(new ImageIcon(myImg));
@@ -528,7 +562,7 @@ return feretCol;
 
 
                         }
-                        if (checkcenteraccess == true) {
+                        if () {
                             InputStream in = gui.class.getResourceAsStream("pictures/redcheckmark.png");
                             BufferedImage myImg = ImageIO.read(in);
                             check5.setIcon(new ImageIcon(myImg));
@@ -538,7 +572,7 @@ return feretCol;
 
 
                         }
-                        if (checktopright == true) {
+                        if () {
                             InputStream in = gui.class.getResourceAsStream("pictures/redcheckmark.png");
                             BufferedImage myImg = ImageIO.read(in);
                             check3.setIcon(new ImageIcon(myImg));
@@ -547,7 +581,7 @@ return feretCol;
                             ph[passvariable] = curr;
 
                         }
-                        if (checkbottomright == true) {
+                        if () {
                             InputStream in = gui.class.getResourceAsStream("pictures/redcheckmark.png");
                             BufferedImage myImg = ImageIO.read(in);
                             check4.setIcon(new ImageIcon(myImg));
@@ -565,7 +599,7 @@ return feretCol;
 //
 // a green checkmark
 
-                    if (checktopleft == true) {
+                    if () {
                         InputStream in = gui.class.getResourceAsStream("pictures/greencheckmark.png");
                         BufferedImage myImg = ImageIO.read(in);
                         check1.setIcon(new ImageIcon(myImg));
@@ -577,7 +611,7 @@ return feretCol;
 
                     }
 
-                    if (checkbottomleft == true) {
+                    if () {
 
                         InputStream in = gui.class.getResourceAsStream("pictures/greencheckmark.png");
                         BufferedImage myImg = ImageIO.read(in);
@@ -589,7 +623,7 @@ return feretCol;
 
 
                     }
-                    if (checkcenteraccess == true) {
+                    if () {
                         InputStream in = gui.class.getResourceAsStream("pictures/greencheckmark.png");
                         BufferedImage myImg = ImageIO.read(in);
                         check5.setIcon(new ImageIcon(myImg));
@@ -598,7 +632,7 @@ return feretCol;
                         ph[passvariable] = curr;
 
                     }
-                    if (checktopright == true) {
+                    if () {
 
                         InputStream in = gui.class.getResourceAsStream("pictures/greencheckmark.png");
                         BufferedImage myImg = ImageIO.read(in);
@@ -611,14 +645,14 @@ return feretCol;
 
 
                     }
-                    if (checkbottomright == true) {
+                    if () {
                         InputStream in = gui.class.getResourceAsStream("pictures/greencheckmark.png");
                         BufferedImage myImg = ImageIO.read(in);
                         check4.setIcon(new ImageIcon(myImg));
 
                         ph = new double[passvariable + 1];
                         ph[passvariable] = curr;
-
+*/
 
                     }
 
@@ -630,7 +664,7 @@ return feretCol;
 
 
         return feretCol;
-    }
+}
 
 
 
