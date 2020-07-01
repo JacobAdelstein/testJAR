@@ -14,7 +14,7 @@ import java.io.FileWriter;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
+import java.util.concurrent.CountDownLatch;
 
 
 public class gui extends imp{
@@ -27,42 +27,47 @@ public class gui extends imp{
     static JFrame main = new JFrame("JFrame with a JPanel");
     public static measurementsCol submission;
 
-    public Image acquire(cameraControl camera) {
+    public static Image acquire(cameraControl camera) throws InterruptedException {
+        CountDownLatch latch = new CountDownLatch(1);
+        final Image[] capture = new Image[1];
         JButton acquireButton = new JButton("Acquire");
         JFrame acquireFrame = new JFrame("AcquireButton");
         acquireFrame.setSize(400, 70);
-        acquireFrame.getContentPane().add(acquireButton);
-        acquireFrame.setVisible(false);
+        acquireFrame.add(acquireButton);
+        acquireFrame.setVisible(true);
 
-        WebcamPanel panel = camera.getPanel();
-        JFrame window = new JFrame("Live View");
-        window.add(panel);
-        window.setResizable(true);
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.pack();
-        window.setVisible(true);
-        window.setSize(1360, 768);
+//        WebcamPanel panel = camera.getPanel();
+//        JFrame window = new JFrame("Live View");
+//        window.add(panel);
+//        window.setResizable(true);
+//        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        window.pack();
+//        window.setVisible(true);
+//        window.setSize(1360, 768);
 
         acquireButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Image capture = camera.getImage();
+                camera.stopLive();
+                capture[0] = camera.getImage();
 
                 JFrame ImpShow = new JFrame();
                 ImpShow.setSize(800, 600);
                 JLabel impshowlabel = new JLabel();
                 ImpShow.getContentPane().add(impshowlabel);
-                impshowlabel.setIcon(new ImageIcon(capture));
+                impshowlabel.setIcon(new ImageIcon(capture[0]));
                 ImpShow.setVisible(true);
-
-
-
+                latch.countDown();
             }
-
         });
-
+        System.out.println("Awaiting latch");
+        latch.await();
+        return capture[0];
 
     }
+
+
+
 
     public static void main(String[] args) throws IOException {
 
@@ -83,12 +88,10 @@ public class gui extends imp{
         main.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         JPanel Image = new JPanel();
-
         JLabel jl = new JLabel();
 
 
         InputStream in = gui.class.getResourceAsStream("logo/newpotomac.png");
-
         BufferedImage myImg = ImageIO.read(in);
         jl.setIcon(new ImageIcon(myImg));
 
@@ -158,7 +161,7 @@ public class gui extends imp{
 
                 camera.startLive(position);
                  try {
-                     wait();
+                     acquire(camera);
                  } catch (InterruptedException interruptedException) {
                      interruptedException.printStackTrace();
                  }
