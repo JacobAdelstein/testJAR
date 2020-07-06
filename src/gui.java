@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.swing.ImageIcon;
@@ -24,8 +25,18 @@ public class gui extends imp{
     static JPanel Passfail = new JPanel();
     static JLabel Below = new JLabel("The Limit is below the FeretMin!");
     public static settings currentSettings = new settings();
-    static JFrame main = new JFrame("JFrame with a JPanel");
+    static JFrame main = new JFrame("Potomac Inspect");
     public static measurementsCol submission;
+
+    private static class CloseListener implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            //Exit the program
+            System.exit(0);
+        }
+    }
+
+
 
     public static Image acquire(cameraControl camera) throws InterruptedException {
         CountDownLatch latch = new CountDownLatch(1);
@@ -61,8 +72,18 @@ public class gui extends imp{
             }
         });
         System.out.println("Awaiting latch");
-        latch.await();
+        latch.wait();
         return capture[0];
+
+    }
+
+    static void addTab(JTabbedPane tabbedPane, String text) {
+        JLabel label = new JLabel(text);
+        JButton button = new JButton(text);
+        JPanel panel = new JPanel();
+        panel.add(label);
+        panel.add(button);
+        tabbedPane.addTab(text, panel);
 
     }
 
@@ -70,6 +91,52 @@ public class gui extends imp{
 
 
     public static void main(String[] args) throws IOException {
+        //Setup menu variables
+        JMenu menu, subMenu;
+        JMenuItem menuItem;
+        JMenuBar menuBar;
+
+        //Setup tabs
+        JTabbedPane tabbedPane = new JTabbedPane();
+        JPanel panel1 = new JPanel();
+        JPanel panel2 = new JPanel();
+        JTextArea tx1 = new JTextArea(200,200);
+        JTextArea tx2 = new JTextArea(200,200);
+        tabbedPane.setBounds(50,50, 500, 300);
+
+        //Setup the main menu
+        menuBar = new JMenuBar();
+        menu = new JMenu("File");
+        menu.setMnemonic(KeyEvent.VK_F);
+        menuItem = new JMenuItem("New", KeyEvent.VK_N);
+        menuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Created some new shit");
+                String response = JOptionPane.showInputDialog(null, "What is your name?", "Enter your name", JOptionPane.QUESTION_MESSAGE);
+                addTab(tabbedPane, response);
+                System.out.println(response);
+
+            }
+        });
+        menu.add(menuItem);
+        menu.addSeparator();
+
+        menuItem = new JMenuItem("Exit", KeyEvent.VK_X);
+        menuItem.addActionListener(new CloseListener());
+
+        menu.add(menuItem);
+
+        menuBar.add(menu);
+        main.setJMenuBar(menuBar);
+
+
+
+
+
+//        tabbedPane.addTab("Tab 1", null, panel1, "Does nothing");
+//        tabbedPane.addTab("tab2", null, panel2, "blah");
+
 
 
 
@@ -86,6 +153,7 @@ public class gui extends imp{
         main.setSize(875, 420);
         main.setLayout(null);
         main.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        main.getContentPane().add(tabbedPane);
 
         JPanel Image = new JPanel();
         JLabel jl = new JLabel();
@@ -96,7 +164,7 @@ public class gui extends imp{
         jl.setIcon(new ImageIcon(myImg));
 
 
-        main.getContentPane().add(Image);
+//        main.getContentPane().add(Image);
         Image.add(jl);
         Image.setBounds(300, 5, 198, 153);
 
@@ -105,24 +173,24 @@ public class gui extends imp{
 //Buttons for Main Frame
         JButton topleft = new JButton("topleft");
         topleft.setBounds(20, 150, 100, 50);
-        main.getContentPane().add(topleft);
+//        main.getContentPane().add(topleft);
 
         JButton bottomleft = new JButton("bottomleft");
         bottomleft.setBounds(20, 300, 100, 50);
-        main.getContentPane().add(bottomleft);
+//        main.getContentPane().add(bottomleft);
 
 
         JButton center = new JButton("center");
         center.setBounds(350, 250, 100, 50);
-        main.getContentPane().add(center);
+//        main.getContentPane().add(center);
 
         JButton topright = new JButton("topright");
         topright.setBounds(700, 150, 100, 50);
-        main.getContentPane().add(topright);
+//        main.getContentPane().add(topright);
 
         JButton bottomright = new JButton("bottomright");
         bottomright.setBounds(700, 300, 100, 50);
-        main.getContentPane().add(bottomright);
+//        main.getContentPane().add(bottomright);
 
 
 
@@ -149,19 +217,15 @@ public class gui extends imp{
         measurements topLeft = new measurements(1);
 
 
-
-
-
+        final Image[] topleftImg = new Image[1];
 
         topleft.addActionListener(new ActionListener() {
              @Override
             public void actionPerformed(ActionEvent e) {
                 //delegate to event handler method
-                Integer position = 1;
-
-                camera.startLive(position);
+                camera.startLive();
                  try {
-                     acquire(camera);
+                     topleftImg[0] = acquire(camera);
                  } catch (InterruptedException interruptedException) {
                      interruptedException.printStackTrace();
                  }

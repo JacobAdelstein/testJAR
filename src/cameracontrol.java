@@ -41,7 +41,7 @@ public class cameraControl extends gui {
         return panel;
     }
 
-    public void startLive(Integer pos) {
+    public void startLive() {
         JFrame window = new JFrame("Live View");
         window.add(panel);
         window.setResizable(true);
@@ -59,11 +59,12 @@ public class cameraControl extends gui {
         window.pack();
         window.setSize(1360, 768);
         window.setVisible(true);
-        position = pos;
-        System.out.println("Position is " + pos);
 
 
 
+    }
+    public void stopLive() {
+        panel.pause();
     }
 
     public Image getImage() {
