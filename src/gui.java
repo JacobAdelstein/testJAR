@@ -1,7 +1,3 @@
-import com.github.sarxos.webcam.Webcam;
-import com.github.sarxos.webcam.WebcamPanel;
-import com.github.sarxos.webcam.ds.civil.LtiCivilDriver;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -14,11 +10,15 @@ import javax.swing.ImageIcon;
 import java.io.FileWriter;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutionException;
+
+import static java.lang.Thread.sleep;
 
 
-public class gui extends imp{
+public class gui {
 
     private static int passvariable;
     static JFrame resultspanel = new JFrame("Results Panel");
@@ -27,6 +27,16 @@ public class gui extends imp{
     public static settings currentSettings = new settings();
     static JFrame main = new JFrame("Potomac Inspect");
     public static measurementsCol submission;
+    static cameraControl camera;
+    static Image latestImage;
+    static Integer[] currentCapture = new Integer[2];
+    static ArrayList<measurementsCol> storage = new ArrayList<measurementsCol>();
+    static JTabbedPane tabbedPane;
+
+
+    //currentCapture array is intended to indicate which image we're currently capturing
+        //[0] = partNum
+        //[1] = imgPos
 
     private static class CloseListener implements ActionListener{
         @Override
@@ -38,70 +48,109 @@ public class gui extends imp{
 
 
 
-    public static Image acquire(cameraControl camera) throws InterruptedException {
-        CountDownLatch latch = new CountDownLatch(1);
-        final Image[] capture = new Image[1];
-        JButton acquireButton = new JButton("Acquire");
-        JFrame acquireFrame = new JFrame("AcquireButton");
-        acquireFrame.setSize(400, 70);
-        acquireFrame.add(acquireButton);
-        acquireFrame.setVisible(true);
 
-//        WebcamPanel panel = camera.getPanel();
-//        JFrame window = new JFrame("Live View");
-//        window.add(panel);
-//        window.setResizable(true);
-//        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        window.pack();
-//        window.setVisible(true);
-//        window.setSize(1360, 768);
+    //TOP LEFT - 1
+    //TOP RIGHT - 2
 
-        acquireButton.addActionListener(new ActionListener() {
+    static void addTab(JTabbedPane tabbedPane, Integer partNumber) {
+
+        measurementsCol currentMeasure = new measurementsCol(partNumber);
+        storage.add(currentMeasure);
+
+
+        JLabel label = new JLabel(String.valueOf(partNumber));
+        JButton topLeft = new JButton("Top Left");
+        JPanel panel = new JPanel();
+        panel.add(label);
+        panel.add(topLeft);
+
+        topLeft.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                camera.stopLive();
-                capture[0] = camera.getImage();
 
-                JFrame ImpShow = new JFrame();
-                ImpShow.setSize(800, 600);
-                JLabel impshowlabel = new JLabel();
-                ImpShow.getContentPane().add(impshowlabel);
-                impshowlabel.setIcon(new ImageIcon(capture[0]));
-                ImpShow.setVisible(true);
-                latch.countDown();
+                currentCapture[0] = partNumber;
+                currentCapture[1] = 1;
+                camera.startLive();
+
             }
         });
-        System.out.println("Awaiting latch");
-        latch.wait();
-        return capture[0];
+
+
+
+        System.out.println(tabbedPane.getComponentCount());
+        JButton button2 = new JButton("Unclicked");
+        panel.add(button2);
+        button2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String response = JOptionPane.showInputDialog(null, "Enter your part number: ", "Enter your part", JOptionPane.QUESTION_MESSAGE);
+                button2.setText(response);
+            }
+        });
+        JButton button3 = new JButton("Print what you typed");
+        button3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println(button2.getText());
+
+            }
+        });
+        panel.add(button3);
+
+        JButton button4 = new JButton("Show Top Left");
+        button4.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //Action listener attached to btn4
+
+                JFrame newFrame = new JFrame("Showing Top Left");
+                JPanel newJpanel = new JPanel();
+                JLabel label = new JLabel();
+                newJpanel.add(label);
+                newFrame.add(newJpanel);
+                newFrame.setVisible(true);
+
+            }
+        });
+        panel.add(button4);
+
+        JButton button5 = new JButton("Close tabPane");
+        button5.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                tabbedPane.remove(tabbedPane.getSelectedIndex());
+            }
+        });
+        panel.add(button5);
+        tabbedPane.addTab(String.valueOf(partNumber), panel);
+
 
     }
 
-    static void addTab(JTabbedPane tabbedPane, String text) {
-        JLabel label = new JLabel(text);
-        JButton button = new JButton(text);
-        JPanel panel = new JPanel();
-        panel.add(label);
-        panel.add(button);
-        tabbedPane.addTab(text, panel);
-
+    static Boolean partExists(Integer partNum) {
+        for (int i = 0; i < tabbedPane.getTabCount(); i++) {
+            if (Integer.parseInt(tabbedPane.getTitleAt(i)) == partNum) {
+                return true;
+            }
+        }
+        return false;
     }
 
 
 
 
     public static void main(String[] args) throws IOException {
+
+        //Setup camera control
+        camera = new cameraControl();
+
         //Setup menu variables
         JMenu menu, subMenu;
         JMenuItem menuItem;
         JMenuBar menuBar;
 
         //Setup tabs
-        JTabbedPane tabbedPane = new JTabbedPane();
-        JPanel panel1 = new JPanel();
-        JPanel panel2 = new JPanel();
-        JTextArea tx1 = new JTextArea(200,200);
-        JTextArea tx2 = new JTextArea(200,200);
+        tabbedPane = new JTabbedPane();
         tabbedPane.setBounds(50,50, 500, 300);
 
         //Setup the main menu
@@ -109,16 +158,32 @@ public class gui extends imp{
         menu = new JMenu("File");
         menu.setMnemonic(KeyEvent.VK_F);
         menuItem = new JMenuItem("New", KeyEvent.VK_N);
+
+        //Setup Image analysis listener
+        imgAnalyzer analyzer = new imgAnalyzer();
+        camera.addListener(analyzer);
+
+
+
         menuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Created some new shit");
-                String response = JOptionPane.showInputDialog(null, "What is your name?", "Enter your name", JOptionPane.QUESTION_MESSAGE);
-                addTab(tabbedPane, response);
-                System.out.println(response);
+                try {
+                    String response = JOptionPane.showInputDialog(null, "Enter your part number: ", "Enter your name", JOptionPane.QUESTION_MESSAGE);
+                    int partNum = Integer.parseInt(response);
+                    if (partExists(partNum)) {
+                        JOptionPane.showMessageDialog(null, "Part number already exists");
+                    } else {
+                        addTab(tabbedPane, partNum);
+                    }
 
+
+                } catch (NumberFormatException exception) {
+                    JOptionPane.showMessageDialog(null, "Please enter a Integer number");
+                }
             }
         });
+
         menu.add(menuItem);
         menu.addSeparator();
 
@@ -141,7 +206,6 @@ public class gui extends imp{
 
 
 
-        cameraControl camera = new cameraControl();
 
 
 //First JFrame that appears
@@ -214,7 +278,6 @@ public class gui extends imp{
 
 
 //Top Left Button Action Listener
-        measurements topLeft = new measurements(1);
 
 
         final Image[] topleftImg = new Image[1];
@@ -224,11 +287,6 @@ public class gui extends imp{
             public void actionPerformed(ActionEvent e) {
                 //delegate to event handler method
                 camera.startLive();
-                 try {
-                     topleftImg[0] = acquire(camera);
-                 } catch (InterruptedException interruptedException) {
-                     interruptedException.printStackTrace();
-                 }
 
 
 //                cameracontrol.returner();
@@ -353,43 +411,43 @@ public class gui extends imp{
         FileWriter myWriter = new FileWriter("C:/Users/Admin/IdeaProjects/testJAR/Results/savedresults.txt", true);
         resultspanel.setVisible(true);
 
-        impmethod(currentSettings);
+//        impmethod(currentSettings);
 
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
         Date date = new Date(System.currentTimeMillis());
 
 
-        for (double curr : feretCol) {
-
-
-            if (curr > currentSettings.feretMax) {
-
-
-                JLabel Red = new JLabel("Fails:" + curr);
-                Red.setForeground(Color.red);
-                Passfail.add(Red);
-
-            }
-
-
-            if (curr < currentSettings.feretMin) {
-
-                JLabel Red2 = new JLabel("Fail:" + curr);
-                Red2.setForeground(Color.red);
-                resultspanel.add(Below);
-                Passfail.add(Red2);
-
-            }
-
-
-            if (curr > currentSettings.feretMin & curr < currentSettings.feretMax) {
-
-                JLabel Green = new JLabel("Pass" + curr);
-                Green.setForeground(Color.green);
-                Passfail.add(Green);
-
-            }
+//        for (double curr : feretCol) {
+//
+//
+//            if (curr > currentSettings.feretMax) {
+//
+//
+//                JLabel Red = new JLabel("Fails:" + curr);
+//                Red.setForeground(Color.red);
+//                Passfail.add(Red);
+//
+//            }
+//
+//
+//            if (curr < currentSettings.feretMin) {
+//
+//                JLabel Red2 = new JLabel("Fail:" + curr);
+//                Red2.setForeground(Color.red);
+//                resultspanel.add(Below);
+//                Passfail.add(Red2);
+//
+//            }
+//
+//
+//            if (curr > currentSettings.feretMin & curr < currentSettings.feretMax) {
+//
+//                JLabel Green = new JLabel("Pass" + curr);
+//                Green.setForeground(Color.green);
+//                Passfail.add(Green);
+//
+//            }
 
 
 ////TOP LEFT HANDLER FOR SAVING DATA TO RESULTS -- TOP LEFT HANDLER FOR SAVING DATA TO RESULTS -- TOP LEFT HANDLER FOR SAVING DATA TO RESULTS
@@ -464,9 +522,9 @@ public class gui extends imp{
 //        toprighttf = false;
 //        bottomrighttf = false;
 
-            System.out.println(feretCol.length);
-        }
-            return feretCol;
+//            System.out.println(feretCol.length);
+
+            return null;
 
 
     }
@@ -482,6 +540,8 @@ public class gui extends imp{
          double[] ph = {0};
          double[] phtl = {0};
          double[] phbl = {0};
+
+         double[] feretCol = new double[10];
 
         //Panel for pass fail check mark graphics
 //Top left
@@ -536,6 +596,7 @@ public class gui extends imp{
 
 
 //iterate through curr
+
 
 
         for (passvariable = 0; passvariable <= feretCol.length; passvariable++) {

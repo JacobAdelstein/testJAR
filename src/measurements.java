@@ -9,10 +9,13 @@ public class measurements {
     Image capture;
 
     Integer position;
+    Integer partNum;
 
-    public measurements(Integer pos) {
+    public measurements(Integer pos, Image cap, Integer partNumber) {
 //        cameracontrol.returner();
         position = pos;
+        capture = cap;
+        partNum = partNumber;
 
 
 

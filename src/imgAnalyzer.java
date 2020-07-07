@@ -1,27 +1,33 @@
-
 import ij.IJ;
 import ij.ImagePlus;
 import ij.measure.ResultsTable;
 
 import javax.swing.*;
-import java.awt.*;
-import java.io.*;
-
-public class imp {
-
-    public static double[] feretCol;
 
 
-    public static double[] impmethod(settings currentSettings)  {
+public class imgAnalyzer implements cameraListener {
+    public imgAnalyzer() {
+        System.out.println("Image Analysis Loaded");
+
+    }
+
+    @Override
+    public void imageTaken() {
+        System.out.println("An Image was taken");
+        JFrame newFrame = new JFrame("Showing Top Left");
+        JPanel newJpanel = new JPanel();
+        JLabel label = new JLabel();
+        label.setIcon(new ImageIcon(gui.camera.capture));
+        newJpanel.add(label);
+        newFrame.add(newJpanel);
+        newFrame.setVisible(true);
+
+        measurements currentMeasure = new measurements(gui.currentCapture[1], gui.camera.capture, gui.currentCapture[0]);
 
 
-        Image capture = null;
 
-//        Image capture = cameracontrol.captureclass();
-
-
-
-        ImagePlus imp = new ImagePlus("capture", capture);
+        //Do Image Analysis
+        ImagePlus imp = new ImagePlus("capture", gui.camera.capture);
         imp.changes = false;
 
         IJ.run(imp, "8-bit", "");
@@ -47,43 +53,31 @@ public class imp {
 
 
 
-      analysees.analysisclass();
 
 
-        for (double curr : feretCol){
-            System.out.println("Printing FERETCOL: " + curr);
 
 
+
+
+        //Save image and analysis results
+        for (measurementsCol measurement : gui.storage) {
+            if (measurement.partNum == gui.currentCapture[1]) {
+                if (gui.currentCapture[0] == 1) {
+                    measurement.TL = currentMeasure;
+                    System.out.println("TL Saved");
+                }
+            }
         }
 
 
 
+//        for (int i = 1; i <= gui.tabbedPane.getComponentCount(); i++) {
+//            gui.tabbedPane.getComponentAt(i);
+//
+//
+//
+//        }
 
-        StringBuilder message = new StringBuilder();
-        message.delete(0, message.length());
-        message.append("Results: \n");
 
-
-return feretCol;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

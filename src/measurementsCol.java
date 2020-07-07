@@ -2,11 +2,18 @@ import java.awt.*;
 
 public class measurementsCol {
 
+    Integer partNum;
+
     measurements TL;
     measurements TR;
     measurements C;
     measurements BL;
     measurements BR;
+
+
+    public measurementsCol(Integer partNumber) {
+        partNum = partNumber;
+    }
 
     public String Test(){
         return "Test";
