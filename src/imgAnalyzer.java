@@ -12,6 +12,7 @@ public class imgAnalyzer implements cameraListener {
     }
 
     @Override
+
     public void imageTaken() {
         System.out.println("An Image was taken");
         JFrame newFrame = new JFrame("Showing Top Left");
@@ -22,7 +23,7 @@ public class imgAnalyzer implements cameraListener {
         newFrame.add(newJpanel);
         newFrame.setVisible(true);
 
-        measurements currentMeasure = new measurements(gui.currentCapture[1], gui.camera.capture, gui.currentCapture[0]);
+//        measurements currentMeasure = new measurements(gui.currentCapture[1], gui.camera.capture, gui.currentCapture[0]);
 
 
 
@@ -31,13 +32,13 @@ public class imgAnalyzer implements cameraListener {
         imp.changes = false;
 
         IJ.run(imp, "8-bit", "");
-        IJ.setThreshold(imp, currentSettings.lowerThreshold, currentSettings.upperThreshold);
-        IJ.setProperty("BlackBackground", currentSettings.blackBackground);
+        IJ.setThreshold(imp, 60, 255);
+        IJ.setProperty("BlackBackground", true);
         IJ.run(imp, "Convert to Mask", "");
         StringBuilder scale = new StringBuilder();
-        scale.append("distance=" + currentSettings.distance + " known=" + currentSettings.known + " pixel=" + currentSettings.pixel + " unit=um");
+        scale.append("distance=" + 1 + " known=" + 1 + " pixel=" + 1 + " unit=um");
         StringBuilder analysis = new StringBuilder();
-        analysis.append("size=" + currentSettings.sizeMin + "-" + currentSettings.sizeMax + " circularity=" + currentSettings.circularityMin + "-" + currentSettings.circularityMax + " show=[Overlay Masks] clear include in-situ");
+        analysis.append("size=" + 0 + "-" + 100 + " circularity=" + .5 + "-" + 1 + " show=[Overlay Masks] clear include in-situ");
 
 
         IJ.run(imp, "Set Scale...", scale.toString());
@@ -48,7 +49,7 @@ public class imgAnalyzer implements cameraListener {
 
 
         ResultsTable rt = ResultsTable.getResultsTable();
-        feretCol = rt.getColumnAsDoubles(19);
+        double[] results = rt.getColumnAsDoubles(19);
 
 
 
@@ -61,11 +62,14 @@ public class imgAnalyzer implements cameraListener {
 
         //Save image and analysis results
         for (measurementsCol measurement : gui.storage) {
-            if (measurement.partNum == gui.currentCapture[1]) {
-                if (gui.currentCapture[0] == 1) {
-                    measurement.TL = currentMeasure;
-                    System.out.println("TL Saved");
+            if (measurement.partNum == gui.currentCapture[0]) {
+                for (int i = 0; i < measurement.measureList.size(); i++){
+                    if (measurement.measureList.get(i).position == gui.currentCapture[1]){
+                        measurement.measureList.get(i).setImage(gui.camera.capture);
+                        //lol good luck trying to decipher this bullshit
+                    }
                 }
+
             }
         }
 
@@ -77,6 +81,8 @@ public class imgAnalyzer implements cameraListener {
 //
 //
 //        }
+
+        guiHandler.updateTabbedPane();
 
 
     }

@@ -28,7 +28,7 @@ public class gui {
     static JFrame main = new JFrame("Potomac Inspect");
     public static measurementsCol submission;
     static cameraControl camera;
-    static Image latestImage;
+//    static Image latestImage;
     static Integer[] currentCapture = new Integer[2];
     static ArrayList<measurementsCol> storage = new ArrayList<measurementsCol>();
     static JTabbedPane tabbedPane;
@@ -43,6 +43,15 @@ public class gui {
         public void actionPerformed(ActionEvent e) {
             //Exit the program
             System.exit(0);
+        }
+    }
+
+    public static class AcquireListener implements ActionListener {
+
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            //This method is called when the Acquire button is clicked
         }
     }
 
@@ -92,6 +101,7 @@ public class gui {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println(button2.getText());
+                guiHandler.updateTabbedPane();
 
             }
         });
@@ -151,8 +161,8 @@ public class gui {
 
         //Setup tabs
         tabbedPane = new JTabbedPane();
-        tabbedPane.setBounds(50,50, 500, 300);
-
+//        tabbedPane.setBounds(50,50, 500, 600);
+        tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
         //Setup the main menu
         menuBar = new JMenuBar();
         menu = new JMenu("File");
@@ -176,8 +186,6 @@ public class gui {
                     } else {
                         addTab(tabbedPane, partNum);
                     }
-
-
                 } catch (NumberFormatException exception) {
                     JOptionPane.showMessageDialog(null, "Please enter a Integer number");
                 }
@@ -192,8 +200,21 @@ public class gui {
 
         menu.add(menuItem);
 
+
+        menuBar.add(menu);
+
+        menu = new JMenu("Action");
+        menuItem = new JMenuItem("Force Update");
+        menuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                guiHandler.updateTabbedPane();
+            }
+        });
+        menu.add(menuItem);
         menuBar.add(menu);
         main.setJMenuBar(menuBar);
+
 
 
 
@@ -215,7 +236,7 @@ public class gui {
         JPanel Button1 = new JPanel();// Make a JPanel;
         Button1.setBounds(100, 30, 400, 40);
         main.setSize(875, 420);
-        main.setLayout(null);
+        main.setLayout(new GridLayout(1,1));
         main.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         main.getContentPane().add(tabbedPane);
 
@@ -418,111 +439,6 @@ public class gui {
         Date date = new Date(System.currentTimeMillis());
 
 
-//        for (double curr : feretCol) {
-//
-//
-//            if (curr > currentSettings.feretMax) {
-//
-//
-//                JLabel Red = new JLabel("Fails:" + curr);
-//                Red.setForeground(Color.red);
-//                Passfail.add(Red);
-//
-//            }
-//
-//
-//            if (curr < currentSettings.feretMin) {
-//
-//                JLabel Red2 = new JLabel("Fail:" + curr);
-//                Red2.setForeground(Color.red);
-//                resultspanel.add(Below);
-//                Passfail.add(Red2);
-//
-//            }
-//
-//
-//            if (curr > currentSettings.feretMin & curr < currentSettings.feretMax) {
-//
-//                JLabel Green = new JLabel("Pass" + curr);
-//                Green.setForeground(Color.green);
-//                Passfail.add(Green);
-//
-//            }
-
-
-////TOP LEFT HANDLER FOR SAVING DATA TO RESULTS -- TOP LEFT HANDLER FOR SAVING DATA TO RESULTS -- TOP LEFT HANDLER FOR SAVING DATA TO RESULTS
-//
-//
-//            if (toplefttf == true & aquirebuttontf == true) {
-//
-//
-//
-//                myWriter.write(formatter.format(date)+  " " + "Top Left!" + "" + " " + curr +  "\n");
-//
-//
-//
-//            }
-//
-//
-////TOP RIGHT HANDLER FOR SAVING DATA TO RESULTS -- TOP RIGHT HANDLER FOR SAVING DATA TO RESULTS -- TOP RIGHT HANDLER FOR SAVING DATA TO RESULTS
-//
-//
-//            if (toprighttf == true & aquirebuttontf == true) {
-//
-//
-//
-//                myWriter.write(formatter.format(date)+ " " +"Top Right!" + " " + curr + "\n");
-//
-//            }
-//
-//
-//            //CENTER HANDLER FOR SAVING DATA TO RESULTS -- CENTER HANDLER FOR SAVING DATA TO RESULTS -- CENTER HANDLER FOR SAVING DATA TO RESULTS
-//
-//
-//            if (centeraccess == true & aquirebuttontf == true) {
-//
-//
-//
-//                myWriter.write(formatter.format(date)+ " " + "Center Access" + " " + curr + "\n");
-//
-//            }
-//
-//
-//            //BOTTOM RIGHT HANDLER FOR SAVING DATA TO RESULTS -- BOTTOM RIGHT FOR SAVING DATA TO RESULTS -- BOTTOM RIGHT FOR SAVING DATA TO RESULTS
-//
-//
-//            if (bottomrighttf == true & aquirebuttontf == true) {
-//
-//
-//
-//                myWriter.write(formatter.format(date) + " " + "Top Left!" + " " + curr +  "\n");
-//
-//            }
-//
-//
-//            //BOTTOM KEFT HANDLER FOR SAVING DATA TO RESULTS -- BOTTOM LEFT FOR SAVING DATA TO RESULTS -- BOTTOM LEFT FOR SAVING DATA TO RESULTS
-//
-//
-//            if (bottomlefttf == true & aquirebuttontf == true) {
-//
-//
-//
-//                myWriter.write(formatter.format(date) + " " + "Bottom Left!" + " " + curr + "\n");
-//
-//
-//            }
-//
-//
-//
-//        }
-//        myWriter.close();
-//        toplefttf = false;
-//        bottomlefttf = false;
-//        centeraccess = false;
-//        toprighttf = false;
-//        bottomrighttf = false;
-
-//            System.out.println(feretCol.length);
 
             return null;
 

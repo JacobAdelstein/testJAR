@@ -4,26 +4,58 @@ public class measurements {
 
     double[] results;
 
-    Boolean pass = false;
-
+    Boolean pass;
+    Boolean hasImage;
     Image capture;
-
+    String name;
     Integer position;
     Integer partNum;
 
-    public measurements(Integer pos, Image cap, Integer partNumber) {
+    public measurements(Integer pos, Integer partNumber) {
 //        cameracontrol.returner();
         position = pos;
-        capture = cap;
         partNum = partNumber;
+        hasImage = false;
+        pass = false;
+
+        switch (position) {
+            case 1:
+                name = "Top Left";
+                break;
+            case 2:
+                name = "Top Right";
+                break;
+            case 3:
+                name = "Center";
+                break;
+            case 4:
+                name = "Bottom Left";
+                break;
+            case 5:
+                name = "Bottom Right";
+                break;
 
 
+        }
 
     }
 
-    public void add(Image image) {
+    public String toString() {
+        return "Part: " + partNum + " Position: " + position + "Display Name: " + name + " Has Image: " + hasImage;
+
+    }
+
+    public void setImage(Image image) {
         capture = image;
+        hasImage = true;
     }
+
+    public void removeImage() {
+        capture = null;
+        pass = false;
+        hasImage = false;
+    }
+
 
     public static void measurementsmethod(){
 
