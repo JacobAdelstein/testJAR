@@ -6,6 +6,8 @@ import javax.swing.border.EtchedBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 public class guiHandler {
 
@@ -23,6 +25,41 @@ public class guiHandler {
         JLabel image = new JLabel();
 
         image.setIcon(imageIcon);
+        image.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                JFrame newFrame = new JFrame("Showing " + currentMeasurement.name);
+                JPanel newJpanel = new JPanel();
+                JLabel label = new JLabel();
+                label.setIcon(new ImageIcon(currentMeasurement.capture.getScaledInstance(640,360,Image.SCALE_SMOOTH)));
+                newJpanel.add(label);
+                newFrame.add(newJpanel);
+                newFrame.setPreferredSize(new Dimension(640, 360));
+                newFrame.setBounds(500,100,640,360);
+                newFrame.setVisible(true);
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
         imgPanel.add(image, BorderLayout.LINE_START);
         returnPanel.setLayout(new BorderLayout(10, 20));
         returnPanel.setPreferredSize(new Dimension(450,100));

@@ -41,7 +41,7 @@ public class measurements {
     }
 
     public String toString() {
-        return "Part: " + partNum + " Position: " + position + "Display Name: " + name + " Has Image: " + hasImage;
+        return "Part: " + partNum + " Position: " + position + " Display Name: " + name + " Has Image: " + hasImage;
 
     }
 

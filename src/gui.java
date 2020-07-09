@@ -65,74 +65,77 @@ public class gui {
 
         measurementsCol currentMeasure = new measurementsCol(partNumber);
         storage.add(currentMeasure);
-
-
-        JLabel label = new JLabel(String.valueOf(partNumber));
-        JButton topLeft = new JButton("Top Left");
-        JPanel panel = new JPanel();
-        panel.add(label);
-        panel.add(topLeft);
-
-        topLeft.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                currentCapture[0] = partNumber;
-                currentCapture[1] = 1;
-                camera.startLive();
-
-            }
-        });
+        tabbedPane.addTab(String.valueOf(partNumber), null);
+        guiHandler.updateTabbedPane();
 
 
 
-        System.out.println(tabbedPane.getComponentCount());
-        JButton button2 = new JButton("Unclicked");
-        panel.add(button2);
-        button2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String response = JOptionPane.showInputDialog(null, "Enter your part number: ", "Enter your part", JOptionPane.QUESTION_MESSAGE);
-                button2.setText(response);
-            }
-        });
-        JButton button3 = new JButton("Print what you typed");
-        button3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println(button2.getText());
-                guiHandler.updateTabbedPane();
-
-            }
-        });
-        panel.add(button3);
-
-        JButton button4 = new JButton("Show Top Left");
-        button4.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //Action listener attached to btn4
-
-                JFrame newFrame = new JFrame("Showing Top Left");
-                JPanel newJpanel = new JPanel();
-                JLabel label = new JLabel();
-                newJpanel.add(label);
-                newFrame.add(newJpanel);
-                newFrame.setVisible(true);
-
-            }
-        });
-        panel.add(button4);
-
-        JButton button5 = new JButton("Close tabPane");
-        button5.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                tabbedPane.remove(tabbedPane.getSelectedIndex());
-            }
-        });
-        panel.add(button5);
-        tabbedPane.addTab(String.valueOf(partNumber), panel);
+//        JLabel label = new JLabel(String.valueOf(partNumber));
+//        JButton topLeft = new JButton("Top Left");
+//        JPanel panel = new JPanel();
+//        panel.add(label);
+//        panel.add(topLeft);
+//
+//        topLeft.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//
+//                currentCapture[0] = partNumber;
+//                currentCapture[1] = 1;
+//                camera.startLive();
+//
+//            }
+//        });
+//
+//
+//
+//        System.out.println(tabbedPane.getComponentCount());
+//        JButton button2 = new JButton("Unclicked");
+//        panel.add(button2);
+//        button2.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                String response = JOptionPane.showInputDialog(null, "Enter your part number: ", "Enter your part", JOptionPane.QUESTION_MESSAGE);
+//                button2.setText(response);
+//            }
+//        });
+//        JButton button3 = new JButton("Print what you typed");
+//        button3.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                System.out.println(button2.getText());
+//                guiHandler.updateTabbedPane();
+//
+//            }
+//        });
+//        panel.add(button3);
+//
+//        JButton button4 = new JButton("Show Top Left");
+//        button4.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                //Action listener attached to btn4
+//
+//                JFrame newFrame = new JFrame("Showing Top Left");
+//                JPanel newJpanel = new JPanel();
+//                JLabel label = new JLabel();
+//                newJpanel.add(label);
+//                newFrame.add(newJpanel);
+//                newFrame.setVisible(true);
+//
+//            }
+//        });
+//        panel.add(button4);
+//
+//        JButton button5 = new JButton("Close tabPane");
+//        button5.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                tabbedPane.remove(tabbedPane.getSelectedIndex());
+//            }
+//        });
+//        panel.add(button5);
+//        tabbedPane.addTab(String.valueOf(partNumber), panel);
 
 
     }

@@ -29,7 +29,11 @@ public class cameraControl extends gui {
 
     public cameraControl() {
         Webcam.setDriver(new LtiCivilDriver());
+
         webcam = Webcam.getDefault();
+        webcam.close();
+        webcam.open();
+//        System.out.println(webcam.isOpen());
         panel = new WebcamPanel(webcam);
 
 

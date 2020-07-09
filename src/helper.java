@@ -19,25 +19,6 @@ import org.netlib.util.Second;
 import script.imglib.color.Green;
 
 
-class settings {
-
-
-    String windowTitle;
-    String sizeMin;
-    String sizeMax;
-    String circularityMin;
-    String circularityMax;
-    String distance;
-    String known;
-    String pixel;
-    double feretMin;
-    double feretMax;
-    double lowerThreshold;
-    double upperThreshold;
-    Boolean blackBackground;
-
-
-}
 
 class helper extends JFrame{
 

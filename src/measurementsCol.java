@@ -23,7 +23,7 @@ public class measurementsCol {
         }
 
         for (int i=0; i < measureList.size(); i++) {
-            System.out.println("Setting measurement for partNum: " + partNum + " and Position: " + i+1);
+            System.out.println("Setting measurement for partNum: " + partNum + " and Position: " + (i+1));
         }
 
         System.out.println("Printing toString: ");
