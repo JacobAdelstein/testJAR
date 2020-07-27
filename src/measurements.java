@@ -1,6 +1,8 @@
 import java.awt.*;
 
+
 public class measurements {
+    public static final int TopLeft = 1;
 
     double[] results;
 
@@ -19,7 +21,7 @@ public class measurements {
         pass = false;
 
         switch (position) {
-            case 1:
+            case TopLeft:
                 name = "Top Left";
                 break;
             case 2:

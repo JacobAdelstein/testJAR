@@ -1,3 +1,4 @@
+import com.github.sarxos.webcam.WebcamLockException;
 import org.xml.sax.SAXException;
 import javax.swing.*;
 import java.awt.*;
@@ -8,6 +9,8 @@ import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.util.ArrayList;
 
+import static org.python.modules.time.Time.sleep;
+
 
 public class gui {
 
@@ -17,17 +20,6 @@ public class gui {
     static JLabel Below = new JLabel("The Limit is below the FeretMin!");
     public static settings currentSettings;
 
-    static {
-        try {
-            currentSettings = new settings();
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (SAXException e) {
-            e.printStackTrace();
-        }
-    }
 
     static JFrame main = new JFrame("Potomac Inspect");
     public static measurementsCol submission;
@@ -156,10 +148,17 @@ public class gui {
 
 
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException {
+
+        //Initialize program settings
+        currentSettings = new settings();
+        System.out.println("Upload server URL: " + currentSettings.serverURL);
+
+        System.out.println("Profiles loaded: " + currentSettings.listProfiles());
 
         //Setup camera control
         camera = new cameraControl();
+
 
         //Setup menu variables
         JMenu menu, subMenu;

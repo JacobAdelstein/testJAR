@@ -12,5 +12,8 @@
     <orderEntry type="library" name="jars" level="project" />
     <orderEntry type="library" name="bridj-0.7.0" level="project" />
     <orderEntry type="library" name="lti-civil" level="project" />
+    <orderEntry type="library" name="httpclient-4.5.12" level="project" />
+    <orderEntry type="library" name="httpclient-win-4.5.12" level="project" />
+    <orderEntry type="library" name="httpclient-osgi-4.5.12" level="project" />
   </component>
 </module>

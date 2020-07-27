@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 
 public class guiHandler {
 
@@ -115,9 +116,16 @@ public class guiHandler {
     }
 
     public static void updateTabbedPane(){
+        //This function iterates through all tabbedPanes and updates them with latest data.
+        //Call this function after data has changed to update the view.
+
+
+
         for (int i = 0; i < gui.tabbedPane.getTabCount(); i++) {
+            //Iterate through tabbedPanes
 
             int tabNum = Integer.parseInt(gui.tabbedPane.getTitleAt(i));
+            //Get the partNum in the title
             System.out.println("Updating panel at " + tabNum);
             JPanel mainPanel = new JPanel();
             mainPanel.setLayout(new FlowLayout());
@@ -128,6 +136,9 @@ public class guiHandler {
             scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
             scrollPane.setPreferredSize(new Dimension(500,500));
             for(int b = 0; b < gui.storage.size(); b++) {
+                //Iterate through the storage arrayList
+
+
                 if (tabNum == gui.storage.get(b).partNum) {
                     System.out.println(gui.storage.get(b).toString());
                     for (int a = 0; a < gui.storage.get(b).measureList.size(); a++) {
@@ -137,13 +148,28 @@ public class guiHandler {
                             mainPanel.add(getNoImagePanel(gui.storage.get(b).measureList.get(a)));
                         }
                     }
+
+                    JButton submit = new JButton("Submit");
+                    int finalB = b;
+                    submit.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            try {
+                                httpSubmit.testSubmit(gui.storage.get(finalB).partNum);
+                            } catch (IOException ioException) {
+                                ioException.printStackTrace();
+                            }
+
+
+                        }
+                    });
+                    mainPanel.add(submit);
+
+
+
+
                 }
             }
-
-//            mainPanel.add(getRowPanel())
-
-
-//            topLeft.
 
 
 
@@ -152,7 +178,6 @@ public class guiHandler {
 
 
 
-//            gui.tabbedPane.remove(i);
 
 
         }
