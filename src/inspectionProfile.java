@@ -20,13 +20,13 @@ public class inspectionProfile {
         returnString.append("\nUpper Threshold: " + this.upperThreshold);
         returnString.append("\nMinimum analysis size: " + this.sizeMin);
         returnString.append("\nMaximum analysis size: " + this.sizeMax);
-        returnString.append("\nMinimum circularity: " + this.circularityMax);
+        returnString.append("\nMinimum circularity: " + this.circularityMin);
         returnString.append("\nMaximum circularity: " + this.circularityMax);
         returnString.append("\nDistance: " + this.distance);
         returnString.append("\nKnown: " + this.known);
         returnString.append("\nPixel: " + this.pixel);
         returnString.append("\nMinimum Passing: " + this.feretMin);
-        returnString.append("\nMaximum Passing" + this.feretMax);
+        returnString.append("\nMaximum Passing: " + this.feretMax);
         returnString.append("\nBlackBackground: " + this.blackBackground);
         returnString.append("\n<-------------------------------------------->\n\n");
         return returnString.toString();

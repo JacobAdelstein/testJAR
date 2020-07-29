@@ -1,11 +1,14 @@
 import com.github.sarxos.webcam.WebcamLockException;
+import com.itextpdf.text.Jpeg;
 import org.xml.sax.SAXException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.IOException;
+import javax.swing.border.EmptyBorder;
 import javax.xml.parsers.ParserConfigurationException;
 import java.util.ArrayList;
 
@@ -54,18 +57,87 @@ public class gui {
 
 
 
-    //TOP LEFT - 1
-    //TOP RIGHT - 2
-
-    static void addTab(JTabbedPane tabbedPane, Integer partNumber) {
-
-        measurementsCol currentMeasure = new measurementsCol(partNumber);
-        storage.add(currentMeasure);
-        tabbedPane.addTab(String.valueOf(partNumber), null);
-        guiHandler.updateTabbedPane();
 
 
+    static boolean partExists(Integer partNum) {
+        for (int i = 0; i < gui.storage.size(); i++) {
+            if (gui.storage.get(i).partNum == partNum) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
 
+    static void addTab(JTabbedPane tabbedPane) {
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        JFrame newTab = new JFrame("New Measurement");
+        JPanel mainPanel = new JPanel();
+
+
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
+        mainPanel.add(Box.createVerticalGlue());
+        JPanel partNumPanel = new JPanel();
+        partNumPanel.setLayout(new BoxLayout(partNumPanel, BoxLayout.LINE_AXIS));
+        JLabel partNumLabel = new JLabel("Enter Part Number: ");
+        partNumLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        partNumPanel.add(partNumLabel);
+        JTextField partNumField = new JTextField();
+        partNumField.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        partNumField.setMaximumSize(new Dimension(100,20));
+        partNumPanel.add(partNumField);
+        mainPanel.add(partNumPanel);
+        mainPanel.add(Box.createVerticalGlue());
+        JPanel profileSelectorPanel = new JPanel();
+        profileSelectorPanel.setLayout(new BoxLayout(profileSelectorPanel, BoxLayout.LINE_AXIS));
+        JLabel profileLabel = new JLabel("Select a inspection profile: ");
+        profileSelectorPanel.add(profileLabel);
+        JComboBox profileBox = new JComboBox(gui.currentSettings.profileList);
+        profileBox.setMaximumSize(new Dimension(150, 20));
+        profileSelectorPanel.add(profileBox);
+        mainPanel.add(profileSelectorPanel);
+        mainPanel.add(Box.createVerticalGlue());
+
+
+        JButton submit = new JButton("Create Measurement");
+        submit.setAlignmentX(Component.CENTER_ALIGNMENT);
+        submit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    int partNum = Integer.parseInt(partNumField.getText());
+                    if (partExists(partNum)) {
+                        JOptionPane.showMessageDialog(mainPanel, "Measurement already exists for part number " + String.valueOf(partNum));                    } else {
+                        measurementsCol currentMeasure = new measurementsCol(partNum, currentSettings.inspectionProfiles.get(profileBox.getSelectedIndex()));
+                        storage.add(currentMeasure);
+                        tabbedPane.addTab(String.valueOf(partNum), null);
+                        guiHandler.updateTabbedPane();
+                        newTab.setVisible(false);
+                    }
+                } catch (NumberFormatException exception) {
+                    JOptionPane.showMessageDialog(mainPanel, "Please enter an integer number");
+                }
+            }
+        });
+        mainPanel.add(submit);
+        mainPanel.add(Box.createVerticalGlue());
+
+        newTab.setBounds(screenSize.width/2-250,screenSize.height/2-100,500,200);
+        newTab.add(mainPanel);
+        newTab.setVisible(true);
+        newTab.getRootPane().setDefaultButton(submit);
+
+
+
+
+
+
+
+//        measurementsCol currentMeasure = new measurementsCol(partNumber);
+//        storage.add(currentMeasure);
+//        tabbedPane.addTab(String.valueOf(partNumber), null);
 //        JLabel label = new JLabel(String.valueOf(partNumber));
 //        JButton topLeft = new JButton("Top Left");
 //        JPanel panel = new JPanel();
@@ -136,14 +208,6 @@ public class gui {
 
     }
 
-    static Boolean partExists(Integer partNum) {
-        for (int i = 0; i < tabbedPane.getTabCount(); i++) {
-            if (Integer.parseInt(tabbedPane.getTitleAt(i)) == partNum) {
-                return true;
-            }
-        }
-        return false;
-    }
 
 
 
@@ -185,13 +249,7 @@ public class gui {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    String response = JOptionPane.showInputDialog(null, "Enter your part number: ", "Enter your name", JOptionPane.QUESTION_MESSAGE);
-                    int partNum = Integer.parseInt(response);
-                    if (partExists(partNum)) {
-                        JOptionPane.showMessageDialog(null, "Part number already exists");
-                    } else {
-                        addTab(tabbedPane, partNum);
-                    }
+                    addTab(tabbedPane);
                 } catch (NumberFormatException exception) {
                     JOptionPane.showMessageDialog(null, "Please enter a Integer number");
                 }
@@ -220,10 +278,27 @@ public class gui {
         menu.add(menuItem);
         menuBar.add(menu);
         main.setJMenuBar(menuBar);
-        main.setSize(875, 420);
+        main.setSize(600, 900);
         main.setLayout(new GridLayout(1,1));
         main.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         main.getContentPane().add(tabbedPane);
+        main.setFocusable(true);
+        main.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                System.out.println(e.getKeyCode() + " key released");
+
+            }
+        });
         main.setVisible(true);
 
 

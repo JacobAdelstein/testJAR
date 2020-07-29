@@ -2,9 +2,8 @@ import java.awt.*;
 import java.util.ArrayList; // import the ArrayList class
 
 public class measurementsCol {
-
-    Integer partNum;
     inspectionProfile currentProfile;
+    Integer partNum;
     ArrayList<measurements> measureList;
 //    measurements TL;
 //    measurements TR;
@@ -20,7 +19,7 @@ public class measurementsCol {
         System.out.println("MeasureList Size: " + measureList.size());
 
         for (int i=0; i < 5; i++) {
-            measureList.add(new measurements(i+1, partNumber));
+            measureList.add(new measurements(i+1, partNumber, currentProfile));
         }
 
         for (int i=0; i < measureList.size(); i++) {

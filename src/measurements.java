@@ -5,7 +5,7 @@ public class measurements {
     public static final int TopLeft = 1;
 
     double[] results;
-
+    inspectionProfile profile;
     Boolean pass;
     Boolean hasImage;
     Image capture;
@@ -13,12 +13,12 @@ public class measurements {
     Integer position;
     Integer partNum;
 
-    public measurements(Integer pos, Integer partNumber) {
-//        cameracontrol.returner();
+    public measurements(Integer pos, Integer partNumber, inspectionProfile currentProfile) {
         position = pos;
         partNum = partNumber;
         hasImage = false;
         pass = false;
+        profile = currentProfile;
 
         switch (position) {
             case TopLeft:

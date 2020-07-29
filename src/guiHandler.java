@@ -11,17 +11,46 @@ import java.awt.event.MouseListener;
 import java.io.IOException;
 
 public class guiHandler {
+    private static boolean checkPass(double[] results, inspectionProfile currentProfile){
+        if (results.length == 0) {
+            return false;
+        }
+        for (int i=0; i < results.length; i++) {
+            if (results[i] < currentProfile.feretMin || results[i] > currentProfile.feretMax) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static JPanel getResultsPanel(measurements currentMeasurement) {
+
+        JPanel returnPanel = new JPanel();
+        returnPanel.setLayout(new BoxLayout(returnPanel, BoxLayout.PAGE_AXIS));
+        returnPanel.setSize(100,60);
+        returnPanel.setMaximumSize(new Dimension(100, 60));
+        returnPanel.setMinimumSize(new Dimension(100, 60));
+        boolean pass = checkPass(currentMeasurement.results, currentMeasurement.profile);
+
+        if (pass) {
+            returnPanel.setBackground(new Color(72, 245, 76));
+        } else {
+            JLabel fail = new JLabel("FAIL", SwingConstants.CENTER);
+            returnPanel.add(fail);
+            returnPanel.setBackground(new Color(245, 66, 66));
+        }
+
+        return returnPanel;
+
+    }
 
 
     public static JPanel getImagePanel(measurements currentMeasurement){
         //Get Scaled ImageIcon
         ImageIcon imageIcon = new ImageIcon(currentMeasurement.capture.getScaledInstance(80,45,Image.SCALE_SMOOTH));
-
-
-
-
         JPanel returnPanel = new JPanel();
         JPanel imgPanel = new JPanel();
+        imgPanel.setMaximumSize(new Dimension(80,45));
         imgPanel.setLayout(new BorderLayout(10, 20));
         JLabel image = new JLabel();
 
@@ -29,12 +58,10 @@ public class guiHandler {
         image.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-
             }
 
             @Override
             public void mousePressed(MouseEvent e) {
-
             }
 
             @Override
@@ -48,21 +75,19 @@ public class guiHandler {
                 newFrame.setPreferredSize(new Dimension(640, 360));
                 newFrame.setBounds(500,100,640,360);
                 newFrame.setVisible(true);
-
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
-
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-
             }
         });
         imgPanel.add(image, BorderLayout.LINE_START);
-        returnPanel.setLayout(new BorderLayout(10, 20));
+
+        returnPanel.setLayout(new GridLayout(1, 4));
         returnPanel.setPreferredSize(new Dimension(450,100));
         JButton removeBtn = new JButton("Remove");
 
@@ -75,27 +100,28 @@ public class guiHandler {
 
             }
         });
-
-
-        returnPanel.add(removeBtn, BorderLayout.LINE_END);
-        returnPanel.add(imgPanel, BorderLayout.CENTER);
-        JLabel locLabel = new JLabel(currentMeasurement.name);
+        JLabel locLabel = new JLabel(currentMeasurement.name, SwingConstants.CENTER);
+        returnPanel.add(locLabel);
+        returnPanel.add(imgPanel);
+        returnPanel.add(getResultsPanel(currentMeasurement));
+        returnPanel.add(removeBtn);
         locLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        returnPanel.add(locLabel, BorderLayout.LINE_START);
+        locLabel.setVerticalAlignment(SwingConstants.CENTER);
         returnPanel.setBorder(BorderFactory.createBevelBorder(EtchedBorder.RAISED));
+
         return returnPanel;
     }
 
     public static JPanel getNoImagePanel(measurements currentMeasurement){
         JPanel returnPanel = new JPanel();
-        returnPanel.setLayout(new BorderLayout(10, 20));
+        returnPanel.setLayout(new BoxLayout(returnPanel, BoxLayout.LINE_AXIS));
+        returnPanel.add(Box.createHorizontalGlue());
         returnPanel.setPreferredSize(new Dimension(450,100));
         JButton acquireBtn = new JButton("Acquire");
 
         acquireBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 gui.currentCapture[0] = currentMeasurement.partNum;
                 gui.currentCapture[1] = currentMeasurement.position;
                 gui.camera.startLive();
@@ -104,13 +130,18 @@ public class guiHandler {
         });
 
 
-
-
-
-        returnPanel.add(acquireBtn, BorderLayout.LINE_END);
         JLabel locLabel = new JLabel(currentMeasurement.name);
+        returnPanel.add(locLabel);
+        returnPanel.add(Box.createHorizontalGlue());
+        returnPanel.add(Box.createHorizontalGlue());
+        returnPanel.add(Box.createHorizontalGlue());
+        returnPanel.add(Box.createHorizontalGlue());
+        returnPanel.add(Box.createHorizontalGlue());
+        returnPanel.add(Box.createHorizontalGlue());
+        //i know this sum bs code righ here
+        returnPanel.add(acquireBtn);
+        returnPanel.add(Box.createHorizontalGlue());
         locLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        returnPanel.add(locLabel, BorderLayout.LINE_START);
         returnPanel.setBorder(BorderFactory.createBevelBorder(EtchedBorder.RAISED));
         return returnPanel;
     }
