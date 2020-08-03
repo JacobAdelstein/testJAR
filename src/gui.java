@@ -22,6 +22,8 @@ public class gui {
     static JPanel Passfail = new JPanel();
     static JLabel Below = new JLabel("The Limit is below the FeretMin!");
     public static settings currentSettings;
+    static int debugCount = 0;
+    static boolean debugMode = false;
 
 
     static JFrame main = new JFrame("Potomac Inspect");
@@ -54,7 +56,23 @@ public class gui {
         }
     }
 
+    static public void debugChecker(int keyPressed) {
+        int[] code = {38, 38, 40, 40, 37, 39, 37, 39, 66, 10};
+        if (keyPressed == code[debugCount]) {
+            debugCount++;
+            if (debugCount == code.length) {
+                System.out.println("DEBUG MODE ENABLED");
+                debugMode = true;
+                JOptionPane.showMessageDialog(null, "Debug mode enabled");
+                debugCount = 0;
 
+
+
+            }
+        } else {
+            debugCount = 0;
+        }
+    }
 
 
 
@@ -296,25 +314,14 @@ public class gui {
             @Override
             public void keyReleased(KeyEvent e) {
                 System.out.println(e.getKeyCode() + " key released");
+                debugChecker(e.getKeyCode());
 
             }
         });
         main.setVisible(true);
 
-
-
-
-
-
-
 //        tabbedPane.addTab("Tab 1", null, panel1, "Does nothing");
 //        tabbedPane.addTab("tab2", null, panel2, "blah");
-
-
-
-
-
-
     }
 }
 
