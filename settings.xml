@@ -1,0 +1,42 @@
+<settings>
+
+	<GlobalSettings>
+		<serverURL>http://192.168.10.111:8000/newSubmit</serverURL>
+	</GlobalSettings>
+	
+	
+	<InspectionProfile>
+	
+		<testProfile>
+			<lowerThreshold>0</lowerThreshold>
+			<upperThreshold>61</upperThreshold>
+			<sizeMin>150</sizeMin>
+			<sizeMax>300</sizeMax>
+			<circularityMin>.8</circularityMin>
+			<circularityMax>1</circularityMax>
+			<distance>1</distance>
+			<known>1</known>
+			<pixel>1</pixel>
+			<feretMin>0</feretMin>
+			<feretMax>10</feretMax>
+			<blackBackground>false</blackBackground>
+		</testProfile>
+		
+		<SophionQC>
+			<lowerThreshold>0</lowerThreshold>
+			<upperThreshold>69</upperThreshold>
+			<sizeMin>0</sizeMin>
+			<sizeMax>1</sizeMax>
+			<circularityMin>0.5</circularityMin>
+			<circularityMax>1</circularityMax>
+			<distance>1</distance>
+			<known>1</known>
+			<pixel>1</pixel>
+			<feretMin>0</feretMin>
+			<feretMax>5</feretMax>
+			<blackBackground>true</blackBackground>
+		</SophionQC>
+		
+	</InspectionProfile>
+	
+</settings>

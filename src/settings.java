@@ -18,6 +18,8 @@ public class settings {
     ArrayList<inspectionProfile> inspectionProfiles;
     String[] profileList;
     String serverURL;
+    boolean debug = false;
+    boolean offlineSave = false;
 
 
     public String listProfiles() {

@@ -56,7 +56,7 @@ public class httpSubmit {
 
 
 
-    public static void testSubmit(Integer partNum) throws IOException {
+    public static void testSubmit(Integer partNum, Integer techID) throws IOException {
 
 
         Image img1 = null;
@@ -88,6 +88,7 @@ public class httpSubmit {
                 .addBinaryBody("img1", os.toByteArray(), ContentType.DEFAULT_BINARY, "img1.jpg")
                 .addTextBody("partNum", String.valueOf(partNum))
                 .addTextBody("date", getDateString())
+                .addTextBody("tech", String.valueOf(techID))
                 .setBoundary("----WebKitFormBoundary7MA4YWxkTrZu0gW").build();
 
 //        System.out.println(EntityUtils.toString(entity));

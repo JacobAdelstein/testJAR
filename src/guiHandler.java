@@ -3,11 +3,10 @@ import org.jruby.RubyProcess;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.io.IOException;
 
 public class guiHandler {
@@ -186,7 +185,12 @@ public class guiHandler {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             try {
-                                httpSubmit.testSubmit(gui.storage.get(finalB).partNum);
+                                try {
+                                    int techID = Integer.parseInt(JOptionPane.showInputDialog("Enter Technician ID"));
+                                    httpSubmit.testSubmit(gui.storage.get(finalB).partNum, techID);
+                                } catch (NumberFormatException ex) {
+                                    JOptionPane.showMessageDialog(null, "Technician ID must be a number");
+                                }
                             } catch (IOException ioException) {
                                 ioException.printStackTrace();
                             }
@@ -214,6 +218,74 @@ public class guiHandler {
         }
 
     }
+
+    public static JMenuBar getMenu(boolean debug){
+
+        //Setup menu variables
+        JMenu menu, subMenu;
+        JMenuItem menuItem;
+        JMenuBar menuBar;
+
+        //Setup the main menu
+        menuBar = new JMenuBar();
+        menu = new JMenu("File");
+        menu.setMnemonic(KeyEvent.VK_F);
+        menuItem = new JMenuItem("New", KeyEvent.VK_N);
+
+
+        menuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    gui.addTab(gui.tabbedPane);
+                } catch (NumberFormatException exception) {
+                    JOptionPane.showMessageDialog(null, "Please enter a Integer number");
+                }
+            }
+        });
+
+        menu.add(menuItem);
+        menu.addSeparator();
+        menuItem = new JMenuItem("Exit", KeyEvent.VK_X);
+        menuItem.addActionListener(new gui.CloseListener());
+        menu.add(menuItem);
+        menuBar.add(menu);
+        menu = new JMenu("Action");
+        menuItem = new JMenuItem("Force Update");
+        menuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                guiHandler.updateTabbedPane();
+            }
+        });
+        menu.add(menuItem);
+        menuBar.add(menu);
+        if (debug) {
+            System.out.println("Adding debug");
+            menu = new JMenu("Debug");
+            JCheckBoxMenuItem menuItemCheck = new JCheckBoxMenuItem("Offline Save");
+            menuItemCheck.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (menuItemCheck.getState() == true) {
+
+                    } else {
+
+                    }
+
+                }
+            });
+            menu.add(menuItemCheck);
+            menuBar.add(menu);
+            SwingUtilities.updateComponentTreeUI(gui.main);
+
+
+
+        }
+
+        return menuBar;
+    }
+
 
 
 }

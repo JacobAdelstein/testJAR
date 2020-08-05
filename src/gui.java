@@ -23,7 +23,6 @@ public class gui {
     static JLabel Below = new JLabel("The Limit is below the FeretMin!");
     public static settings currentSettings;
     static int debugCount = 0;
-    static boolean debugMode = false;
 
 
     static JFrame main = new JFrame("Potomac Inspect");
@@ -39,7 +38,7 @@ public class gui {
         //[0] = partNum
         //[1] = imgPos
 
-    private static class CloseListener implements ActionListener{
+    static class CloseListener implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
             //Exit the program
@@ -62,9 +61,10 @@ public class gui {
             debugCount++;
             if (debugCount == code.length) {
                 System.out.println("DEBUG MODE ENABLED");
-                debugMode = true;
+                currentSettings.debug = true;
                 JOptionPane.showMessageDialog(null, "Debug mode enabled");
                 debugCount = 0;
+                main.setJMenuBar(guiHandler.getMenu(currentSettings.debug));
 
 
 
@@ -147,84 +147,9 @@ public class gui {
         newTab.setVisible(true);
         newTab.getRootPane().setDefaultButton(submit);
 
-
-
-
-
-
-
-//        measurementsCol currentMeasure = new measurementsCol(partNumber);
-//        storage.add(currentMeasure);
-//        tabbedPane.addTab(String.valueOf(partNumber), null);
-//        JLabel label = new JLabel(String.valueOf(partNumber));
-//        JButton topLeft = new JButton("Top Left");
-//        JPanel panel = new JPanel();
-//        panel.add(label);
-//        panel.add(topLeft);
-//
-//        topLeft.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//
-//                currentCapture[0] = partNumber;
-//                currentCapture[1] = 1;
-//                camera.startLive();
-//
-//            }
-//        });
-//
-//
-//
-//        System.out.println(tabbedPane.getComponentCount());
-//        JButton button2 = new JButton("Unclicked");
-//        panel.add(button2);
-//        button2.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                String response = JOptionPane.showInputDialog(null, "Enter your part number: ", "Enter your part", JOptionPane.QUESTION_MESSAGE);
-//                button2.setText(response);
-//            }
-//        });
-//        JButton button3 = new JButton("Print what you typed");
-//        button3.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                System.out.println(button2.getText());
-//                guiHandler.updateTabbedPane();
-//
-//            }
-//        });
-//        panel.add(button3);
-//
-//        JButton button4 = new JButton("Show Top Left");
-//        button4.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                //Action listener attached to btn4
-//
-//                JFrame newFrame = new JFrame("Showing Top Left");
-//                JPanel newJpanel = new JPanel();
-//                JLabel label = new JLabel();
-//                newJpanel.add(label);
-//                newFrame.add(newJpanel);
-//                newFrame.setVisible(true);
-//
-//            }
-//        });
-//        panel.add(button4);
-//
-//        JButton button5 = new JButton("Close tabPane");
-//        button5.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                tabbedPane.remove(tabbedPane.getSelectedIndex());
-//            }
-//        });
-//        panel.add(button5);
-//        tabbedPane.addTab(String.valueOf(partNumber), panel);
-
-
     }
+
+
 
 
 
@@ -242,20 +167,11 @@ public class gui {
         camera = new cameraControl();
 
 
-        //Setup menu variables
-        JMenu menu, subMenu;
-        JMenuItem menuItem;
-        JMenuBar menuBar;
 
         //Setup tabs
         tabbedPane = new JTabbedPane();
 //        tabbedPane.setBounds(50,50, 500, 600);
         tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-        //Setup the main menu
-        menuBar = new JMenuBar();
-        menu = new JMenu("File");
-        menu.setMnemonic(KeyEvent.VK_F);
-        menuItem = new JMenuItem("New", KeyEvent.VK_N);
 
         //Setup Image analysis listener
         imgAnalyzer analyzer = new imgAnalyzer();
@@ -263,39 +179,9 @@ public class gui {
 
 
 
-        menuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    addTab(tabbedPane);
-                } catch (NumberFormatException exception) {
-                    JOptionPane.showMessageDialog(null, "Please enter a Integer number");
-                }
-            }
-        });
-
-        menu.add(menuItem);
-        menu.addSeparator();
-
-        menuItem = new JMenuItem("Exit", KeyEvent.VK_X);
-        menuItem.addActionListener(new CloseListener());
-
-        menu.add(menuItem);
 
 
-        menuBar.add(menu);
-
-        menu = new JMenu("Action");
-        menuItem = new JMenuItem("Force Update");
-        menuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                guiHandler.updateTabbedPane();
-            }
-        });
-        menu.add(menuItem);
-        menuBar.add(menu);
-        main.setJMenuBar(menuBar);
+        main.setJMenuBar(guiHandler.getMenu(currentSettings.debug));
         main.setSize(600, 900);
         main.setLayout(new GridLayout(1,1));
         main.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
