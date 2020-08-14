@@ -32,6 +32,7 @@ public class gui {
     static Integer[] currentCapture = new Integer[2];
     static ArrayList<measurementsCol> storage = new ArrayList<measurementsCol>();
     static JTabbedPane tabbedPane;
+    static debugConsole sysConsole;
 
 
     //currentCapture array is intended to indicate which image we're currently capturing
@@ -60,7 +61,7 @@ public class gui {
         if (keyPressed == code[debugCount]) {
             debugCount++;
             if (debugCount == code.length) {
-                System.out.println("DEBUG MODE ENABLED");
+                gui.sysConsole.println("DEBUG MODE ENABLED");
                 currentSettings.debug = true;
                 JOptionPane.showMessageDialog(null, "Debug mode enabled");
                 debugCount = 0;
@@ -156,12 +157,14 @@ public class gui {
 
 
     public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException {
+        //Setup the debug console
+        sysConsole = new debugConsole();
 
         //Initialize program settings
         currentSettings = new settings();
-        System.out.println("Upload server URL: " + currentSettings.serverURL);
+        gui.sysConsole.println("Upload server URL: " + currentSettings.serverURL);
 
-        System.out.println("Profiles loaded: " + currentSettings.listProfiles());
+        gui.sysConsole.println("Profiles loaded: " + currentSettings.listProfiles());
 
         //Setup camera control
         camera = new cameraControl();
@@ -199,7 +202,7 @@ public class gui {
 
             @Override
             public void keyReleased(KeyEvent e) {
-                System.out.println(e.getKeyCode() + " key released");
+                gui.sysConsole.println(e.getKeyCode() + " key released");
                 debugChecker(e.getKeyCode());
 
             }

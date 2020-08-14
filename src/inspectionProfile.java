@@ -11,6 +11,7 @@ public class inspectionProfile {
     double feretMax;
     double lowerThreshold;
     double upperThreshold;
+    int holeCount;
     Boolean blackBackground;
 
     @Override
@@ -28,6 +29,7 @@ public class inspectionProfile {
         returnString.append("\nMinimum Passing: " + this.feretMin);
         returnString.append("\nMaximum Passing: " + this.feretMax);
         returnString.append("\nBlackBackground: " + this.blackBackground);
+        returnString.append("\nHole Count: " + this.holeCount);
         returnString.append("\n<-------------------------------------------->\n\n");
         return returnString.toString();
     }
@@ -138,6 +140,14 @@ public class inspectionProfile {
 
     public inspectionProfile(String name) {
         profileName = name;
+    }
+
+    public int getHoleCount() {
+        return holeCount;
+    }
+
+    public void setHoleCount(int holeCount) {
+        this.holeCount = holeCount;
     }
 
 

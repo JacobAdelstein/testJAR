@@ -1,4 +1,8 @@
+import net.imagej.ops.Ops;
 import org.jruby.RubyProcess;
+import org.json.JSONException;
+import org.python.indexer.Def;
+import org.yecht.IoFileRead;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -10,17 +14,6 @@ import java.awt.event.*;
 import java.io.IOException;
 
 public class guiHandler {
-    private static boolean checkPass(double[] results, inspectionProfile currentProfile){
-        if (results.length == 0) {
-            return false;
-        }
-        for (int i=0; i < results.length; i++) {
-            if (results[i] < currentProfile.feretMin || results[i] > currentProfile.feretMax) {
-                return false;
-            }
-        }
-        return true;
-    }
 
     public static JPanel getResultsPanel(measurements currentMeasurement) {
 
@@ -29,15 +22,87 @@ public class guiHandler {
         returnPanel.setSize(100,60);
         returnPanel.setMaximumSize(new Dimension(100, 60));
         returnPanel.setMinimumSize(new Dimension(100, 60));
-        boolean pass = checkPass(currentMeasurement.results, currentMeasurement.profile);
+        boolean pass = currentMeasurement.checkPass();
 
         if (pass) {
+            JLabel passLabel = new JLabel("Pass", SwingConstants.CENTER);
+            returnPanel.add(passLabel);
             returnPanel.setBackground(new Color(72, 245, 76));
         } else {
             JLabel fail = new JLabel("FAIL", SwingConstants.CENTER);
             returnPanel.add(fail);
             returnPanel.setBackground(new Color(245, 66, 66));
         }
+
+        returnPanel.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                JFrame newFrame = new JFrame("Editing results for " + currentMeasurement.name);
+                JPanel newJpanel = new JPanel();
+                newJpanel.setLayout(new BoxLayout(newJpanel, BoxLayout.PAGE_AXIS));
+
+
+                DefaultListModel<result> resultsModel = new DefaultListModel<>();
+                for (int i = 0; i < currentMeasurement.results.length; i++) {
+                    resultsModel.addElement(currentMeasurement.results[i]);
+                }
+                JList resultsList = new JList(resultsModel);
+                resultsList.setCellRenderer(new DefaultListCellRenderer() {
+                    @Override
+                    public Component getListCellRendererComponent(JList list, Object object, int index, boolean isSelected, boolean cellHasFocus) {
+                        object = (result) object;
+                        setText(String.valueOf(((result) object).getResult()));
+
+                        if (isSelected) {
+                            setBackground(list.getSelectionBackground());
+                            setForeground(list.getSelectionForeground());
+                        } else {
+                            setBackground(list.getBackground());
+                            setForeground(list.getForeground());
+                        }
+
+                        return this;
+                    }
+                });
+                newFrame.setSize(300, 650);
+                newJpanel.add(resultsList);
+
+                JButton remove = new JButton("Remove");
+                remove.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        resultsModel.removeElementAt(resultsList.getSelectedIndex());
+                    }
+                });
+
+                newJpanel.add(remove);
+                newFrame.add(newJpanel);
+                newFrame.setVisible(true);
+
+
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
+
 
         return returnPanel;
 
@@ -70,9 +135,12 @@ public class guiHandler {
                 JLabel label = new JLabel();
                 label.setIcon(new ImageIcon(currentMeasurement.capture.getScaledInstance(640,360,Image.SCALE_SMOOTH)));
                 newJpanel.add(label);
+                JLabel overlayLabel = new JLabel();
+                overlayLabel.setIcon(new ImageIcon(currentMeasurement.overlay.getScaledInstance(640,360, Image.SCALE_SMOOTH)));
+                newJpanel.add(overlayLabel);
                 newFrame.add(newJpanel);
-                newFrame.setPreferredSize(new Dimension(640, 360));
-                newFrame.setBounds(500,100,640,360);
+                newFrame.setPreferredSize(new Dimension(640, 700));
+                newFrame.setBounds(500,100,640,700);
                 newFrame.setVisible(true);
             }
 
@@ -156,7 +224,7 @@ public class guiHandler {
 
             int tabNum = Integer.parseInt(gui.tabbedPane.getTitleAt(i));
             //Get the partNum in the title
-            System.out.println("Updating panel at " + tabNum);
+            gui.sysConsole.println("Updating panel at " + tabNum);
             JPanel mainPanel = new JPanel();
             mainPanel.setLayout(new FlowLayout());
             mainPanel.setPreferredSize(new Dimension(500, 1000));
@@ -167,10 +235,8 @@ public class guiHandler {
             scrollPane.setPreferredSize(new Dimension(500,500));
             for(int b = 0; b < gui.storage.size(); b++) {
                 //Iterate through the storage arrayList
-
-
                 if (tabNum == gui.storage.get(b).partNum) {
-                    System.out.println(gui.storage.get(b).toString());
+                    gui.sysConsole.println(gui.storage.get(b).toString());
                     for (int a = 0; a < gui.storage.get(b).measureList.size(); a++) {
                         if (gui.storage.get(b).measureList.get(a).hasImage == true) {
                             mainPanel.add(getImagePanel(gui.storage.get(b).measureList.get(a)));
@@ -190,33 +256,19 @@ public class guiHandler {
                                     httpSubmit.testSubmit(gui.storage.get(finalB).partNum, techID);
                                 } catch (NumberFormatException ex) {
                                     JOptionPane.showMessageDialog(null, "Technician ID must be a number");
+                                } catch (JSONException ex) {
+                                    JOptionPane.showMessageDialog(null, "Received a JSON Exception");
                                 }
                             } catch (IOException ioException) {
                                 ioException.printStackTrace();
                             }
-
-
                         }
                     });
                     mainPanel.add(submit);
-
-
-
-
                 }
             }
-
-
-
-
             gui.tabbedPane.setComponentAt(i, scrollPane);
-
-
-
-
-
         }
-
     }
 
     public static JMenuBar getMenu(boolean debug){
@@ -261,7 +313,7 @@ public class guiHandler {
         menu.add(menuItem);
         menuBar.add(menu);
         if (debug) {
-            System.out.println("Adding debug");
+            gui.sysConsole.println("Adding debug");
             menu = new JMenu("Debug");
             JCheckBoxMenuItem menuItemCheck = new JCheckBoxMenuItem("Offline Save");
             menuItemCheck.addActionListener(new ActionListener() {
@@ -276,6 +328,20 @@ public class guiHandler {
                 }
             });
             menu.add(menuItemCheck);
+
+            JCheckBoxMenuItem console = new JCheckBoxMenuItem("Show Debug Console");
+            console.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (console.getState() == true) {
+                        gui.sysConsole.showConsole();
+                    } else {
+                        gui.sysConsole.hideConsole();
+                    }
+                }
+            });
+            menu.add(console);
+
             menuBar.add(menu);
             SwingUtilities.updateComponentTreeUI(gui.main);
 

@@ -9,17 +9,18 @@
 	
 		<testProfile>
 			<lowerThreshold>0</lowerThreshold>
-			<upperThreshold>61</upperThreshold>
-			<sizeMin>150</sizeMin>
-			<sizeMax>300</sizeMax>
-			<circularityMin>.8</circularityMin>
+			<upperThreshold>50</upperThreshold>
+			<sizeMin>100</sizeMin>
+			<sizeMax>3000</sizeMax>
+			<circularityMin>.7</circularityMin>
 			<circularityMax>1</circularityMax>
 			<distance>1</distance>
 			<known>1</known>
 			<pixel>1</pixel>
-			<feretMin>0</feretMin>
-			<feretMax>10</feretMax>
+			<feretMin>40</feretMin>
+			<feretMax>50</feretMax>
 			<blackBackground>false</blackBackground>
+			<holeCount>10</holeCount>
 		</testProfile>
 		
 		<SophionQC>
@@ -35,6 +36,8 @@
 			<feretMin>0</feretMin>
 			<feretMax>5</feretMax>
 			<blackBackground>true</blackBackground>
+			<holeCount>5</holeCount>
+
 		</SophionQC>
 		
 	</InspectionProfile>

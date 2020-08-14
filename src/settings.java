@@ -26,7 +26,7 @@ public class settings {
         StringBuilder returnString = new StringBuilder();
         for(int i=0; i < inspectionProfiles.size(); i++) {
 
-            System.out.println(inspectionProfiles.get(i));
+                gui.sysConsole.println(inspectionProfiles.get(i).toString());
 
 
             if(i == inspectionProfiles.size() - 1) {
@@ -40,7 +40,7 @@ public class settings {
 
     public settings() throws ParserConfigurationException, IOException, SAXException {
         //Initialize when settings object is created
-        System.out.println("Starting loading settings module");
+        gui.sysConsole.println("Starting loading settings module");
         inspectionProfiles = new ArrayList<inspectionProfile>();
 
         //Create document builder stuff
@@ -129,14 +129,17 @@ public class settings {
                                                         currentProfile.setBlackBackground(false);
                                                     }
                                                 }
+                                                if (IPSettingsNS.item(h).getNodeName().equalsIgnoreCase("holecount")) {
+                                                    currentProfile.setHoleCount(Integer.parseInt(IPSettingsNS.item(h).getTextContent()));
+                                                }
                                             }
                                         }
 
                                         //Our new inspectionProfile object is now full of data, add it to the ArrayList
                                         if(inspectionProfiles.add(currentProfile)) {
-                                            System.out.println("Profile added successfully");
+                                            gui.sysConsole.println("Profile added successfully");
                                         } else {
-                                            System.out.println("Issue adding profile");
+                                            gui.sysConsole.println("Issue adding profile");
                                         }
                                     }
                                 }
@@ -145,7 +148,7 @@ public class settings {
                     }
         } else {
             //Otherwise throw an exception
-            System.out.println("Error processing settings file");
+            gui.sysConsole.println("Error processing settings file");
         }
         profileList = new String[inspectionProfiles.size()];
         for(int i=0; i < inspectionProfiles.size(); i++) {

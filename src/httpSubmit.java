@@ -15,8 +15,10 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.joda.time.DateTime;
 import org.jruby.RubyProcess;
+import org.json.*;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.RenderedImage;
 import java.io.ByteArrayOutputStream;
@@ -56,7 +58,7 @@ public class httpSubmit {
 
 
 
-    public static void testSubmit(Integer partNum, Integer techID) throws IOException {
+    public static void testSubmit(Integer partNum, Integer techID) throws IOException, JSONException {
 
 
         Image img1 = null;
@@ -96,10 +98,16 @@ public class httpSubmit {
 
         submitPost.setEntity(entity);
         CloseableHttpResponse response = client.execute(submitPost);
-        System.out.println(response);
-        System.out.println(EntityUtils.toString(response.getEntity()));
-
-
+        gui.sysConsole.println(response.toString());
+        String responseEntity = EntityUtils.toString(response.getEntity());
+        gui.sysConsole.println(responseEntity);
+        JSONObject obj = new JSONObject(responseEntity);
+        int responseCode = obj.getInt("ResponseCode");
+        if (responseCode == 1) {
+            JOptionPane.showMessageDialog(null, "Submission Successful");
+        } else if (responseCode == 0) {
+            JOptionPane.showMessageDialog(null, obj.getString("error"));
+        }
 
 
     }
