@@ -97,7 +97,14 @@ public class httpSubmit {
 
 
         submitPost.setEntity(entity);
-        CloseableHttpResponse response = client.execute(submitPost);
+        CloseableHttpResponse response = null;
+        try {
+            response = client.execute(submitPost);
+        } catch (org.apache.http.conn.HttpHostConnectException ex) {
+            JOptionPane.showMessageDialog(null, "Unable to connect to server");
+            System.out.println(ex.getMessage());
+
+        }
         gui.sysConsole.println(response.toString());
         String responseEntity = EntityUtils.toString(response.getEntity());
         gui.sysConsole.println(responseEntity);
@@ -107,6 +114,9 @@ public class httpSubmit {
             JOptionPane.showMessageDialog(null, "Submission Successful");
         } else if (responseCode == 0) {
             JOptionPane.showMessageDialog(null, obj.getString("error"));
+        } else {
+            JOptionPane.showMessageDialog(null, "Response Code: " + String.valueOf(responseCode) + "\n" + obj.getString("error"));
+
         }
 
 
