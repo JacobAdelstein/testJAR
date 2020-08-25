@@ -71,7 +71,7 @@ public class httpSubmit {
         for (int i = 0; i < gui.storage.size(); i++) {
             if (gui.storage.get(i).partNum == partNum) {
                 for (int b = 0; b < gui.storage.get(i).measureList.size(); b++) {
-                    if (gui.storage.get(i).measureList.get(b).position == measurements.TopLeft) {
+                    if (gui.storage.get(i).measureList.get(b).position == measurements.F_TopLeft) {
                         img1 = gui.storage.get(i).measureList.get(b).capture;
                     }
                 }

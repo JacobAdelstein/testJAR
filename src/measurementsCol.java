@@ -5,11 +5,7 @@ public class measurementsCol {
     inspectionProfile currentProfile;
     Integer partNum;
     ArrayList<measurements> measureList;
-//    measurements TL;
-//    measurements TR;
-//    measurements C;
-//    measurements BL;
-//    measurements BR;
+    String batchDate;
 
 
     public measurementsCol(Integer partNumber, inspectionProfile insProfile) {
@@ -18,7 +14,7 @@ public class measurementsCol {
         currentProfile = insProfile;
         gui.sysConsole.println("MeasureList Size: " + measureList.size());
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 10; i++) {
             measureList.add(new measurements(i + 1, partNumber, currentProfile));
         }
 
@@ -40,5 +36,16 @@ public class measurementsCol {
         }
         return returnString.toString();
     }
+
+    public String getBatchDate() {
+        return batchDate;
+    }
+
+    public void setBatchDate(String date) {
+        this.batchDate = date;
+    }
+
+
+
 
 }

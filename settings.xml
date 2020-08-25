@@ -7,7 +7,7 @@
 	
 	<InspectionProfile>
 	
-		<testProfile>
+		<testProfile profileType="test">
 			<lowerThreshold>0</lowerThreshold>
 			<upperThreshold>50</upperThreshold>
 			<sizeMin>100</sizeMin>
@@ -23,7 +23,25 @@
 			<holeCount>10</holeCount>
 		</testProfile>
 		
-		<SophionQC>
+		<testProfile2 profileType="test">
+			<lowerThreshold>0</lowerThreshold>
+			<upperThreshold>50</upperThreshold>
+			<sizeMin>100</sizeMin>
+			<sizeMax>3000</sizeMax>
+			<circularityMin>.7</circularityMin>
+			<circularityMax>1</circularityMax>
+			<distance>1</distance>
+			<known>1</known>
+			<pixel>1</pixel>
+			<feretMin>40</feretMin>
+			<feretMax>50</feretMax>
+			<blackBackground>false</blackBackground>
+			<holeCount>10</holeCount>
+		</testProfile2>
+		
+		
+		
+		<SophionMH profileType="SophionMH">
 			<lowerThreshold>0</lowerThreshold>
 			<upperThreshold>69</upperThreshold>
 			<sizeMin>0</sizeMin>
@@ -38,7 +56,7 @@
 			<blackBackground>true</blackBackground>
 			<holeCount>5</holeCount>
 
-		</SophionQC>
+		</SophionMH>
 		
 	</InspectionProfile>
 	

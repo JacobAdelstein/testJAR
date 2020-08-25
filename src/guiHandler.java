@@ -11,9 +11,113 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class guiHandler {
+
+    public static JFrame newTab;
+
+    static public void addTab(JTabbedPane tabbedPane) {
+
+        newTab = new JFrame("New Measurement");
+        JPanel mainPanel = new JPanel();
+        JPanel cardPanel = new JPanel(new CardLayout());
+
+
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
+        mainPanel.add(Box.createVerticalGlue());
+        JComboBox profileBox = new JComboBox(gui.currentSettings.profileList);
+        profileBox.setEditable(false);
+        profileBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Item state Changed");
+                CardLayout cl = (CardLayout) cardPanel.getLayout();
+                cl.show(cardPanel, profileBox.getSelectedItem().toString());
+                System.out.println(profileBox.getSelectedItem().toString());
+            }
+        });
+        mainPanel.add(profileBox);
+
+        for (int i = 0; i < gui.currentSettings.inspectionProfiles.size(); i++) {
+            if (gui.currentSettings.inspectionProfiles.get(i).profileType.equalsIgnoreCase("SophionMH")) {
+                System.out.println("Setting profile type SophionMH");
+                cardPanel.add(SophionMH.newDialog(gui.currentSettings.inspectionProfiles.get(profileBox.getSelectedIndex())), gui.currentSettings.inspectionProfiles.get(i).profileName);
+            } else if (gui.currentSettings.inspectionProfiles.get(i).profileType.equalsIgnoreCase("test")) {
+                System.out.println("Setting profile type test");
+                JPanel testPanel = new JPanel();
+                JLabel testLabel = new JLabel("This is a test Label for testPanel");
+                testPanel.add(testLabel);
+                cardPanel.add(testPanel, gui.currentSettings.inspectionProfiles.get(i).profileName);
+
+            } else {
+                System.out.println("Unable to locate inspection view for profile type: " + gui.currentSettings.inspectionProfiles.get(i).profileType);
+
+            }
+        }
+
+
+//        JPanel partNumPanel = new JPanel();
+//        partNumPanel.setLayout(new BoxLayout(partNumPanel, BoxLayout.LINE_AXIS));
+//        JLabel partNumLabel = new JLabel("Enter Part Number: ");
+//        partNumLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+//        partNumPanel.add(partNumLabel);
+//        JTextField partNumField = new JTextField();
+//        partNumField.setAlignmentX(Component.RIGHT_ALIGNMENT);
+//        partNumField.setMaximumSize(new Dimension(100,20));
+//        partNumPanel.add(partNumField);
+//        mainPanel.add(partNumPanel);
+//        mainPanel.add(Box.createVerticalGlue());
+//        JPanel profileSelectorPanel = new JPanel();
+//        profileSelectorPanel.setLayout(new BoxLayout(profileSelectorPanel, BoxLayout.LINE_AXIS));
+//        JLabel profileLabel = new JLabel("Select a inspection profile: ");
+//        profileSelectorPanel.add(profileLabel);
+//        profileBox.setMaximumSize(new Dimension(150, 20));
+//        profileBox.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+////                    int partNum = Integer.parseInt(partNumField.getText());
+////                    if (partExists(partNum)) {
+////                        JOptionPane.showMessageDialog(mainPanel, "Measurement already exists for part number " + String.valueOf(partNum));                    } else {
+////                        measurementsCol currentMeasure = new measurementsCol(partNum, currentSettings.inspectionProfiles.get(profileBox.getSelectedIndex()));
+////                        storage.add(currentMeasure);
+////                        tabbedPane.addTab(String.valueOf(partNum), null);
+////                        guiHandler.updateTabbedPane();
+////                        newTab.setVisible(false);
+//
+//            }
+//        });
+//        profileSelectorPanel.add(profileBox);
+//        mainPanel.add(profileSelectorPanel);
+//        mainPanel.add(Box.createVerticalGlue());
+//
+//
+//
+//
+//        JButton submit = new JButton("Create Measurement");
+//        submit.setAlignmentX(Component.CENTER_ALIGNMENT);
+//
+//        mainPanel.add(submit);
+//        mainPanel.add(Box.createVerticalGlue());
+
+        newTab.setBounds(gui.screenSize.width/2-250,gui.screenSize.height/2-100,1000,400);
+        newTab.add(mainPanel, BorderLayout.PAGE_START);
+        newTab.add(cardPanel, BorderLayout.CENTER);
+        newTab.setVisible(true);
+//        newTab.getRootPane().setDefaultButton(submit);
+
+    }
+
+
+
+
+
+
+
+
+
+
 
     public static JPanel getResultsPanel(measurements currentMeasurement) {
 
@@ -225,49 +329,54 @@ public class guiHandler {
             int tabNum = Integer.parseInt(gui.tabbedPane.getTitleAt(i));
             //Get the partNum in the title
             gui.sysConsole.println("Updating panel at " + tabNum);
-            JPanel mainPanel = new JPanel();
-            mainPanel.setLayout(new FlowLayout());
-            mainPanel.setPreferredSize(new Dimension(500, 1000));
-//            mainPanel.setSize(1000,1100);
-            JScrollPane scrollPane = new JScrollPane(mainPanel);
-            scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-            scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-            scrollPane.setPreferredSize(new Dimension(500,500));
-            for(int b = 0; b < gui.storage.size(); b++) {
-                //Iterate through the storage arrayList
-                if (tabNum == gui.storage.get(b).partNum) {
-                    gui.sysConsole.println(gui.storage.get(b).toString());
-                    for (int a = 0; a < gui.storage.get(b).measureList.size(); a++) {
-                        if (gui.storage.get(b).measureList.get(a).hasImage == true) {
-                            mainPanel.add(getImagePanel(gui.storage.get(b).measureList.get(a)));
-                        } else {
-                            mainPanel.add(getNoImagePanel(gui.storage.get(b).measureList.get(a)));
-                        }
-                    }
 
-                    JButton submit = new JButton("Submit");
-                    int finalB = b;
-                    submit.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            try {
-                                try {
-                                    int techID = Integer.parseInt(JOptionPane.showInputDialog("Enter Technician ID"));
-                                    httpSubmit.testSubmit(gui.storage.get(finalB).partNum, techID);
-                                } catch (NumberFormatException ex) {
-                                    JOptionPane.showMessageDialog(null, "Technician ID must be a number");
-                                } catch (JSONException ex) {
-                                    JOptionPane.showMessageDialog(null, "Received a JSON Exception");
-                                }
-                            } catch (IOException ioException) {
-                                ioException.printStackTrace();
-                            }
-                        }
-                    });
-                    mainPanel.add(submit);
-                }
-            }
+//            JPanel mainPanel = new JPanel();
+//            mainPanel.setLayout(new FlowLayout());
+//            mainPanel.setPreferredSize(new Dimension(500, 1000));
+////            mainPanel.setSize(1000,1100);
+//            JScrollPane scrollPane = new JScrollPane(mainPanel);
+//            scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+//            scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+//            scrollPane.setPreferredSize(new Dimension(500,500));
+//            for(int b = 0; b < gui.storage.size(); b++) {
+//                //Iterate through the storage arrayList
+//                if (tabNum == gui.storage.get(b).partNum) {
+//                    gui.sysConsole.println(gui.storage.get(b).toString());
+//                    for (int a = 0; a < gui.storage.get(b).measureList.size(); a++) {
+//                        if (gui.storage.get(b).measureList.get(a).hasImage == true) {
+//                            mainPanel.add(getImagePanel(gui.storage.get(b).measureList.get(a)));
+//                        } else {
+//                            mainPanel.add(getNoImagePanel(gui.storage.get(b).measureList.get(a)));
+//                        }
+//                    }
+//
+//                    JButton submit = new JButton("Submit");
+//                    int finalB = b;
+//                    submit.addActionListener(new ActionListener() {
+//                        @Override
+//                        public void actionPerformed(ActionEvent e) {
+//                            try {
+//                                try {
+//                                    int techID = Integer.parseInt(JOptionPane.showInputDialog("Enter Technician ID"));
+//                                    httpSubmit.testSubmit(gui.storage.get(finalB).partNum, techID);
+//                                } catch (NumberFormatException ex) {
+//                                    JOptionPane.showMessageDialog(null, "Technician ID must be a number");
+//                                } catch (JSONException ex) {
+//                                    JOptionPane.showMessageDialog(null, "Received a JSON Exception");
+//                                }
+//                            } catch (IOException ioException) {
+//                                ioException.printStackTrace();
+//                            }
+//                        }
+//                    });
+//                    mainPanel.add(submit);
+//                }
+//            }
+
+            if 
             gui.tabbedPane.setComponentAt(i, scrollPane);
+
+
         }
     }
 
@@ -289,8 +398,8 @@ public class guiHandler {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    gui.addTab(gui.tabbedPane);
-                } catch (NumberFormatException exception) {
+                    addTab(gui.tabbedPane);
+                } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(null, "Please enter a Integer number");
                 }
             }
@@ -351,7 +460,5 @@ public class guiHandler {
 
         return menuBar;
     }
-
-
 
 }

@@ -2,7 +2,17 @@ import java.awt.*;
 
 
 public class measurements {
-    public static final int TopLeft = 1;
+    public static final int F_TopLeft = 1;
+    public static final int F_TopRight = 2;
+    public static final int F_Center = 3;
+    public static final int F_BotLeft = 4;
+    public static final int F_BotRight = 5;
+    public static final int B_TopLeft = 6;
+    public static final int B_TopRight = 7;
+    public static final int B_Center = 8;
+    public static final int B_BotRight = 9;
+    public static final int B_BotLeft = 10;
+
 
     result[] results;
     inspectionProfile profile;
@@ -22,21 +32,28 @@ public class measurements {
         profile = currentProfile;
 
         switch (position) {
-            case TopLeft:
-                name = "Top Left";
+            case F_TopLeft:
+                name = "Top Left Front";
                 break;
-            case 2:
-                name = "Top Right";
+            case F_TopRight:
+                name = "Top Right Front";
                 break;
-            case 3:
-                name = "Center";
+            case F_Center:
+                name = "Center Front";
                 break;
-            case 4:
-                name = "Bottom Left";
+            case F_BotLeft:
+                name = "Bottom Left Front";
                 break;
-            case 5:
-                name = "Bottom Right";
+            case F_BotRight:
+                name = "Bottom Right Front";
                 break;
+            case B_TopLeft:
+                name = "Top Left Back";
+                break;
+            case B_TopRight:
+                name = "Top Right Back";
+                break;
+
 
 
         }

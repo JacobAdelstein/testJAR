@@ -1,4 +1,5 @@
 public class inspectionProfile {
+    String profileType;
     String profileName;
     double sizeMin;
     double sizeMax;
@@ -17,7 +18,8 @@ public class inspectionProfile {
     @Override
     public String toString() {
         StringBuilder returnString = new StringBuilder("\n\n------------Profile: " + this.profileName + " ------------\n");
-        returnString.append("Lower Threshold: " + this.lowerThreshold);
+        returnString.append("Profile Type: " + this.profileType);
+        returnString.append("\nLower Threshold: " + this.lowerThreshold);
         returnString.append("\nUpper Threshold: " + this.upperThreshold);
         returnString.append("\nMinimum analysis size: " + this.sizeMin);
         returnString.append("\nMaximum analysis size: " + this.sizeMax);
@@ -148,6 +150,14 @@ public class inspectionProfile {
 
     public void setHoleCount(int holeCount) {
         this.holeCount = holeCount;
+    }
+
+    public void setProfileType(String profileType) {
+        this.profileType = profileType;
+    }
+
+    public String getProfileType() {
+        return profileType;
     }
 
 

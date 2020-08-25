@@ -2,6 +2,11 @@ import javax.swing.*;
 import java.awt.*;
 
 public class debugConsole {
+
+    public final int INFO = 0;
+    public final int WARNING = 1;
+
+
     JFrame console;
     TextArea textArea;
     public debugConsole() {
@@ -27,6 +32,12 @@ public class debugConsole {
 
     public void println(String printString) {
         textArea.append(printString + "\n");
+        System.out.println(printString);
+    }
+
+    public void println(String printString, int alertType) {
+        textArea.append(printString + "\n");
+        System.out.println(printString);
     }
 
     public void println(double printDouble) {

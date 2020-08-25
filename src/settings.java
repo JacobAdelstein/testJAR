@@ -84,6 +84,8 @@ public class settings {
                                         //Ensure it's an element node
                                         //Make a new inspectionProfile Object and start filling it with data
                                         inspectionProfile currentProfile = new inspectionProfile(inspectionProfileNS.item(k).getNodeName());
+                                        Element currElement = (Element) inspectionProfileNS.item(k);
+                                        currentProfile.setProfileType(currElement.getAttribute("profileType"));
                                         NodeList IPSettingsNS = inspectionProfileNS.item(k).getChildNodes();
                                         //IPSettingsNS = Inspection Profile Settings NodeList
                                         for(int h=0; h < IPSettingsNS.getLength(); h++) {

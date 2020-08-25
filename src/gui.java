@@ -1,5 +1,3 @@
-import com.github.sarxos.webcam.WebcamLockException;
-import com.itextpdf.text.Jpeg;
 import org.xml.sax.SAXException;
 import javax.swing.*;
 import java.awt.*;
@@ -8,11 +6,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
-import javax.swing.border.EmptyBorder;
 import javax.xml.parsers.ParserConfigurationException;
 import java.util.ArrayList;
 
-import static org.python.modules.time.Time.sleep;
 
 
 public class gui {
@@ -23,6 +19,7 @@ public class gui {
     static JLabel Below = new JLabel("The Limit is below the FeretMin!");
     public static settings currentSettings;
     static int debugCount = 0;
+    public static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
 
     static JFrame main = new JFrame("Potomac Inspect");
@@ -76,8 +73,6 @@ public class gui {
     }
 
 
-
-
     static boolean partExists(Integer partNum) {
         for (int i = 0; i < gui.storage.size(); i++) {
             if (gui.storage.get(i).partNum == partNum) {
@@ -89,74 +84,74 @@ public class gui {
         return false;
     }
 
-    static void addTab(JTabbedPane tabbedPane) {
-
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        JFrame newTab = new JFrame("New Measurement");
-        JPanel mainPanel = new JPanel();
-
-
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
-        mainPanel.add(Box.createVerticalGlue());
-        JPanel partNumPanel = new JPanel();
-        partNumPanel.setLayout(new BoxLayout(partNumPanel, BoxLayout.LINE_AXIS));
-        JLabel partNumLabel = new JLabel("Enter Part Number: ");
-        partNumLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        partNumPanel.add(partNumLabel);
-        JTextField partNumField = new JTextField();
-        partNumField.setAlignmentX(Component.RIGHT_ALIGNMENT);
-        partNumField.setMaximumSize(new Dimension(100,20));
-        partNumPanel.add(partNumField);
-        mainPanel.add(partNumPanel);
-        mainPanel.add(Box.createVerticalGlue());
-        JPanel profileSelectorPanel = new JPanel();
-        profileSelectorPanel.setLayout(new BoxLayout(profileSelectorPanel, BoxLayout.LINE_AXIS));
-        JLabel profileLabel = new JLabel("Select a inspection profile: ");
-        profileSelectorPanel.add(profileLabel);
-        JComboBox profileBox = new JComboBox(gui.currentSettings.profileList);
-        profileBox.setMaximumSize(new Dimension(150, 20));
-        profileSelectorPanel.add(profileBox);
-        mainPanel.add(profileSelectorPanel);
-        mainPanel.add(Box.createVerticalGlue());
-
-
-        JButton submit = new JButton("Create Measurement");
-        submit.setAlignmentX(Component.CENTER_ALIGNMENT);
-        submit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    int partNum = Integer.parseInt(partNumField.getText());
-                    if (partExists(partNum)) {
-                        JOptionPane.showMessageDialog(mainPanel, "Measurement already exists for part number " + String.valueOf(partNum));                    } else {
-                        measurementsCol currentMeasure = new measurementsCol(partNum, currentSettings.inspectionProfiles.get(profileBox.getSelectedIndex()));
-                        storage.add(currentMeasure);
-                        tabbedPane.addTab(String.valueOf(partNum), null);
-                        guiHandler.updateTabbedPane();
-                        newTab.setVisible(false);
-                    }
-                } catch (NumberFormatException exception) {
-                    JOptionPane.showMessageDialog(mainPanel, "Please enter an integer number");
-                }
-            }
-        });
-        mainPanel.add(submit);
-        mainPanel.add(Box.createVerticalGlue());
-
-        newTab.setBounds(screenSize.width/2-250,screenSize.height/2-100,500,200);
-        newTab.add(mainPanel);
-        newTab.setVisible(true);
-        newTab.getRootPane().setDefaultButton(submit);
-
-    }
-
-
+//    static void addTab(JTabbedPane tabbedPane) {
+//
+//        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+//        JFrame newTab = new JFrame("New Measurement");
+//        JPanel mainPanel = new JPanel();
+//
+//
+//        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
+//        mainPanel.add(Box.createVerticalGlue());
+//        JPanel partNumPanel = new JPanel();
+//        partNumPanel.setLayout(new BoxLayout(partNumPanel, BoxLayout.LINE_AXIS));
+//        JLabel partNumLabel = new JLabel("Enter Part Number: ");
+//        partNumLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+//        partNumPanel.add(partNumLabel);
+//        JTextField partNumField = new JTextField();
+//        partNumField.setAlignmentX(Component.RIGHT_ALIGNMENT);
+//        partNumField.setMaximumSize(new Dimension(100,20));
+//        partNumPanel.add(partNumField);
+//        mainPanel.add(partNumPanel);
+//        mainPanel.add(Box.createVerticalGlue());
+//        JPanel profileSelectorPanel = new JPanel();
+//        profileSelectorPanel.setLayout(new BoxLayout(profileSelectorPanel, BoxLayout.LINE_AXIS));
+//        JLabel profileLabel = new JLabel("Select a inspection profile: ");
+//        profileSelectorPanel.add(profileLabel);
+//        JComboBox profileBox = new JComboBox(gui.currentSettings.profileList);
+//        profileBox.setMaximumSize(new Dimension(150, 20));
+//        profileSelectorPanel.add(profileBox);
+//        mainPanel.add(profileSelectorPanel);
+//        mainPanel.add(Box.createVerticalGlue());
+//
+//
+//        JButton submit = new JButton("Create Measurement");
+//        submit.setAlignmentX(Component.CENTER_ALIGNMENT);
+//        submit.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                try {
+//                    int partNum = Integer.parseInt(partNumField.getText());
+//                    if (partExists(partNum)) {
+//                        JOptionPane.showMessageDialog(mainPanel, "Measurement already exists for part number " + String.valueOf(partNum));                    } else {
+//                        measurementsCol currentMeasure = new measurementsCol(partNum, currentSettings.inspectionProfiles.get(profileBox.getSelectedIndex()));
+//                        storage.add(currentMeasure);
+//                        tabbedPane.addTab(String.valueOf(partNum), null);
+//                        guiHandler.updateTabbedPane();
+//                        newTab.setVisible(false);
+//                    }
+//                } catch (NumberFormatException exception) {
+//                    JOptionPane.showMessageDialog(mainPanel, "Please enter an integer number");
+//                }
+//            }
+//        });
+//        mainPanel.add(submit);
+//        mainPanel.add(Box.createVerticalGlue());
+//
+//        newTab.setBounds(screenSize.width/2-250,screenSize.height/2-100,500,200);
+//        newTab.add(mainPanel);
+//        newTab.setVisible(true);
+//        newTab.getRootPane().setDefaultButton(submit);
+//
+//    }
 
 
 
 
 
-    public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException {
+
+
+    public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException, InterruptedException {
         //Setup the debug console
         sysConsole = new debugConsole();
 
@@ -179,11 +174,6 @@ public class gui {
         //Setup Image analysis listener
         imgAnalyzer analyzer = new imgAnalyzer();
         camera.addListener(analyzer);
-
-
-
-
-
         main.setJMenuBar(guiHandler.getMenu(currentSettings.debug));
         main.setSize(600, 900);
         main.setLayout(new GridLayout(1,1));
@@ -209,36 +199,5 @@ public class gui {
         });
         main.setVisible(true);
 
-//        tabbedPane.addTab("Tab 1", null, panel1, "Does nothing");
-//        tabbedPane.addTab("tab2", null, panel2, "blah");
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
