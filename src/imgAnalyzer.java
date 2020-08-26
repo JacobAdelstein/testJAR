@@ -40,28 +40,33 @@ public class imgAnalyzer implements cameraListener {
 //        newFrame.setVisible(true);
 //        measurements currentMeasure = new measurements(gui.currentCapture[1], gui.camera.capture, gui.currentCapture[0]);
 
-        double[] results = new double[1];
+//        double[] results = new double[1];
         //First we determine which tab took the image
         for (measurementsCol measurement : gui.storage) {
             if (measurement.partNum == gui.currentCapture[0]) {
-                //Do Image Analysis
-                ImagePlus imp = new ImagePlus("capture", gui.camera.capture);
-                ImagePlus org = new ImagePlus("original", gui.camera.capture);
-                imp.changes = false;
 
-                IJ.run(imp, "8-bit", "");
-                IJ.setThreshold(imp, measurement.currentProfile.lowerThreshold, measurement.currentProfile.upperThreshold);
-                IJ.setProperty("BlackBackground", measurement.currentProfile.blackBackground);
-                IJ.run(imp, "Convert to Mask", "");
+                if (measurement.currentProfile.getProfileType().equalsIgnoreCase("SophionMH")) {
+                    SophionMH.analyzeImage(measurement, gui.currentCapture[1], gui.camera.capture);
 
-                String scale = ("distance=" + measurement.currentProfile.distance + " known=" + measurement.currentProfile.known + " pixel=" + measurement.currentProfile.pixel + " unit=um");
-                String analysis = ("size=" + measurement.currentProfile.sizeMin + "-" + measurement.currentProfile.sizeMax + " circularity=" + measurement.currentProfile.circularityMin + "-" + measurement.currentProfile.circularityMax + " show=[Overlay Masks] clear include in-situ");
-                IJ.run(imp, "Set Scale...", scale);
-                IJ.run(imp, "Set Measurements...", "feret's");
+                } else {
+                    //Do Image Analysis
+                    ImagePlus imp = new ImagePlus("capture", gui.camera.capture);
+                    ImagePlus org = new ImagePlus("original", gui.camera.capture);
+                    imp.changes = false;
+
+                    IJ.run(imp, "8-bit", "");
+                    IJ.setThreshold(imp, measurement.currentProfile.lowerThreshold, measurement.currentProfile.upperThreshold);
+                    IJ.setProperty("BlackBackground", measurement.currentProfile.blackBackground);
+                    IJ.run(imp, "Convert to Mask", "");
+
+                    String scale = ("distance=" + measurement.currentProfile.distance + " known=" + measurement.currentProfile.known + " pixel=" + measurement.currentProfile.pixel + " unit=um");
+                    String analysis = ("size=" + measurement.currentProfile.sizeMin + "-" + measurement.currentProfile.sizeMax + " circularity=" + measurement.currentProfile.circularityMin + "-" + measurement.currentProfile.circularityMax + " show=[Overlay Masks] clear include in-situ");
+                    IJ.run(imp, "Set Scale...", scale);
+                    IJ.run(imp, "Set Measurements...", "feret's");
 //        IJ.run(imp, "Analyze Particles...", "size=800-Infinity circularity=0.70-1.00 show=[Overlay Masks] clear include in-situ");
-                IJ.run(imp, "Analyze Particles...", analysis);
+                    IJ.run(imp, "Analyze Particles...", analysis);
 //                IJ.doCommand(imp, "Analyze Particles...");
-                imp.show();
+                    imp.show();
 
 //                IJ.run("Calculator Plus", "i1=capture i2=original operation=[Add: i2 = (i1+i2) x k1 + k2] k1=1 k2=0 create");
 //                IJ.runPlugIn("Calculator Plus", "i1=capture i2=original operation=[Add: i2 = (i1+i2) x k1 + k2] k1=1 k2=0 create");
@@ -69,24 +74,58 @@ public class imgAnalyzer implements cameraListener {
 //                org.show();
 //                imp.show();
 
-                overlay = (Image) imp.getBufferedImage();
+                    overlay = (Image) imp.getBufferedImage();
 
-                gui.sysConsole.println("SCALE: " + scale);
-                gui.sysConsole.println("Analysis: " + analysis);
-                ResultsTable rt = ResultsTable.getResultsTable();
-                results = rt.getColumnAsDoubles(19);
+                    gui.sysConsole.println("SCALE: " + scale);
+                    gui.sysConsole.println("Analysis: " + analysis);
+                    ResultsTable rt = ResultsTable.getResultsTable();
+                    double[] results = rt.getColumnAsDoubles(19);
 
-                try {
-                    gui.sysConsole.println("--------------RESULTS--------------");
-                    gui.sysConsole.println("Number of results: " + results.length);
-                    for (int i = 0; i < results.length; i++) {
-                        gui.sysConsole.println(results[i]);
+                    try {
+                        gui.sysConsole.println("--------------RESULTS--------------");
+                        gui.sysConsole.println("Number of results: " + results.length);
+                        for (int i = 0; i < results.length; i++) {
+                            gui.sysConsole.println(results[i]);
+                        }
+                        gui.sysConsole.println("--------------END RESULTS--------------");
+                    } catch (NullPointerException  ex) {
+                        JOptionPane.showMessageDialog(null, "No holes found");
+                        results = new double[1];
                     }
-                    gui.sysConsole.println("--------------END RESULTS--------------");
-                } catch (NullPointerException  ex) {
-                    JOptionPane.showMessageDialog(null, "No holes found");
-                    results = new double[1];
+
+                    for (int i = 0; i < measurement.measureList.size(); i++){
+                        if (measurement.measureList.get(i).position == gui.currentCapture[1]){
+                            measurement.measureList.get(i).setImage(gui.camera.capture);
+                            measurement.measureList.get(i).results = results;
+                            measurement.measureList.get(i).overlay = overlay;
+
+
+                        }
+                    }
+
+
+
+//                    for (int i = 0; i < measurement.measureList.size(); i++){
+//                        if (measurement.measureList.get(i).position == gui.currentCapture[1]){
+//                            measurement.measureList.get(i).setImage(gui.camera.capture);
+////                        measurement.measureList.get(i).results = results;
+//                            measurement.measureList.get(i).overlay = overlay;
+//                            result[] resultsArray = new result[results.length];
+//                            for (int k = 0; k < results.length; k++) {
+//                                resultsArray[k] = new result(k, results[k]);
+//                            }
+//                            measurement.measureList.get(i).results = resultsArray;
+//                        }
+//                    }
+
                 }
+
+
+
+
+
+
+
             }
         }
 
@@ -105,23 +144,23 @@ public class imgAnalyzer implements cameraListener {
 
 
         //Save image and analysis results
-        for (measurementsCol measurement : gui.storage) {
-            if (measurement.partNum == gui.currentCapture[0]) {
-                for (int i = 0; i < measurement.measureList.size(); i++){
-                    if (measurement.measureList.get(i).position == gui.currentCapture[1]){
-                        measurement.measureList.get(i).setImage(gui.camera.capture);
-//                        measurement.measureList.get(i).results = results;
-                        measurement.measureList.get(i).overlay = overlay;
-                        result[] resultsArray = new result[results.length];
-                        for (int k = 0; k < results.length; k++) {
-                            resultsArray[k] = new result(k, results[k]);
-                        }
-                        measurement.measureList.get(i).results = resultsArray;
-                    }
-                }
-
-            }
-        }
+//        for (measurementsCol measurement : gui.storage) {
+//            if (measurement.partNum == gui.currentCapture[0]) {
+//                for (int i = 0; i < measurement.measureList.size(); i++){
+//                    if (measurement.measureList.get(i).position == gui.currentCapture[1]){
+//                        measurement.measureList.get(i).setImage(gui.camera.capture);
+////                        measurement.measureList.get(i).results = results;
+//                        measurement.measureList.get(i).overlay = overlay;
+//                        result[] resultsArray = new result[results.length];
+//                        for (int k = 0; k < results.length; k++) {
+//                            resultsArray[k] = new result(k, results[k]);
+//                        }
+//                        measurement.measureList.get(i).results = resultsArray;
+//                    }
+//                }
+//
+//            }
+//        }
 
 
 

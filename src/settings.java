@@ -22,6 +22,7 @@ public class settings {
     boolean offlineSave = false;
 
 
+
     public String listProfiles() {
         StringBuilder returnString = new StringBuilder();
         for(int i=0; i < inspectionProfiles.size(); i++) {
@@ -134,6 +135,11 @@ public class settings {
                                                 if (IPSettingsNS.item(h).getNodeName().equalsIgnoreCase("holecount")) {
                                                     currentProfile.setHoleCount(Integer.parseInt(IPSettingsNS.item(h).getTextContent()));
                                                 }
+
+                                                if (IPSettingsNS.item(h).getNodeName().equalsIgnoreCase("submitaddress")) {
+                                                    currentProfile.setsubmitAddress(IPSettingsNS.item(h).getTextContent());
+                                                }
+
                                             }
                                         }
 

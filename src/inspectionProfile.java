@@ -1,6 +1,7 @@
 public class inspectionProfile {
     String profileType;
     String profileName;
+    String submitAddress;
     double sizeMin;
     double sizeMax;
     double circularityMin;
@@ -32,9 +33,15 @@ public class inspectionProfile {
         returnString.append("\nMaximum Passing: " + this.feretMax);
         returnString.append("\nBlackBackground: " + this.blackBackground);
         returnString.append("\nHole Count: " + this.holeCount);
+        returnString.append("\nSubmit Address: " + this.submitAddress);
+
         returnString.append("\n<-------------------------------------------->\n\n");
         return returnString.toString();
     }
+
+
+
+
 
     public String getProfileName() {
         return profileName;
@@ -154,10 +161,20 @@ public class inspectionProfile {
 
     public void setProfileType(String profileType) {
         this.profileType = profileType;
+
     }
 
     public String getProfileType() {
         return profileType;
+    }
+
+    public void setsubmitAddress(String address) {
+        this.submitAddress = address;
+
+    }
+
+    public String getsubmitAddress() {
+        return submitAddress;
     }
 
 

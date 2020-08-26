@@ -1,7 +1,7 @@
 <settings>
 
 	<GlobalSettings>
-		<serverURL>http://192.168.10.111:8000/newSubmit</serverURL>
+		<serverURL>http://192.168.10.111:8000</serverURL>
 	</GlobalSettings>
 	
 	
@@ -21,11 +21,12 @@
 			<feretMax>50</feretMax>
 			<blackBackground>false</blackBackground>
 			<holeCount>10</holeCount>
+			<submitAddress>"/jsonsubmit"</submitAddress>
 		</testProfile>
 		
-		<testProfile2 profileType="test">
+		<testProfile2 profileType="SophionMH">
 			<lowerThreshold>0</lowerThreshold>
-			<upperThreshold>50</upperThreshold>
+			<upperThreshold>60</upperThreshold>
 			<sizeMin>100</sizeMin>
 			<sizeMax>3000</sizeMax>
 			<circularityMin>.7</circularityMin>
@@ -33,10 +34,12 @@
 			<distance>1</distance>
 			<known>1</known>
 			<pixel>1</pixel>
-			<feretMin>40</feretMin>
-			<feretMax>50</feretMax>
+			<feretMin>20</feretMin>
+			<feretMax>30</feretMax>
 			<blackBackground>false</blackBackground>
 			<holeCount>10</holeCount>
+			<submitAddress>/jsonsubmit</submitAddress>
+
 		</testProfile2>
 		
 		
@@ -55,6 +58,8 @@
 			<feretMax>5</feretMax>
 			<blackBackground>true</blackBackground>
 			<holeCount>5</holeCount>
+			<submitAddress>"/jsonsubmit"</submitAddress>
+
 
 		</SophionMH>
 		

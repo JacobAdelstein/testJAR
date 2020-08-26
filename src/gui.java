@@ -175,7 +175,7 @@ public class gui {
         imgAnalyzer analyzer = new imgAnalyzer();
         camera.addListener(analyzer);
         main.setJMenuBar(guiHandler.getMenu(currentSettings.debug));
-        main.setSize(600, 900);
+        main.setSize(950, 950);
         main.setLayout(new GridLayout(1,1));
         main.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         main.getContentPane().add(tabbedPane);

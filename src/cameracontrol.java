@@ -1,4 +1,5 @@
 import com.github.sarxos.webcam.Webcam;
+import com.github.sarxos.webcam.WebcamLockException;
 import com.github.sarxos.webcam.WebcamPanel;
 import com.github.sarxos.webcam.ds.civil.LtiCivilDriver;
 
@@ -8,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.lang.Thread.sleep;
 
 
 interface cameraListener {
@@ -27,12 +30,21 @@ public class cameraControl extends gui {
 
 
 
-    public cameraControl() {
+    public cameraControl() throws InterruptedException {
         Webcam.setDriver(new LtiCivilDriver());
 
         webcam = Webcam.getDefault();
         webcam.close();
-        webcam.open();
+
+        //Sometimes the webcam can remain open when restarting the program, causing a crash.
+        //So, we'll attempt to wait a second and try again if we can't open the webcam
+        try {
+            webcam.open();
+        } catch (WebcamLockException ex) {
+            System.out.println("Waiting for camera to close.... Trying again");
+            sleep(2000);
+            webcam.open();
+        }
         panel = new WebcamPanel(webcam);
 
 

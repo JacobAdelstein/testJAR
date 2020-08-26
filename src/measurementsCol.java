@@ -8,8 +8,9 @@ public class measurementsCol {
     String batchDate;
 
 
-    public measurementsCol(Integer partNumber, inspectionProfile insProfile) {
+    public measurementsCol(Integer partNumber, String batchDate, inspectionProfile insProfile) {
         partNum = partNumber;
+        this.batchDate = batchDate;
         measureList = new ArrayList<measurements>();
         currentProfile = insProfile;
         gui.sysConsole.println("MeasureList Size: " + measureList.size());

@@ -18,7 +18,7 @@ public class guiHandler {
 
     public static JFrame newTab;
 
-    static public void addTab(JTabbedPane tabbedPane) {
+    static public void addTab() {
 
         newTab = new JFrame("New Measurement");
         JPanel mainPanel = new JPanel();
@@ -35,7 +35,6 @@ public class guiHandler {
                 System.out.println("Item state Changed");
                 CardLayout cl = (CardLayout) cardPanel.getLayout();
                 cl.show(cardPanel, profileBox.getSelectedItem().toString());
-                System.out.println(profileBox.getSelectedItem().toString());
             }
         });
         mainPanel.add(profileBox);
@@ -43,7 +42,7 @@ public class guiHandler {
         for (int i = 0; i < gui.currentSettings.inspectionProfiles.size(); i++) {
             if (gui.currentSettings.inspectionProfiles.get(i).profileType.equalsIgnoreCase("SophionMH")) {
                 System.out.println("Setting profile type SophionMH");
-                cardPanel.add(SophionMH.newDialog(gui.currentSettings.inspectionProfiles.get(profileBox.getSelectedIndex())), gui.currentSettings.inspectionProfiles.get(i).profileName);
+                cardPanel.add(SophionMH.newDialog(gui.currentSettings.inspectionProfiles.get(i)), gui.currentSettings.inspectionProfiles.get(i).profileName);
             } else if (gui.currentSettings.inspectionProfiles.get(i).profileType.equalsIgnoreCase("test")) {
                 System.out.println("Setting profile type test");
                 JPanel testPanel = new JPanel();
@@ -126,9 +125,8 @@ public class guiHandler {
         returnPanel.setSize(100,60);
         returnPanel.setMaximumSize(new Dimension(100, 60));
         returnPanel.setMinimumSize(new Dimension(100, 60));
-        boolean pass = currentMeasurement.checkPass();
 
-        if (pass) {
+        if (currentMeasurement.pass) {
             JLabel passLabel = new JLabel("Pass", SwingConstants.CENTER);
             returnPanel.add(passLabel);
             returnPanel.setBackground(new Color(72, 245, 76));
@@ -146,7 +144,7 @@ public class guiHandler {
                 newJpanel.setLayout(new BoxLayout(newJpanel, BoxLayout.PAGE_AXIS));
 
 
-                DefaultListModel<result> resultsModel = new DefaultListModel<>();
+                DefaultListModel<Double> resultsModel = new DefaultListModel<>();
                 for (int i = 0; i < currentMeasurement.results.length; i++) {
                     resultsModel.addElement(currentMeasurement.results[i]);
                 }
@@ -323,12 +321,13 @@ public class guiHandler {
 
 
 
-        for (int i = 0; i < gui.tabbedPane.getTabCount(); i++) {
-            //Iterate through tabbedPanes
+        //Iterate through tabbedPanes
 
-            int tabNum = Integer.parseInt(gui.tabbedPane.getTitleAt(i));
-            //Get the partNum in the title
-            gui.sysConsole.println("Updating panel at " + tabNum);
+        int i = gui.tabbedPane.getSelectedIndex();
+
+        int tabNum = Integer.parseInt(gui.tabbedPane.getTitleAt(i));
+        //Get the partNum in the title
+        gui.sysConsole.println("Updating panel at " + tabNum);
 
 //            JPanel mainPanel = new JPanel();
 //            mainPanel.setLayout(new FlowLayout());
@@ -373,11 +372,21 @@ public class guiHandler {
 //                }
 //            }
 
-            if 
-            gui.tabbedPane.setComponentAt(i, scrollPane);
-
+        for(int b = 0; b < gui.storage.size(); b++) {
+            //Iterate through the storage arrayList
+            if (tabNum == gui.storage.get(b).partNum) {
+                System.out.print(gui.storage.get(b).currentProfile.profileType);
+                if (gui.storage.get(b).currentProfile.profileType.equalsIgnoreCase("SophionMH")) {
+                    gui.tabbedPane.setComponentAt(i, SophionMH.getPanel(gui.storage.get(b)));
+                }
+            }
 
         }
+
+//            gui.tabbedPane.setComponentAt(i, scrollPane);
+
+
+
     }
 
     public static JMenuBar getMenu(boolean debug){
@@ -398,7 +407,7 @@ public class guiHandler {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    addTab(gui.tabbedPane);
+                    addTab();
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(null, "Please enter a Integer number");
                 }
@@ -429,8 +438,10 @@ public class guiHandler {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     if (menuItemCheck.getState() == true) {
+                        gui.sysConsole.println("Offline Mode Enabled");
 
                     } else {
+                        gui.sysConsole.println("Offline Mode Disabled");
 
                     }
 
@@ -450,15 +461,9 @@ public class guiHandler {
                 }
             });
             menu.add(console);
-
             menuBar.add(menu);
             SwingUtilities.updateComponentTreeUI(gui.main);
-
-
-
         }
-
         return menuBar;
     }
-
 }

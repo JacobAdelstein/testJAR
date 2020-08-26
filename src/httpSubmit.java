@@ -55,6 +55,52 @@ public class httpSubmit {
         return dateString.toString();
     }
 
+    public static void HTTPClient(HttpPost post) {
+        CloseableHttpClient client = HttpClients.createDefault();
+
+        CloseableHttpResponse response = null;
+        try {
+            response = client.execute(post);
+        } catch (org.apache.http.conn.HttpHostConnectException ex) {
+            JOptionPane.showMessageDialog(null, "Unable to connect to server");
+            System.out.println(ex.getMessage());
+        } catch (IOException exIO) {
+            JOptionPane.showMessageDialog(null, "IO Exception attempting to submit");
+        }
+        gui.sysConsole.println(response.toString());
+        String responseEntity = null;
+        try {
+            responseEntity = EntityUtils.toString(response.getEntity());
+
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "IO Exception converting response to string");
+
+        }
+        gui.sysConsole.println(responseEntity);
+
+        JSONObject obj;
+        try {
+            obj = new JSONObject(responseEntity);
+            int responseCode = obj.getInt("ResponseCode");
+            if (responseCode == 1) {
+                JOptionPane.showMessageDialog(null, "Submission Successful");
+            } else if (responseCode == 0) {
+                JOptionPane.showMessageDialog(null, obj.getString("error"));
+            } else {
+                JOptionPane.showMessageDialog(null, "Response Code: " + String.valueOf(responseCode) + "\n" + obj.getString("error"));
+
+            }
+
+        } catch (JSONException exJSON) {
+            JOptionPane.showMessageDialog(null, "JSON Exception occurred");
+
+        }
+
+
+
+
+    }
+
 
 
 
