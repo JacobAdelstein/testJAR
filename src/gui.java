@@ -32,6 +32,7 @@ public class gui {
     static debugConsole sysConsole;
 
 
+
     //currentCapture array is intended to indicate which image we're currently capturing
         //[0] = partNum
         //[1] = imgPos
@@ -45,8 +46,6 @@ public class gui {
     }
 
     public static class AcquireListener implements ActionListener {
-
-
         @Override
         public void actionPerformed(ActionEvent e) {
             //This method is called when the Acquire button is clicked
@@ -63,9 +62,6 @@ public class gui {
                 JOptionPane.showMessageDialog(null, "Debug mode enabled");
                 debugCount = 0;
                 main.setJMenuBar(guiHandler.getMenu(currentSettings.debug));
-
-
-
             }
         } else {
             debugCount = 0;

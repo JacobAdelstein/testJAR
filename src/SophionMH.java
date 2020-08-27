@@ -18,10 +18,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.awt.image.RenderedImage;
 import java.io.*;
 import java.time.LocalDateTime;
@@ -206,6 +203,27 @@ public class SophionMH {
 
     public static JPanel getPanel(measurementsCol data) {
         JPanel returnPanel = new JPanel(new BorderLayout());
+
+        returnPanel.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                gui.debugChecker(e.getKeyCode());
+
+            }
+        });
+
+
+
         JLabel titleLbl = new JLabel("Measurement for part: " + data.partNum);
         GridLayout layout = new GridLayout(5, 1);
         JPanel frontPanel = new JPanel(layout);
