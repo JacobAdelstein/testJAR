@@ -100,7 +100,7 @@ public class guiHandler {
 //        mainPanel.add(submit);
 //        mainPanel.add(Box.createVerticalGlue());
 
-        newTab.setBounds(gui.screenSize.width/2-250,gui.screenSize.height/2-100,1000,400);
+        newTab.setBounds(gui.screenSize.width/2-250,gui.screenSize.height/2-100,330,160);
         newTab.add(mainPanel, BorderLayout.PAGE_START);
         newTab.add(cardPanel, BorderLayout.CENTER);
         newTab.setVisible(true);
