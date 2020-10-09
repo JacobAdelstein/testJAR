@@ -1,16 +1,20 @@
 public class inspectionProfile {
-    String profileType;
-    String profileName;
-    String submitAddress;
-    double sizeMin;
-    double sizeMax;
-    double circularityMin;
-    double circularityMax;
+    String profileType;     //Type of profile, used to select inspection type
+    String profileName;     //Friendly name of profile
+    String submitAddress;   //Server subaddress
+    double sizeMin;         //The minimum size recognized by the analysis algorithm
+    double sizeMax;         //The maximum size recognized by the analysis algorithm
+    double circularityMin;  //The minimum circularity recognized by the analysis algorithm
+    double circularityMax;  //The maximum circularity recognized by the analysis algorithm
     double distance;
     double known;
     double pixel;
-    double feretMin;
-    double feretMax;
+    double enterMin;
+    double enterMax;
+
+
+    double exitMin;
+    double exitMax;
     double lowerThreshold;
     double upperThreshold;
     int holeCount;
@@ -29,8 +33,10 @@ public class inspectionProfile {
         returnString.append("\nDistance: " + this.distance);
         returnString.append("\nKnown: " + this.known);
         returnString.append("\nPixel: " + this.pixel);
-        returnString.append("\nMinimum Passing: " + this.feretMin);
-        returnString.append("\nMaximum Passing: " + this.feretMax);
+        returnString.append("\nMinimum exit size: " + this.exitMin);
+        returnString.append("\nMaximum exit size: " + this.exitMax);
+        returnString.append("\nMinimum enter size: " + this.exitMin);
+        returnString.append("\nMaximum enter size: " + this.enterMax);
         returnString.append("\nBlackBackground: " + this.blackBackground);
         returnString.append("\nHole Count: " + this.holeCount);
         returnString.append("\nSubmit Address: " + this.submitAddress);
@@ -107,20 +113,36 @@ public class inspectionProfile {
         this.pixel = pixel;
     }
 
-    public double getFeretMin() {
-        return feretMin;
+    public double getEnterMin() {
+        return enterMin;
     }
 
-    public void setFeretMin(double feretMin) {
-        this.feretMin = feretMin;
+    public void setEnterMin(double enterMin) {
+        this.enterMin = enterMin;
     }
 
-    public double getFeretMax() {
-        return feretMax;
+    public double getEnterMax() {
+        return enterMax;
     }
 
-    public void setFeretMax(double feretMax) {
-        this.feretMax = feretMax;
+    public void setEnterMax(double enterMax) {
+        this.enterMax = enterMax;
+    }
+
+    public double getExitMin() {
+        return exitMin;
+    }
+
+    public void setExitMin(double exitMin) {
+        this.exitMin = exitMin;
+    }
+
+    public double getExitMax() {
+        return exitMax;
+    }
+
+    public void setExitMax(double exitMax) {
+        this.exitMax = exitMax;
     }
 
     public double getLowerThreshold() {

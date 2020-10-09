@@ -280,17 +280,19 @@ public class SophionMH {
                     }
                 }
 
-                if (pass) {
+                System.out.println("Save Override: " + gui.saveOverride);
+
+                if (pass || gui.saveOverride) {
                     try {
 
-                        String techString = JOptionPane.showInputDialog("Enter technician ID");
                         int techID = 0;
                         boolean goodID = false;
                         while (!goodID) {
+                            String techString = JOptionPane.showInputDialog("Enter technician ID");
                             if (!techString.matches("\\d+")) {
-                                JOptionPane.showInputDialog("Enter a valid integer number");
+                                JOptionPane.showMessageDialog(null, "Invalid input. Enter an integer number.");
                             } else if (techString.length() > 10) {
-                                JOptionPane.showInputDialog("u crazy?");
+                                JOptionPane.showMessageDialog(null, "u crazy?");
                             } else {
                                 goodID = true;
                                 techID = Integer.valueOf(techString);
@@ -300,11 +302,9 @@ public class SophionMH {
 
 
                         JSONObject jsonData = new JSONObject();
-//                        jsonData.append("pass", true);
-
                         JSONObject jsonResults = new JSONObject();
-
                         jsonResults.put("pass", true);
+
 
                         for (measurements measurement : data.measureList) {
 
@@ -317,7 +317,8 @@ public class SophionMH {
 
                         }
 
-                        System.out.println(jsonResults);
+
+
 
                         String submitURL = gui.currentSettings.serverURL + data.currentProfile.submitAddress;
                         System.out.println("Submission URL: " + submitURL);
@@ -325,6 +326,7 @@ public class SophionMH {
 
 
                         //Initialize HTTP stuff
+//                        System.out.println(submitURL);
                         HttpPost submitPost = new HttpPost(submitURL);
                         submitPost.setHeader("Content-type", "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW");
 
@@ -380,7 +382,20 @@ public class SophionMH {
 
                         //Just send it
                         submitPost.setEntity(request);
-                        httpSubmit.HTTPClient(submitPost);
+                        if (httpSubmit.HTTPClient(submitPost) == 1) {
+                            if (!gui.keepPanel) {
+                                gui.tabbedPane.removeTabAt(gui.tabbedPane.indexOfTab(String.valueOf(data.partNum)));
+                                for (measurementsCol part: gui.storage) {
+                                    if (part.partNum == data.partNum) {
+                                        if (gui.storage.remove(part)) {
+                                            gui.sysConsole.println("Removed successfully");
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+
 
                     } catch (JSONException ex) {
                         JOptionPane.showMessageDialog(null, "JSON Exception");
@@ -481,7 +496,7 @@ public class SophionMH {
                 newJpanel.add(overlayLabel);
                 newFrame.add(newJpanel);
                 newFrame.setPreferredSize(new Dimension(640, 700));
-                newFrame.setBounds(500,100,640,700);
+                newFrame.setBounds(500,100,650,750);
                 newFrame.setVisible(true);
             }
 
@@ -613,6 +628,7 @@ public class SophionMH {
     }
 
     public static void analyzeImage(measurementsCol measurement, int position, Image image) {
+
         System.out.println("Analyzing SOMH");
 
         //Do Image Analysis
@@ -631,7 +647,10 @@ public class SophionMH {
 //        IJ.run(imp, "Analyze Particles...", "size=800-Infinity circularity=0.70-1.00 show=[Overlay Masks] clear include in-situ");
         IJ.run(imp, "Analyze Particles...", analysis);
 //                IJ.doCommand(imp, "Analyze Particles...");
-        imp.show();
+        if (gui.showOverlay) {
+            //Only show thresholded image if the debug setting set to true
+            imp.show();
+        }
 
 //                IJ.run("Calculator Plus", "i1=capture i2=original operation=[Add: i2 = (i1+i2) x k1 + k2] k1=1 k2=0 create");
 //                IJ.runPlugIn("Calculator Plus", "i1=capture i2=original operation=[Add: i2 = (i1+i2) x k1 + k2] k1=1 k2=0 create");
@@ -662,14 +681,46 @@ public class SophionMH {
                 measurement.measureList.get(i).setImage(gui.camera.capture);
                 measurement.measureList.get(i).setResults(results);
                 measurement.measureList.get(i).overlay = overlay;
+                measurement.measureList.get(i).setPass(checkPass(position, results, measurement.measureList.get(i).profile));
 
 
             }
         }
 
+
+
     }
 
 
+    public static boolean checkPass(int position, double[] results, inspectionProfile profile) {
+
+        System.out.println("Number of results: " + String.valueOf(results.length));
+        for (double result : results) {
+            System.out.println(result);
+        }
+
+        int numPass = 0;
+
+        for (double result: results) {
+            if (position < 6) {
+                if (result <= profile.enterMax && result >= profile.enterMin) {
+                    numPass++;
+                }
+            } else if (position >= 6) {
+                if (result >= profile.exitMin && result <= profile.exitMax) {
+                    numPass++;
+                }
+            }
+        }
+
+        if (numPass >= profile.holeCount) {
+            return true;
+        } else {
+            return false;
+        }
+
+
+    }
 
 
 

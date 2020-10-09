@@ -10,15 +10,6 @@ import java.awt.*;
 
 public class imgAnalyzer implements cameraListener {
 
-    private static boolean checkPass(double result, inspectionProfile currentProfile){
-
-        if (result < currentProfile.feretMin || result > currentProfile.feretMax) {
-            return false;
-        } else {
-            return true;
-        }
-
-    }
 
 
     public imgAnalyzer() {

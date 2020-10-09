@@ -1,6 +1,13 @@
 import net.imagej.ops.Ops;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.jruby.RubyProcess;
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.python.indexer.Def;
 import org.yecht.IoFileRead;
 
@@ -9,6 +16,7 @@ import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.FileNotFoundException;
@@ -16,7 +24,107 @@ import java.io.IOException;
 
 public class guiHandler {
 
+
+
     public static JFrame newTab;
+
+    static public void getLastSubmit() {
+        JFrame getSubmit = new JFrame("Get latest submission from server: " + gui.currentSettings.serverURL);
+        JPanel mainPanel = new JPanel();
+        JComboBox profileBox = new JComboBox(gui.currentSettings.profileList);
+        profileBox.setEditable(false);
+
+
+        JButton goButt = new JButton("Go");
+        goButt.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getSubmit.dispose();
+                System.out.println("Getting results for " + gui.currentSettings.inspectionProfiles.get(profileBox.getSelectedIndex()).profileName);
+
+                CloseableHttpClient client = HttpClients.createDefault();
+                String submitURL = gui.currentSettings.serverURL + gui.currentSettings.inspectionProfiles.get(profileBox.getSelectedIndex()).submitAddress;
+//                HttpGet submitGet = new HttpGet(submitURL);
+                HttpGet submitGet = new HttpGet("http://192.168.10.111:8000/jsonsubmit");
+
+                CloseableHttpResponse response = null;
+                try {
+                    response = client.execute(submitGet);
+                } catch (IOException exception) {
+                    exception.printStackTrace();
+                }
+
+                System.out.println(response);
+                String responseEntity = null;
+
+                try {
+                    responseEntity = EntityUtils.toString(response.getEntity());
+                    gui.sysConsole.println(responseEntity);
+                } catch (IOException exception) {
+                    exception.printStackTrace();
+                }
+
+                JSONObject obj;
+                try {
+                    obj = new JSONObject(responseEntity);
+
+                    System.out.println("OBJ " + obj);
+
+
+
+
+                    String[] columnNames = {"Part Number", "Batch Date", "Pass", "Technician", "Submission Date"};
+                    JFrame resultsFrame = new JFrame("Showing last 10 submissions for " + gui.currentSettings.inspectionProfiles.get(profileBox.getSelectedIndex()).profileName);
+                    JPanel mainPanel = new JPanel();
+                    JTable resultsTable = new JTable(11, 5);
+
+                    resultsTable.setValueAt(columnNames[0], 0, 0);
+                    resultsTable.setValueAt(columnNames[1], 0, 1);
+                    resultsTable.setValueAt(columnNames[2], 0, 2);
+                    resultsTable.setValueAt(columnNames[3], 0, 3);
+                    resultsTable.setValueAt(columnNames[4], 0, 4);
+
+
+                    for (int d = 1; d <= 10; d++) {
+                        JSONObject subObj = obj.getJSONObject(String.valueOf(d));
+
+                        if (subObj.getBoolean("deleted")) {
+                            resultsTable.setValueAt("DELETED", d, 0);
+                            resultsTable.setValueAt("DELETED", d, 1);
+                            resultsTable.setValueAt("DELETED", d, 2);
+                            resultsTable.setValueAt("DELETED", d, 3);
+                            resultsTable.setValueAt("DELETED", d, 4);
+                        } else {
+                            resultsTable.setValueAt(subObj.get("partNum"), d, 0);
+                            resultsTable.setValueAt(subObj.get("batchDate"), d, 1);
+                            resultsTable.setValueAt(subObj.get("pass"), d, 2);
+                            resultsTable.setValueAt(subObj.get("tech"), d, 3);
+                            resultsTable.setValueAt(subObj.get("submissionDate"), d, 4);
+
+                        }
+
+
+                    }
+
+                    resultsTable.setDefaultEditor(Object.class, null);
+                    mainPanel.add(resultsTable);
+                    resultsFrame.add(mainPanel);
+                    resultsFrame.setSize(500, 250);
+                    resultsFrame.setVisible(true);
+
+
+                } catch (JSONException exJSON) {
+                    JOptionPane.showMessageDialog(null, "JSON Exception occurred");
+
+                }
+            }
+        });
+        mainPanel.add(profileBox);
+        mainPanel.add(goButt);
+        getSubmit.add(mainPanel);
+        getSubmit.setSize(500, 80);
+        getSubmit.setVisible(true);
+    }
 
     static public void addTab() {
 
@@ -421,7 +529,7 @@ public class guiHandler {
         menu.add(menuItem);
         menuBar.add(menu);
         menu = new JMenu("Action");
-        menuItem = new JMenuItem("Force Update");
+        menuItem = new JMenuItem("Force Update Panels");
         menuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -429,6 +537,20 @@ public class guiHandler {
             }
         });
         menu.add(menuItem);
+
+        menuItem = new JMenuItem("Get last submission");
+        menuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //Send a get request for JSON data
+                getLastSubmit();
+
+            }
+        });
+        menu.add(menuItem);
+
+
+
         menuBar.add(menu);
         if (debug) {
             gui.sysConsole.println("Adding debug");
@@ -461,6 +583,50 @@ public class guiHandler {
                 }
             });
             menu.add(console);
+
+            JCheckBoxMenuItem overlay = new JCheckBoxMenuItem("Show Overlays");
+            overlay.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (overlay.getState()) {
+                        gui.showOverlay = true;
+                    } else {
+                        gui.showOverlay = false;
+                    }
+                }
+            });
+            menu.add(overlay);
+
+            JCheckBoxMenuItem keepPanel = new JCheckBoxMenuItem("Keep panel after submit");
+            keepPanel.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (keepPanel.getState()) {
+                        gui.keepPanel = true;
+                    } else {
+                        gui.keepPanel = false;
+                    }
+                }
+            });
+            menu.add(keepPanel);
+
+
+            JCheckBoxMenuItem saveOverride = new JCheckBoxMenuItem("Override save");
+            saveOverride.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (saveOverride.getState()) {
+                        gui.saveOverride = true;
+                    } else {
+                        gui.saveOverride = false;
+                    }
+                }
+            });
+            menu.add(saveOverride);
+
+
+
+
             menuBar.add(menu);
             SwingUtilities.updateComponentTreeUI(gui.main);
         }

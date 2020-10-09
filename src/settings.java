@@ -27,10 +27,7 @@ public class settings {
     public String listProfiles() {
         StringBuilder returnString = new StringBuilder();
         for (int i = 0; i < inspectionProfiles.size(); i++) {
-
             gui.sysConsole.println(inspectionProfiles.get(i).toString());
-
-
             if (i == inspectionProfiles.size() - 1) {
                 returnString.append(inspectionProfiles.get(i).profileName);
             } else {
@@ -120,12 +117,21 @@ public class settings {
                                         if (IPSettingsNS.item(h).getNodeName().equalsIgnoreCase("pixel")) {
                                             currentProfile.setPixel(Double.parseDouble(IPSettingsNS.item(h).getTextContent()));
                                         }
-                                        if (IPSettingsNS.item(h).getNodeName().equalsIgnoreCase("feretmin")) {
-                                            currentProfile.setFeretMin(Double.parseDouble(IPSettingsNS.item(h).getTextContent()));
+
+
+                                        if (IPSettingsNS.item(h).getNodeName().equalsIgnoreCase("entermin")) {
+                                            currentProfile.setEnterMin(Double.parseDouble(IPSettingsNS.item(h).getTextContent()));
                                         }
-                                        if (IPSettingsNS.item(h).getNodeName().equalsIgnoreCase("feretmax")) {
-                                            currentProfile.setFeretMax(Double.parseDouble(IPSettingsNS.item(h).getTextContent()));
+                                        if (IPSettingsNS.item(h).getNodeName().equalsIgnoreCase("entermax")) {
+                                            currentProfile.setEnterMax(Double.parseDouble(IPSettingsNS.item(h).getTextContent()));
                                         }
+                                        if (IPSettingsNS.item(h).getNodeName().equalsIgnoreCase("exitmin")) {
+                                            currentProfile.setExitMin(Double.parseDouble(IPSettingsNS.item(h).getTextContent()));
+                                        }
+                                        if (IPSettingsNS.item(h).getNodeName().equalsIgnoreCase("exitmax")) {
+                                            currentProfile.setExitMax(Double.parseDouble(IPSettingsNS.item(h).getTextContent()));
+                                        }
+
                                         if (IPSettingsNS.item(h).getNodeName().equalsIgnoreCase("blackbackground")) {
                                             if (IPSettingsNS.item(h).getTextContent().equalsIgnoreCase("true")) {
                                                 currentProfile.setBlackBackground(true);

@@ -85,36 +85,17 @@ public class measurements {
         hasImage = false;
     }
 
-    private boolean checkPass(double[] results) {
-        int pass = 0;
-        for (double result : results) {
-            if (result > profile.feretMax || result < profile.feretMin) {
-
-            } else {
-                pass++;
-            }
-        }
-        if (pass >= profile.holeCount) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 
     public void setResults(double[] results) {
-        System.out.println("SETTING RESULTS");
         this.results = results;
 
-        if (results.length < profile.holeCount) {
-            this.pass = false;
-        } else if (checkPass(results)) {
-            this.pass = true;
-        } else {
-            this.pass = false;
-        }
 
 
 
+    }
+
+    public void setPass(Boolean pass) {
+        this.pass = pass;
     }
 
 

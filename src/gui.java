@@ -21,6 +21,10 @@ public class gui {
     static int debugCount = 0;
     public static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
+    public static boolean showOverlay = false;
+    public static boolean keepPanel = false;
+    public static boolean submitOverride = false;
+    public static boolean saveOverride = false;
 
     static JFrame main = new JFrame("Potomac Inspect");
     public static measurementsCol submission;

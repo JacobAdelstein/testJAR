@@ -31,8 +31,6 @@ import java.util.List;
 
 public class httpSubmit {
 
-
-
     private static String getDateString() {
         DateTime date = new DateTime(); //Make a new date obj
         StringBuilder dateString = new StringBuilder();  //Create our stringbuilder
@@ -55,10 +53,11 @@ public class httpSubmit {
         return dateString.toString();
     }
 
-    public static void HTTPClient(HttpPost post) {
-        CloseableHttpClient client = HttpClients.createDefault();
+    public static int HTTPClient(HttpPost post) {
 
+        CloseableHttpClient client = HttpClients.createDefault();
         CloseableHttpResponse response = null;
+
         try {
             response = client.execute(post);
         } catch (org.apache.http.conn.HttpHostConnectException ex) {
@@ -83,11 +82,14 @@ public class httpSubmit {
             obj = new JSONObject(responseEntity);
             int responseCode = obj.getInt("ResponseCode");
             if (responseCode == 1) {
-                JOptionPane.showMessageDialog(null, "Submission Successful");
+                JOptionPane.showMessageDialog(null, obj.getString("tech") + " submitted part " + String.valueOf(obj.getInt("partNum")));
+                return 1;
             } else if (responseCode == 0) {
                 JOptionPane.showMessageDialog(null, obj.getString("error"));
+                return 0;
             } else {
                 JOptionPane.showMessageDialog(null, "Response Code: " + String.valueOf(responseCode) + "\n" + obj.getString("error"));
+                return responseCode;
 
             }
 
@@ -96,9 +98,7 @@ public class httpSubmit {
 
         }
 
-
-
-
+    return 99;
     }
 
 
@@ -109,9 +109,6 @@ public class httpSubmit {
 
         Image img1 = null;
         CloseableHttpClient client = HttpClients.createDefault();
-//        HttpGet httpget = new HttpGet("http://192.168.10.111:8000/APITest");
-//        httpget.
-//        System.out.print(EntityUtils.toString(response.getEntity()));
         HttpPost submitPost = new HttpPost(gui.currentSettings.serverURL);
         submitPost.setHeader("Content-type", "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW");
         for (int i = 0; i < gui.storage.size(); i++) {
@@ -128,8 +125,6 @@ public class httpSubmit {
 
 
 
-//        ArrayList<NameValuePair> formparams = new ArrayList<NameValuePair>();
-//        formparams.add(new BasicNameValuePair("partNum", String.valueOf(partNum)));
         HttpEntity entity = MultipartEntityBuilder
                 .create()
                 .setMode(HttpMultipartMode.BROWSER_COMPATIBLE)
@@ -139,7 +134,6 @@ public class httpSubmit {
                 .addTextBody("tech", String.valueOf(techID))
                 .setBoundary("----WebKitFormBoundary7MA4YWxkTrZu0gW").build();
 
-//        System.out.println(EntityUtils.toString(entity));
 
 
         submitPost.setEntity(entity);
@@ -149,7 +143,6 @@ public class httpSubmit {
         } catch (org.apache.http.conn.HttpHostConnectException ex) {
             JOptionPane.showMessageDialog(null, "Unable to connect to server");
             System.out.println(ex.getMessage());
-
         }
         gui.sysConsole.println(response.toString());
         String responseEntity = EntityUtils.toString(response.getEntity());
@@ -162,15 +155,6 @@ public class httpSubmit {
             JOptionPane.showMessageDialog(null, obj.getString("error"));
         } else {
             JOptionPane.showMessageDialog(null, "Response Code: " + String.valueOf(responseCode) + "\n" + obj.getString("error"));
-
         }
-
-
     }
-
-
-
-
-
-
 }

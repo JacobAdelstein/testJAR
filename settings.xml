@@ -17,8 +17,10 @@
 			<distance>1</distance>
 			<known>1</known>
 			<pixel>1</pixel>
-			<feretMin>40</feretMin>
-			<feretMax>50</feretMax>
+			<enterMin>0</enterMin>
+			<enterMax>5000</enterMax>
+			<exitMin>40</exitMin>
+			<exitMax>50</exitMax>
 			<blackBackground>false</blackBackground>
 			<holeCount>10</holeCount>
 			<submitAddress>"/jsonsubmit"</submitAddress>
@@ -34,10 +36,12 @@
 			<distance>1</distance>
 			<known>1</known>
 			<pixel>1</pixel>
-			<feretMin>20</feretMin>
-			<feretMax>30</feretMax>
+			<enterMin>0</enterMin>
+			<enterMax>5000</enterMax>
+			<exitMin>40</exitMin>
+			<exitMax>50</exitMax>
 			<blackBackground>false</blackBackground>
-			<holeCount>10</holeCount>
+			<holeCount>5</holeCount>
 			<submitAddress>/jsonsubmit</submitAddress>
 
 		</testProfile2>
@@ -54,8 +58,10 @@
 			<distance>1</distance>
 			<known>1</known>
 			<pixel>1</pixel>
-			<feretMin>0</feretMin>
-			<feretMax>5</feretMax>
+			<enterMin>40</enterMin>
+			<enterMax>50</enterMax>
+			<exitMin>40</exitMin>
+			<exitMax>50</exitMax>
 			<blackBackground>true</blackBackground>
 			<holeCount>5</holeCount>
 			<submitAddress>"/jsonsubmit"</submitAddress>
