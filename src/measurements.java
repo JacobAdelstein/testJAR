@@ -15,6 +15,7 @@ public class measurements {
     public static final int B_BotLeft = 10;
 
 
+
     double[] results;
     inspectionProfile profile;
     Boolean pass;

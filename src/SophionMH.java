@@ -276,9 +276,11 @@ public class SophionMH {
                     }
                 }
 
-                offlinesave.filewrite(data);
-
-
+                try {
+                    offlinesave.filewrite(data);
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
 
 
                 System.out.println("Save Override: " + gui.saveOverride);

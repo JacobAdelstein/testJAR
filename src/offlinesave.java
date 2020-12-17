@@ -5,76 +5,67 @@ import java.io.IOException;
 
 public class offlinesave {
 
-    public static void filewrite(measurementsCol data){
+    public static void filewrite(measurementsCol data) throws IOException {
+
+        //Specify the file name and path here
+        File file = new File("C:/Users/jacob/IdeaProjects/testJAR/src/OfflineSaveResults.txt");
+
+        /* This logic will make sure that the file
+         * gets created if it is not present at the
+         * specified location*/
+        if (!file.exists()) {
+            file.createNewFile();
+        }
 
 
 
-        BufferedWriter bw = null;
+        FileWriter fw = new FileWriter(file);
+        BufferedWriter bw = new BufferedWriter(fw);
+
         try {
-              String profiletype = "Profile Type:" + data.currentProfile.profileType;
+              bw.write("Profile Type:" + data.currentProfile.profileType);
 
-              String profileName = "Profile Name:" + data.currentProfile.profileName;
+              bw.write("\nProfile Name:" + data.currentProfile.profileName);
 
-              String submitAddress = "Submit Address:" + data.currentProfile.submitAddress;
+              bw.write("\nSubmit Address:" + data.currentProfile.submitAddress);
 
-              String sizeMin = "Size Min:" + data.currentProfile.sizeMin;
+              bw.write("\nSize Min:" + data.currentProfile.sizeMin);
 
-              String sizeMax = "Size Max:" + data.currentProfile.sizeMax;
+              bw.write("\nSize Max:" + data.currentProfile.sizeMax);
 
-              String circularityMin = "Circularity Min:" + data.currentProfile.circularityMin;
+              bw.write("\nCircularity Min:" + data.currentProfile.circularityMin);
 
-              String circularityMax = "Circularity Max:" + data.currentProfile.circularityMax;
+              bw.write("\nCircularity Max:" + data.currentProfile.circularityMax);
 
-              String distance = "Distance:" + data.currentProfile.distance;
+              bw.write("\nDistance:" + data.currentProfile.distance);
 
-              String known = "Known:" + data.currentProfile.known;
+              bw.write( "\nKnown:" + data.currentProfile.known);
 
-              String pixel = "Pixel:" + data.currentProfile.pixel;
+              bw.write("\nPixel:" + data.currentProfile.pixel);
 
-              String enterMin = "enterMin:" + data.currentProfile.enterMin;
+              bw.write( "\nenterMin:" + data.currentProfile.enterMin);
 
-              String enterMax = "enterMax:" + data.currentProfile.enterMax;
+              bw.write("\nenterMax:" + data.currentProfile.enterMax);
 
-              String exitMin =  "exitMin:" + data.currentProfile.exitMin;
+              bw.write( "\nexitMin:" + data.currentProfile.exitMin);
 
-              String exitMax = "exitMax" + data.currentProfile.exitMax;
+              bw.write( "\nexitMax:" + data.currentProfile.exitMax);
 
-              String lowerThreshold = "lowerThreshold" + data.currentProfile.lowerThreshold;
+              bw.write( "\nlowerThreshold:" + data.currentProfile.lowerThreshold);
 
-              String upperThreshold = "upperThreshold" + data.currentProfile.upperThreshold;
+              bw.write( "\nupperThreshold:" + data.currentProfile.upperThreshold);
 
-              String holeCount = "holeCount" + data.currentProfile.holeCount;
+              bw.write( "\nholeCount:" + data.currentProfile.holeCount);
 
 
-            //Specify the file name and path here
-            File file = new File("C:/Users/jacob/IdeaProjects/testJAR/src/OfflineSaveResults.txt");
 
-            /* This logic will make sure that the file
-             * gets created if it is not present at the
-             * specified location*/
-            if (!file.exists()) {
-                file.createNewFile();
-            }
+              for (measurements measurement : data.measureList) {
+                  bw.write("\n\nData for hole: " + measurement.position);
+                  for (double result : measurement.results) {
+                      bw.write("\n  " + result);
+                  }
+              }
 
-            FileWriter fw = new FileWriter(file);
-            bw = new BufferedWriter(fw);
-            bw.write(profiletype);
-            bw.write(profileName);
-            bw.write(submitAddress);
-            bw.write(sizeMin);
-            bw.write(sizeMax);
-            bw.write(circularityMin);
-            bw.write(circularityMax);
-            bw.write(distance);
-            bw.write(known);
-            bw.write(pixel);
-            bw.write(enterMin);
-            bw.write(enterMax);
-            bw.write(exitMax);
-            bw.write(exitMin);
-            bw.write(lowerThreshold);
-            bw.write(upperThreshold);
-            bw.write(holeCount);
 
 
             System.out.println("File written Successfully");
