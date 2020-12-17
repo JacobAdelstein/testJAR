@@ -1,23 +1,18 @@
-import com.github.sarxos.webcam.Webcam;
-import com.github.sarxos.webcam.WebcamLockException;
-import com.github.sarxos.webcam.WebcamPanel;
+import com.github.sarxos.webcam.*;
 import com.github.sarxos.webcam.ds.civil.LtiCivilDriver;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import static java.lang.Thread.sleep;
 
 
 interface cameraListener {
     void imageTaken();
 }
 
-public class cameraControl extends gui {
+public class cameraControl extends gui implements WebcamDiscoveryListener, MouseListener, WindowListener, WebcamListener{
     Webcam webcam;
     static WebcamPanel panel;
     Integer position;
@@ -29,29 +24,28 @@ public class cameraControl extends gui {
     }
 
 
-
     public cameraControl() throws InterruptedException {
+
         Webcam.setDriver(new LtiCivilDriver());
 
-        webcam = Webcam.getDefault();
-        webcam.close();
+
+//        webcam = Webcam.getDefault();
+//        webcam.close();
+        picker();
 
         //Sometimes the webcam can remain open when restarting the program, causing a crash.
         //So, we'll attempt to wait a second and try again if we can't open the webcam
-        try {
-            webcam.open();
-        } catch (WebcamLockException ex) {
-            System.out.println("Waiting for camera to close.... Trying again");
-            sleep(2000);
-            webcam.open();
-        }
-        panel = new WebcamPanel(webcam);
-
-
-
-        gui.sysConsole.println("Camera Initialized");
-
-
+//        try {
+//            webcam.open();
+//        } catch (WebcamLockException ex) {
+//            System.out.println("Waiting for camera to close.... Trying again");
+//            sleep(2000);
+//            webcam.open();
+//        }
+//        panel = new WebcamPanel(webcam);
+//
+//
+//        gui.sysConsole.println("Camera Initialized");
 
 
     }
@@ -103,6 +97,7 @@ public class cameraControl extends gui {
 
 
     }
+
     public void stopLive() {
         panel.pause();
     }
@@ -115,6 +110,149 @@ public class cameraControl extends gui {
         for (cameraListener hl : listeners)
             hl.imageTaken();
 
+
+    }
+
+    public void picker() {
+
+     Webcam.addDiscoveryListener((WebcamDiscoveryListener) this);
+
+
+
+//        addWindowListener((WindowListener) this);
+//        addMouseListener((MouseListener) this);
+
+
+
+        JButton b = new JButton("Submit");
+        WebcamPicker picker = new WebcamPicker();
+
+
+
+        JFrame p = new JFrame();
+
+        p.add(picker);
+        p.setVisible(true);
+
+
+
+//        webcam.addWebcamListener((WebcamListener) this);
+
+
+
+
+
+        p.setVisible(true);
+
+        p.getContentPane().setLayout(new FlowLayout());
+
+        b.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                webcam = picker.getSelectedWebcam();
+                webcam.open();
+                panel = new WebcamPanel(webcam);
+
+
+
+            }
+        });
+        p.add(b);
+
+    }
+
+
+
+
+    @Override
+    public void webcamFound(WebcamDiscoveryEvent event) {
+
+    }
+
+    @Override
+    public void webcamGone(WebcamDiscoveryEvent event) {
+
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        startLive();
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
+    }
+
+    @Override
+    public void windowOpened(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowClosed(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowIconified(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowActivated(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent e) {
+
+    }
+
+    @Override
+    public void webcamOpen(WebcamEvent we) {
+
+    }
+
+    @Override
+    public void webcamClosed(WebcamEvent we) {
+
+    }
+
+    @Override
+    public void webcamDisposed(WebcamEvent we) {
+
+    }
+
+    @Override
+    public void webcamImageObtained(WebcamEvent we) {
 
     }
 }

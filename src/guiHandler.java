@@ -1,25 +1,15 @@
-import net.imagej.ops.Ops;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.jruby.RubyProcess;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.python.indexer.Def;
-import org.yecht.IoFileRead;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class guiHandler {
@@ -492,9 +482,6 @@ public class guiHandler {
         }
 
 //            gui.tabbedPane.setComponentAt(i, scrollPane);
-
-
-
     }
 
     public static JMenuBar getMenu(boolean debug){

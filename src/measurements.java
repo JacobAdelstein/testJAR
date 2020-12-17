@@ -1,4 +1,3 @@
-import org.yecht.Data;
 
 import java.awt.*;
 

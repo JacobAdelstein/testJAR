@@ -1,12 +1,13 @@
 import org.xml.sax.SAXException;
+
 import javax.swing.*;
+import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
-import javax.xml.parsers.ParserConfigurationException;
 import java.util.ArrayList;
 
 
@@ -161,9 +162,14 @@ public class gui {
 
         gui.sysConsole.println("Profiles loaded: " + currentSettings.listProfiles());
 
-        //Setup camera control
-        camera = new cameraControl();
+        //offlinesave.filewrite();
 
+
+        //Setup camera control
+
+
+
+        camera = new cameraControl();
 
 
         //Setup tabs

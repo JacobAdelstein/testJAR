@@ -20,6 +20,10 @@ public class inspectionProfile {
     int holeCount;
     Boolean blackBackground;
 
+    public inspectionProfile() {
+
+    }
+
     @Override
     public String toString() {
         StringBuilder returnString = new StringBuilder("\n\n------------Profile: " + this.profileName + " ------------\n");
