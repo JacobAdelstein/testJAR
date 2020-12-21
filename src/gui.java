@@ -205,5 +205,9 @@ public class gui {
         });
         main.setVisible(true);
 
+        settings.settingsframe();
+
+
+
     }
 }

@@ -65,10 +65,28 @@
 			<blackBackground>true</blackBackground>
 			<holeCount>5</holeCount>
 			<submitAddress>"/jsonsubmit"</submitAddress>
-
-
 		</SophionMH>
-		
+
+		<jacob profileType="SophionMH">
+			<lowerThreshold>0</lowerThreshold>
+			<upperThreshold>69</upperThreshold>
+			<sizeMin>0</sizeMin>
+			<sizeMax>1</sizeMax>
+			<circularityMin>0.5</circularityMin>
+			<circularityMax>1</circularityMax>
+			<distance>1</distance>
+			<known>1</known>
+			<pixel>1</pixel>
+			<enterMin>40</enterMin>
+			<enterMax>50</enterMax>
+			<exitMin>40</exitMin>
+			<exitMax>50</exitMax>
+			<blackBackground>true</blackBackground>
+			<holeCount>5</holeCount>
+			<submitAddress>"/jsonsubmit"</submitAddress>
+		</jacob>
+
+
 	</InspectionProfile>
 	
 </settings>

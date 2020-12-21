@@ -26,12 +26,51 @@ public class measurements {
     Integer position;
     Integer partNum;
 
+
+
+    public String positionname() {
+
+
+            if (position == 1) {
+                return "FrontTopLeft";
+            }
+
+            if (position == 2) {
+                return "FrontTopRight";
+            }
+            if (position == 3) {
+                return "FrontCenter";
+            }
+            if (position == 4) {
+                return "FrontBottomLeft";
+            }
+            if (position == 5) {
+                return "FrontBottomRight";
+            }
+            if (position == 6) {
+                return "BackTopLeft";
+            }
+            if (position == 7) {
+                return "BackTopRight";
+            }
+            if (position == 8) {
+                return "BackCenter";
+            }
+            if (position == 9) {
+                return "BackBottomRight";
+            }
+            else{
+                return "BackBottomLeft";
+            }
+
+    }
     public measurements(Integer pos, Integer partNumber, inspectionProfile currentProfile) {
         position = pos;
         partNum = partNumber;
         hasImage = false;
         pass = false;
         profile = currentProfile;
+
 
         switch (position) {
             case F_TopLeft:
@@ -89,14 +128,12 @@ public class measurements {
     public void setResults(double[] results) {
         this.results = results;
 
-
-
-
     }
 
     public void setPass(Boolean pass) {
         this.pass = pass;
     }
+
 
 
 }

@@ -2,10 +2,17 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class offlinesave {
 
-    public static void filewrite(measurementsCol data) throws IOException {
+
+
+
+
+
+    public static void filewrite(measurementsCol data, int techid) throws IOException {
 
         //Specify the file name and path here
         File file = new File("C:/Users/jacob/IdeaProjects/testJAR/src/OfflineSaveResults.txt");
@@ -23,7 +30,9 @@ public class offlinesave {
         BufferedWriter bw = new BufferedWriter(fw);
 
         try {
-              bw.write("Profile Type:" + data.currentProfile.profileType);
+            bw.write("TechID:"+ techid);
+            bw.write("\nDate:"+ LocalDate.now() + " "+ "Time:" + LocalTime.now());
+              bw.write("\nProfile Type:" + data.currentProfile.profileType);
 
               bw.write("\nProfile Name:" + data.currentProfile.profileName);
 
@@ -60,7 +69,7 @@ public class offlinesave {
 
 
               for (measurements measurement : data.measureList) {
-                  bw.write("\n\nData for hole: " + measurement.position);
+                  bw.write("\n\nData for hole: " + measurement.positionname());
                   for (double result : measurement.results) {
                       bw.write("\n  " + result);
                   }

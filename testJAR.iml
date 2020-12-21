@@ -15,5 +15,14 @@
     <orderEntry type="library" name="httpclient-4.5.12" level="project" />
     <orderEntry type="library" name="httpclient-win-4.5.12" level="project" />
     <orderEntry type="library" name="httpclient-osgi-4.5.12" level="project" />
+    <orderEntry type="library" name="fluent-hc-4.5.12" level="project" />
+    <orderEntry type="library" name="jna-platform-4.5.2" level="project" />
+    <orderEntry type="library" name="jna-4.5.2" level="project" />
+    <orderEntry type="library" name="swt" level="project" />
+    <orderEntry type="library" name="httpmime-4.5.12" level="project" />
+    <orderEntry type="library" name="httpcore-4.4.13" level="project" />
+    <orderEntry type="library" name="httpclient-cache-4.5.12" level="project" />
+    <orderEntry type="library" name="commons-logging-1.2" level="project" />
+    <orderEntry type="library" name="commons-codec-1.11" level="project" />
   </component>
 </module>

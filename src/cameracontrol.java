@@ -114,8 +114,7 @@ public class cameraControl extends gui implements WebcamDiscoveryListener, Mouse
     }
 
     public void picker() {
-
-     Webcam.addDiscoveryListener((WebcamDiscoveryListener) this);
+        Webcam.addDiscoveryListener((WebcamDiscoveryListener) this);
 
 
 
@@ -152,12 +151,22 @@ public class cameraControl extends gui implements WebcamDiscoveryListener, Mouse
                 webcam = picker.getSelectedWebcam();
                 webcam.open();
                 panel = new WebcamPanel(webcam);
-
-
+                p.dispose();
 
             }
+
         });
         p.add(b);
+
+        p.setTitle("Select Webcam");
+        p.setSize(600, 100);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        double width = screenSize.getWidth();
+        double height = screenSize.getHeight();
+
+        p.setBounds((int) ((width - p.getWidth()) / 2), (int) ((height - p.getHeight()) / 2), 600, 100);
+
+
 
     }
 

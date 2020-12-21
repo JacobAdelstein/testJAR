@@ -276,11 +276,6 @@ public class SophionMH {
                     }
                 }
 
-                try {
-                    offlinesave.filewrite(data);
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
 
 
                 System.out.println("Save Override: " + gui.saveOverride);
@@ -300,6 +295,13 @@ public class SophionMH {
                                 goodID = true;
                                 techID = Integer.valueOf(techString);
                             }
+
+                        }
+
+                        try {
+                            offlinesave.filewrite(data,techID);
+                        } catch (IOException ioException) {
+                            ioException.printStackTrace();
                         }
 
 
