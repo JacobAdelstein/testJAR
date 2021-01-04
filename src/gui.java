@@ -24,8 +24,8 @@ public class gui {
 
     public static boolean showOverlay = false;
     public static boolean keepPanel = false;
-    public static boolean submitOverride = false;
     public static boolean saveOverride = false;
+    public static boolean offlineSave = false;
 
     static JFrame main = new JFrame("Potomac Inspect");
     public static measurementsCol submission;

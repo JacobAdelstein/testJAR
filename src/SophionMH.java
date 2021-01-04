@@ -298,10 +298,14 @@ public class SophionMH {
 
                         }
 
-                        try {
-                            offlinesave.filewrite(data,techID);
-                        } catch (IOException ioException) {
-                            ioException.printStackTrace();
+
+                        if (gui.offlineSave) {
+                            try {
+                                offlinesave.filewrite(data,techID);
+                            } catch (IOException ioException) {
+                                ioException.printStackTrace();
+                            }
+
                         }
 
 

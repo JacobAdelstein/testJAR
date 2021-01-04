@@ -55,14 +55,15 @@ public class settingsframe {
         tp.setBorder(new LineBorder(Color.BLACK, 0));
 
         tp.add("General", generalPanel);
-        generalPanel.add(new settingsEntry("Server Address", newSettings.serverURL));
+        settingsEntry URLField = new settingsEntry("Server Address", newSettings.serverURL);
+        generalPanel.add(URLField);
 
-        JPanel browsepanel = new JPanel();
-        browsepanel.setLayout(new GridLayout(1,2));
+        JPanel browsePanel = new JPanel();
+        browsePanel.setLayout(new GridLayout(1,2));
 
 
-        JPanel labelpanbel = new JPanel();
-        labelpanbel.setLayout(new GridLayout(1,2));
+        JPanel labelPanel = new JPanel();
+        labelPanel.setLayout(new GridLayout(1,2));
         JPanel filePanel = new JPanel();
         filePanel.setLayout(new GridLayout(1,2));
         JLabel fileLabel = new JLabel("Offline Save Location");
@@ -76,20 +77,20 @@ public class settingsframe {
                 chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                 int option = chooser.showOpenDialog(settingsframe);
                 if (option == JFileChooser.APPROVE_OPTION) {
-                    newSettings.offlineSaveDirectory = chooser.getSelectedFile().getAbsolutePath();
+                    fileField.setText(chooser.getSelectedFile().getAbsolutePath());
                     System.out.println("New path: " + newSettings.offlineSaveDirectory);
                 }
             }
         });
 
 
-        labelpanbel.add(fileLabel);
-        browsepanel.add(fileField);
-        browsepanel.add(browseButton);
+        labelPanel.add(fileLabel);
+        browsePanel.add(fileField);
+        browsePanel.add(browseButton);
 
 
-        filePanel.add(labelpanbel);
-        filePanel.add(browsepanel);
+        filePanel.add(labelPanel);
+        filePanel.add(browsePanel);
       
 
 
@@ -113,6 +114,10 @@ public class settingsframe {
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                System.out.println("URL IS: " + URLField.getText());
+                newSettings.serverURL = URLField.getText();
+                newSettings.offlineSaveDirectory = fileField.getText();
+
 
                 for(settingsPanel panel : panelList) {
 
@@ -137,12 +142,10 @@ public class settingsframe {
                 } catch (TransformerException transformerException) {
                     transformerException.printStackTrace();
                 }
-
                 settingsframe.dispose();
-                gui.
             }
-
         });
+
         savePanel.add(saveButton);
 
 
@@ -209,8 +212,14 @@ public class settingsframe {
                                 //Ensure it's an element node
                                 if (globalSettingsNL.item(k).getNodeName().equals("serverURL")) {
                                     //Read in server URL global setting
-//                                    serverURL = globalSettingsNL.item(k).getTextContent();
+                                    globalSettingsNL.item(k).setTextContent(newSettings.serverURL);
                                 }
+
+                                if (globalSettingsNL.item(k).getNodeName().equals("offlineSaveDirectory")) {
+                                    globalSettingsNL.item(k).setTextContent(newSettings.offlineSaveDirectory);
+                                }
+
+
                             }
                         }
                     }

@@ -5,9 +5,11 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xml.sax.SAXException;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
+import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
@@ -498,6 +500,10 @@ public class guiHandler {
         menuItem = new JMenuItem("New", KeyEvent.VK_N);
 
 
+
+
+
+
         menuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -509,12 +515,46 @@ public class guiHandler {
             }
         });
 
+
         menu.add(menuItem);
         menu.addSeparator();
+
+        menuItem = new JMenuItem("Settings", KeyEvent.VK_N);
+
+
+        menuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    settingsframe settings = new settingsframe();
+                } catch (NumberFormatException ex) {
+
+                } catch (SAXException saxException) {
+                    saxException.printStackTrace();
+                } catch (ParserConfigurationException parserConfigurationException) {
+                    parserConfigurationException.printStackTrace();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+
+
+            }
+        });
+
+
+        menu.add(menuItem);
+        menu.addSeparator();
+
+
+
         menuItem = new JMenuItem("Exit", KeyEvent.VK_X);
         menuItem.addActionListener(new gui.CloseListener());
         menu.add(menuItem);
         menuBar.add(menu);
+
+
+
+
         menu = new JMenu("Action");
         menuItem = new JMenuItem("Force Update Panels");
         menuItem.addActionListener(new ActionListener() {
@@ -535,28 +575,36 @@ public class guiHandler {
             }
         });
         menu.add(menuItem);
-
-
-
         menuBar.add(menu);
+
+
+
+
+        menu = new JMenu("Option");
+        JCheckBoxMenuItem offlineCheckBox = new JCheckBoxMenuItem("Offline Save?");
+        offlineCheckBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (offlineCheckBox.getState()) {
+                    gui.sysConsole.println("Offline Mode Enabled");
+                    gui.offlineSave = offlineCheckBox.getState();
+
+                } else {
+                    gui.sysConsole.println("Offline Mode Disabled");
+                    gui.offlineSave = offlineCheckBox.getState();
+
+                }
+
+            }
+        });
+        menu.add(offlineCheckBox);
+        menuBar.add(menu);
+
+
+
         if (debug) {
             gui.sysConsole.println("Adding debug");
             menu = new JMenu("Debug");
-            JCheckBoxMenuItem menuItemCheck = new JCheckBoxMenuItem("Offline Save");
-            menuItemCheck.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    if (menuItemCheck.getState() == true) {
-                        gui.sysConsole.println("Offline Mode Enabled");
-
-                    } else {
-                        gui.sysConsole.println("Offline Mode Disabled");
-
-                    }
-
-                }
-            });
-            menu.add(menuItemCheck);
 
             JCheckBoxMenuItem console = new JCheckBoxMenuItem("Show Debug Console");
             console.addActionListener(new ActionListener() {
@@ -610,6 +658,7 @@ public class guiHandler {
                 }
             });
             menu.add(saveOverride);
+
 
 
 

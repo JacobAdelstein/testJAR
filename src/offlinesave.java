@@ -1,3 +1,5 @@
+import org.joda.time.DateTime;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -12,8 +14,6 @@ public class offlinesave {
 
     public static void filewrite(measurementsCol data, int techid) throws IOException {
 
-
-        int partNum = 999;
         boolean success = false;
         String fileExtension = ".txt";
 
@@ -24,8 +24,14 @@ public class offlinesave {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
 
+        DateTime dt = new DateTime();
+
+
+
+
+
         int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
+        int month = dt.getMonthOfYear();
         int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
         System.out.println("YEAR: " + year + " MONTH: " + month + " day: " + dayOfMonth);
 
@@ -48,7 +54,7 @@ public class offlinesave {
 
 
         filePath.append("\\");
-        filePath.append(String.valueOf(partNum) + fileExtension);
+        filePath.append(String.valueOf(data.partNum) + fileExtension);
 
 
         File txt = new File(filePath.toString());

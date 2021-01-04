@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><settings>
 
 	<GlobalSettings>
-		<serverURL>http://192.168.10.111:8000</serverURL>
-			<offlineSaveDirectory>C:\Users\jacob\IdeaProjects\testJAR\Directory</offlineSaveDirectory>
+		<serverURL>http://192.168.10.111:8008</serverURL>
+		<offlineSaveDirectory>C:\Users\jacob\IdeaProjects\testJAR\Directory</offlineSaveDirectory>
 	</GlobalSettings>
 	
 	
@@ -15,7 +15,7 @@
 			<sizeMax>3000.0</sizeMax>
 			<circularityMin>0.7</circularityMin>
 			<circularityMax>1.0</circularityMax>
-			<distance>1.0</distance>
+			<distance>200.0</distance>
 			<known>1.0</known>
 			<pixel>1.0</pixel>
 			<enterMin>0</enterMin>
