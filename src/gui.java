@@ -50,6 +50,7 @@ public class gui {
         }
     }
 
+
     public static class AcquireListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -85,66 +86,66 @@ public class gui {
         return false;
     }
 
-//    static void addTab(JTabbedPane tabbedPane) {
-//
-//        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-//        JFrame newTab = new JFrame("New Measurement");
-//        JPanel mainPanel = new JPanel();
-//
-//
-//        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
-//        mainPanel.add(Box.createVerticalGlue());
-//        JPanel partNumPanel = new JPanel();
-//        partNumPanel.setLayout(new BoxLayout(partNumPanel, BoxLayout.LINE_AXIS));
-//        JLabel partNumLabel = new JLabel("Enter Part Number: ");
-//        partNumLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-//        partNumPanel.add(partNumLabel);
-//        JTextField partNumField = new JTextField();
-//        partNumField.setAlignmentX(Component.RIGHT_ALIGNMENT);
-//        partNumField.setMaximumSize(new Dimension(100,20));
-//        partNumPanel.add(partNumField);
-//        mainPanel.add(partNumPanel);
-//        mainPanel.add(Box.createVerticalGlue());
-//        JPanel profileSelectorPanel = new JPanel();
-//        profileSelectorPanel.setLayout(new BoxLayout(profileSelectorPanel, BoxLayout.LINE_AXIS));
-//        JLabel profileLabel = new JLabel("Select a inspection profile: ");
-//        profileSelectorPanel.add(profileLabel);
-//        JComboBox profileBox = new JComboBox(gui.currentSettings.profileList);
-//        profileBox.setMaximumSize(new Dimension(150, 20));
-//        profileSelectorPanel.add(profileBox);
-//        mainPanel.add(profileSelectorPanel);
-//        mainPanel.add(Box.createVerticalGlue());
-//
-//
-//        JButton submit = new JButton("Create Measurement");
-//        submit.setAlignmentX(Component.CENTER_ALIGNMENT);
-//        submit.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                try {
-//                    int partNum = Integer.parseInt(partNumField.getText());
-//                    if (partExists(partNum)) {
-//                        JOptionPane.showMessageDialog(mainPanel, "Measurement already exists for part number " + String.valueOf(partNum));                    } else {
-//                        measurementsCol currentMeasure = new measurementsCol(partNum, currentSettings.inspectionProfiles.get(profileBox.getSelectedIndex()));
-//                        storage.add(currentMeasure);
-//                        tabbedPane.addTab(String.valueOf(partNum), null);
-//                        guiHandler.updateTabbedPane();
-//                        newTab.setVisible(false);
-//                    }
-//                } catch (NumberFormatException exception) {
-//                    JOptionPane.showMessageDialog(mainPanel, "Please enter an integer number");
-//                }
-//            }
-//        });
-//        mainPanel.add(submit);
-//        mainPanel.add(Box.createVerticalGlue());
-//
-//        newTab.setBounds(screenSize.width/2-250,screenSize.height/2-100,500,200);
-//        newTab.add(mainPanel);
-//        newTab.setVisible(true);
-//        newTab.getRootPane().setDefaultButton(submit);
-//
-//    }
+    static void addTab(JTabbedPane tabbedPane) {
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        JFrame newTab = new JFrame("New Measurement");
+        JPanel mainPanel = new JPanel();
+
+
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
+        mainPanel.add(Box.createVerticalGlue());
+        JPanel partNumPanel = new JPanel();
+        partNumPanel.setLayout(new BoxLayout(partNumPanel, BoxLayout.LINE_AXIS));
+        JLabel partNumLabel = new JLabel("Enter Part Number: ");
+        partNumLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        partNumPanel.add(partNumLabel);
+        JTextField partNumField = new JTextField();
+        partNumField.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        partNumField.setMaximumSize(new Dimension(100,20));
+        partNumPanel.add(partNumField);
+        mainPanel.add(partNumPanel);
+        mainPanel.add(Box.createVerticalGlue());
+        JPanel profileSelectorPanel = new JPanel();
+        profileSelectorPanel.setLayout(new BoxLayout(profileSelectorPanel, BoxLayout.LINE_AXIS));
+        JLabel profileLabel = new JLabel("Select a inspection profile: ");
+        profileSelectorPanel.add(profileLabel);
+        JComboBox profileBox = new JComboBox(gui.currentSettings.profileList);
+        profileBox.setMaximumSize(new Dimension(150, 20));
+        profileSelectorPanel.add(profileBox);
+        mainPanel.add(profileSelectorPanel);
+        mainPanel.add(Box.createVerticalGlue());
+
+
+        JButton submit = new JButton("Create Measurement");
+        submit.setAlignmentX(Component.CENTER_ALIGNMENT);
+        submit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    int partNum = Integer.parseInt(partNumField.getText());
+                    if (partExists(partNum)) {
+                        JOptionPane.showMessageDialog(mainPanel, "Measurement already exists for part number " + String.valueOf(partNum));                    } else {
+                        measurementsCol currentMeasure = new measurementsCol(partNum, submission.batchDate, currentSettings.inspectionProfiles.get(profileBox.getSelectedIndex()));
+                        storage.add(currentMeasure);
+                        tabbedPane.addTab(String.valueOf(partNum), null);
+                        guiHandler.updateTabbedPane();
+                        newTab.setVisible(false);
+                    }
+                } catch (NumberFormatException exception) {
+                    JOptionPane.showMessageDialog(mainPanel, "Please enter an integer number");
+                }
+            }
+        });
+        mainPanel.add(submit);
+        mainPanel.add(Box.createVerticalGlue());
+
+        newTab.setBounds(screenSize.width/2-250,screenSize.height/2-100,500,200);
+        newTab.add(mainPanel);
+        newTab.setVisible(true);
+        newTab.getRootPane().setDefaultButton(submit);
+
+    }
 
 
 
@@ -205,7 +206,6 @@ public class gui {
         });
         main.setVisible(true);
 
-        settings.settingsframe();
 
 
 

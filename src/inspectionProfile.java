@@ -11,14 +11,49 @@ public class inspectionProfile {
     double pixel;
     double enterMin;
     double enterMax;
-
-
     double exitMin;
     double exitMax;
     double lowerThreshold;
     double upperThreshold;
     int holeCount;
     Boolean blackBackground;
+
+    public double getCircularityMin() {
+        return circularityMin;
+    }
+
+    public double getCircularityMax() {
+        return circularityMax;
+    }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public double getKnown() {
+        return known;
+    }
+
+    public double getPixel() {
+        return pixel;
+    }
+
+    public void setCircularityMin(double circularityMin) {
+        this.circularityMin = circularityMin;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
+    }
+
+    public void setKnown(double known) {
+        this.known = known;
+    }
+
+    public void setPixel(double pixel) {
+        this.pixel = pixel;
+    }
+
 
     public inspectionProfile() {
 
@@ -75,46 +110,6 @@ public class inspectionProfile {
 
     public void setSizeMax(double sizeMax) {
         this.sizeMax = sizeMax;
-    }
-
-    public double getCircularityMin() {
-        return circularityMin;
-    }
-
-    public void setCircularityMin(double circularityMin) {
-        this.circularityMin = circularityMin;
-    }
-
-    public double getCircularityMax() {
-        return circularityMax;
-    }
-
-    public void setCircularityMax(double circularityMax) {
-        this.circularityMax = circularityMax;
-    }
-
-    public double getDistance() {
-        return distance;
-    }
-
-    public void setDistance(double distance) {
-        this.distance = distance;
-    }
-
-    public double getKnown() {
-        return known;
-    }
-
-    public void setKnown(double known) {
-        this.known = known;
-    }
-
-    public double getPixel() {
-        return pixel;
-    }
-
-    public void setPixel(double pixel) {
-        this.pixel = pixel;
     }
 
     public double getEnterMin() {
@@ -204,4 +199,7 @@ public class inspectionProfile {
     }
 
 
+    public void setCircularityMax(double circularityMax) {
+        this.circularityMax = circularityMax;
+    }
 }

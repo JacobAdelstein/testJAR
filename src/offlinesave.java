@@ -4,29 +4,66 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Calendar;
+import java.util.Date;
 
 public class offlinesave {
 
 
-
-
-
-
     public static void filewrite(measurementsCol data, int techid) throws IOException {
 
-        //Specify the file name and path here
-        File file = new File("C:/Users/jacob/IdeaProjects/testJAR/src/OfflineSaveResults.txt");
 
-        /* This logic will make sure that the file
-         * gets created if it is not present at the
-         * specified location*/
-        if (!file.exists()) {
-            file.createNewFile();
+        int partNum = 999;
+        boolean success = false;
+        String fileExtension = ".txt";
+
+        System.out.println("test");
+        String baseDir = gui.currentSettings.offlineSaveDirectory;
+
+        Date date = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+        System.out.println("YEAR: " + year + " MONTH: " + month + " day: " + dayOfMonth);
+
+        StringBuilder filePath = new StringBuilder(baseDir);
+        filePath.append("\\");
+        filePath.append(year);
+        filePath.append("\\");
+        filePath.append(month);
+        filePath.append("\\");
+        filePath.append(dayOfMonth);
+
+
+        try {
+            File file = new File(filePath.toString());
+            success = file.mkdirs();
+            System.out.println("Created? " + success);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
 
+        filePath.append("\\");
+        filePath.append(String.valueOf(partNum) + fileExtension);
 
-        FileWriter fw = new FileWriter(file);
+
+        File txt = new File(filePath.toString());
+        if (!txt.exists()) {
+            System.out.println("File created? " + txt.createNewFile());
+        } else {
+            System.out.println("FILE EXISTS");
+        }
+
+        System.out.println(filePath);
+
+
+
+
+        FileWriter fw = new FileWriter(txt);
         BufferedWriter bw = new BufferedWriter(fw);
 
         try {
