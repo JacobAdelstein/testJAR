@@ -1,18 +1,24 @@
 import com.github.sarxos.webcam.*;
 import com.github.sarxos.webcam.ds.civil.LtiCivilDriver;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.RenderedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 
 interface cameraListener {
     void imageTaken();
 }
 
-public class cameraControl extends gui implements WebcamDiscoveryListener, MouseListener, WindowListener, WebcamListener{
+public class cameraControl extends gui implements WebcamDiscoveryListener, MouseListener, WindowListener, WebcamListener {
     Webcam webcam;
     static WebcamPanel panel;
     Integer position;
@@ -27,26 +33,9 @@ public class cameraControl extends gui implements WebcamDiscoveryListener, Mouse
     public cameraControl() throws InterruptedException {
 
         Webcam.setDriver(new LtiCivilDriver());
-
-
-//        webcam = Webcam.getDefault();
-//        webcam.close();
         picker();
-
-        //Sometimes the webcam can remain open when restarting the program, causing a crash.
-        //So, we'll attempt to wait a second and try again if we can't open the webcam
-//        try {
-//            webcam.open();
-//        } catch (WebcamLockException ex) {
-//            System.out.println("Waiting for camera to close.... Trying again");
-//            sleep(2000);
-//            webcam.open();
-//        }
+//        webcam.open();
 //        panel = new WebcamPanel(webcam);
-//
-//
-//        gui.sysConsole.println("Camera Initialized");
-
 
     }
 
@@ -54,9 +43,7 @@ public class cameraControl extends gui implements WebcamDiscoveryListener, Mouse
         return webcam.getName();
     }
 
-    public WebcamPanel getPanel() {
-        return panel;
-    }
+
 
     public void startLive() {
         JFrame window = new JFrame("Live View");
@@ -113,62 +100,157 @@ public class cameraControl extends gui implements WebcamDiscoveryListener, Mouse
 
     }
 
+    public void takePic() {
+
+        JFrame clayscodewindow = new JFrame("Live View");
+        clayscodewindow.add(panel);
+        clayscodewindow.setResizable(true);
+        clayscodewindow.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        clayscodewindow.pack();
+        clayscodewindow.setVisible(true);
+        clayscodewindow.setSize(1360, 768);
+
+        panel.resume();
+        panel.setFPSDisplayed(true);
+        panel.setDisplayDebugInfo(true);
+        panel.setImageSizeDisplayed(true);
+        panel.setMirrored(false);
+        clayscodewindow.pack();
+        clayscodewindow.setSize(1360, 768);
+
+        JButton acquireButton = new JButton("Acquire");
+        JFrame acquireFrame = new JFrame("Acquire Button");
+        acquireFrame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+        acquireFrame.setSize(400, 70);
+
+
+        acquireButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gui.sysConsole.println("Acquire Clicked");
+//                panel.pause();
+
+                JFileChooser chooser = new JFileChooser();
+                chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                chooser.setMultiSelectionEnabled(false);
+                chooser.setAcceptAllFileFilterUsed(false);
+                chooser.setFileFilter(new FileFilter() {
+                    @Override
+                    public boolean accept(File f) {
+                        if (f.getName().toLowerCase(Locale.ROOT).endsWith("jpg")) {
+                            return true;
+                        }
+                        if (f.isDirectory()) {
+                            return true;
+                        }
+                        return false;
+                    }
+
+                    @Override
+                    public String getDescription() {
+                        return ".JPG file";
+                    }
+                });
+                chooser.setDialogTitle("Select a save location");
+                int option = chooser.showSaveDialog(gui.main);
+                if (option == JFileChooser.APPROVE_OPTION) {
+//                    if (!chooser.getSelectedFile().getAbsolutePath().toLowerCase().endsWith("jpg")) {
+//                        chooser.setSelectedFile(new File(chooser.getSelectedFile().getAbsolutePath() + ".jpg"));
+//                    }
+
+                    File imgFile = new File(chooser.getSelectedFile() + ".jpg");
+                    System.out.println(chooser.getSelectedFile());
+                    try {
+                        ImageIO.write((RenderedImage) panel.getImage(), "jpg", imgFile);
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                    }
+                    acquireFrame.dispose();
+                    clayscodewindow.dispose();
+
+                }
+
+
+                panel.resume();
+
+
+            }
+        });
+        acquireFrame.add(acquireButton);
+        clayscodewindow.setVisible(true);
+        acquireFrame.setVisible(true);
+
+
+    }
+
     public void picker() {
-        Webcam.addDiscoveryListener((WebcamDiscoveryListener) this);
-
-
-
-//        addWindowListener((WindowListener) this);
-//        addMouseListener((MouseListener) this);
-
-
 
         JButton b = new JButton("Submit");
         WebcamPicker picker = new WebcamPicker();
 
+        List<Webcam> camList = Webcam.getWebcams();
+
+        if (camList.size() == 0) {
+            JOptionPane.showMessageDialog(null, "No Webcam Detected");
+            System.out.println("No Webcam detected, exiting...");
+            System.exit(0);
+        }
+
+        JFrame cameraselectionframe = new JFrame();
+        cameraselectionframe.add(picker);
+        if(camList.size()==1){
+            webcam = Webcam.getDefault();
+            webcam.open();
+            panel = new WebcamPanel(webcam);
+            main.setVisible(true);
+            gui.loadMain();
 
 
-        JFrame p = new JFrame();
-
-        p.add(picker);
-        p.setVisible(true);
 
 
-
-//        webcam.addWebcamListener((WebcamListener) this);
-
+        }
 
 
+        if (camList.size() > 1) {
+            cameraselectionframe.setVisible(true);
+        }
 
-
-        p.setVisible(true);
-
-        p.getContentPane().setLayout(new FlowLayout());
-
+        cameraselectionframe.getContentPane().setLayout(new FlowLayout());
         b.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 webcam = picker.getSelectedWebcam();
                 webcam.open();
                 panel = new WebcamPanel(webcam);
-                p.dispose();
+                cameraselectionframe.dispose();
+                main.setVisible(true);
+                gui.loadMain();
+
+
+
+
+
 
             }
-
         });
-        p.add(b);
 
-        p.setTitle("Select Webcam");
-        p.setSize(600, 100);
+        cameraselectionframe.add(b);
+        cameraselectionframe.setTitle("Select Webcam");
+        cameraselectionframe.setSize(600, 100);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         double width = screenSize.getWidth();
         double height = screenSize.getHeight();
 
-        p.setBounds((int) ((width - p.getWidth()) / 2), (int) ((height - p.getHeight()) / 2), 600, 100);
-
-
+        cameraselectionframe.setBounds((int) ((width - cameraselectionframe.getWidth()) / 2), (int) ((height - cameraselectionframe.getHeight()) / 2), 600, 100);
 
     }
+
+
+
+
+
+
+
 
 
 
@@ -190,7 +272,6 @@ public class cameraControl extends gui implements WebcamDiscoveryListener, Mouse
 
     @Override
     public void mousePressed(MouseEvent e) {
-
 
 
     }

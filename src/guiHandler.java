@@ -195,7 +195,6 @@ public class guiHandler {
 //
 //
 //        JButton submit = new JButton("Create Measurement");
-//        submit.setAlignmentX(Component.CENTER_ALIGNMENT);
 //
 //        mainPanel.add(submit);
 //        mainPanel.add(Box.createVerticalGlue());
@@ -266,7 +265,8 @@ public class guiHandler {
                         return this;
                     }
                 });
-                newFrame.setSize(300, 650);
+                newFrame.setSize(200, 650);
+                newFrame.setBackground(Color.black);
                 newJpanel.add(resultsList);
 
                 JButton remove = new JButton("Remove");
@@ -276,7 +276,7 @@ public class guiHandler {
                         resultsModel.removeElementAt(resultsList.getSelectedIndex());
                     }
                 });
-
+                newJpanel.setBackground(Color.white);
                 newJpanel.add(remove);
                 newFrame.add(newJpanel);
                 newFrame.setVisible(true);
@@ -540,6 +540,28 @@ public class guiHandler {
 
             }
         });
+
+        menu.add(menuItem);
+        menu.addSeparator();
+
+        menuItem = new JMenuItem("Take Screenshot", KeyEvent.VK_N);
+
+
+        menuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+
+                gui.camera.takePic();
+
+
+
+
+
+
+            }
+        });
+
 
 
         menu.add(menuItem);

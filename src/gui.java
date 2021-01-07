@@ -165,22 +165,26 @@ public class gui {
 
         //offlinesave.filewrite();
 
-
-        //Setup camera control
-
-
-
-        camera = new cameraControl();
-
-
-        //Setup tabs
-        tabbedPane = new JTabbedPane();
-//        tabbedPane.setBounds(50,50, 500, 600);
-        tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-
         //Setup Image analysis listener
         imgAnalyzer analyzer = new imgAnalyzer();
+
+
+        //Setup camera control
+        camera = new cameraControl();
         camera.addListener(analyzer);
+
+
+
+
+
+
+    }
+
+    public static void loadMain() {
+        //Setup tabs
+        tabbedPane = new JTabbedPane();
+        tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+
         main.setJMenuBar(guiHandler.getMenu(currentSettings.debug));
         main.setSize(950, 950);
         main.setLayout(new GridLayout(1,1));
@@ -206,8 +210,7 @@ public class gui {
         });
         main.setVisible(true);
 
-
-
-
     }
+
+
 }

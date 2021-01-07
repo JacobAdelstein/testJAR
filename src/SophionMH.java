@@ -17,6 +17,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.RenderedImage;
 import java.io.*;
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -561,6 +562,48 @@ public class SophionMH {
             returnPanel.add(fail);
             returnPanel.setBackground(new Color(245, 66, 66));
         }
+
+        double biggestnum = Integer.MIN_VALUE;;
+        double smallestnum = Integer.MAX_VALUE;;
+
+        for(int i = 0; i<currentMeasurement.results.length; i++){
+
+            if (biggestnum < currentMeasurement.results[i]){
+
+            biggestnum = currentMeasurement.results[i];
+
+            }
+        }
+
+        for(int i = 0; i<currentMeasurement.results.length; i++){
+
+            if (smallestnum > currentMeasurement.results[i]){
+
+                smallestnum = currentMeasurement.results[i];
+            }
+        }
+
+
+
+
+
+        JLabel counter = new JLabel("Hole Count:" + " " + currentMeasurement.results.length);
+        counter.setHorizontalAlignment(2);
+        returnPanel.add(counter);
+
+        DecimalFormat numberFormat = new DecimalFormat("#.000");
+
+        JLabel minholesize = new JLabel("Min:" + " " + numberFormat.format(smallestnum));
+        minholesize.setHorizontalAlignment(2);
+        returnPanel.add(minholesize);
+
+        JLabel maxholesize = new JLabel("Max:" + " " + numberFormat.format(biggestnum));
+        maxholesize.setHorizontalAlignment(2);
+        returnPanel.add(maxholesize);
+
+
+
+
 
         returnPanel.addMouseListener(new MouseListener() {
             @Override
