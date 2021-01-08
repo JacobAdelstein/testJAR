@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><settings>
 
 	<GlobalSettings>
-		<serverURL>http://192.168.10.111:8008</serverURL>
+		<serverURL>http://192.168.10.141</serverURL>
 		<offlineSaveDirectory>C:\Users\jacob\IdeaProjects\testJAR\Directory</offlineSaveDirectory>
 	</GlobalSettings>
 	
@@ -24,7 +24,7 @@
 			<exitMax>50</exitMax>
 			<blackBackground>false</blackBackground>
 			<holeCount>10</holeCount>
-			<submitAddress>"/jsonsubmit"</submitAddress>
+			<submitAddress>/jsonsubmit</submitAddress>
 		</testProfile>
 		
 		<testProfile2 profileType="SophionMH">
@@ -65,7 +65,7 @@
 			<exitMax>50</exitMax>
 			<blackBackground>true</blackBackground>
 			<holeCount>5</holeCount>
-			<submitAddress>"/jsonsubmit"</submitAddress>
+			<submitAddress>/jsonsubmit</submitAddress>
 		</SophionMH>
 
 		<jacob profileType="SophionMH">
@@ -84,7 +84,7 @@
 			<exitMax>50</exitMax>
 			<blackBackground>true</blackBackground>
 			<holeCount>5</holeCount>
-			<submitAddress>"/jsonsubmit"</submitAddress>
+			<submitAddress>/jsonsubmit</submitAddress>
 		</jacob>
 
 
