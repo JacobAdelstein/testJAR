@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?><settings>
+
+	<GlobalSettings>
+		<serverURL>http://192.168.10.111:8000</serverURL>
+			<offlineSaveDirectory>C:\Users\jacob\IdeaProjects\testJAR\Directory</offlineSaveDirectory>
+	</GlobalSettings>
+	
+	
+	<InspectionProfile>
+	
+		<testProfile profileType="test">
+			<lowerThreshold>0.0</lowerThreshold>
+			<upperThreshold>50.0</upperThreshold>
+			<sizeMin>100.0</sizeMin>
+			<sizeMax>3000.0</sizeMax>
+			<circularityMin>0.7</circularityMin>
+			<circularityMax>1.0</circularityMax>
+			<distance>1.0</distance>
+			<known>1.0</known>
+			<pixel>1.0</pixel>
+			<enterMin>0</enterMin>
+			<enterMax>5000</enterMax>
+			<exitMin>40</exitMin>
+			<exitMax>50</exitMax>
+			<blackBackground>false</blackBackground>
+			<holeCount>10</holeCount>
+			<submitAddress>"/jsonsubmit"</submitAddress>
+		</testProfile>
+		
+		<testProfile2 profileType="SophionMH">
+			<lowerThreshold>0.0</lowerThreshold>
+			<upperThreshold>120.0</upperThreshold>
+			<sizeMin>10.0</sizeMin>
+			<sizeMax>700.0</sizeMax>
+			<circularityMin>0.5</circularityMin>
+			<circularityMax>1.0</circularityMax>
+			<distance>1.0</distance>
+			<known>1.0</known>
+			<pixel>1.0</pixel>
+			<enterMin>0</enterMin>
+			<enterMax>5000</enterMax>
+			<exitMin>0</exitMin>
+			<exitMax>5000</exitMax>
+			<blackBackground>false</blackBackground>
+			<holeCount>5</holeCount>
+			<submitAddress>/jsonsubmit</submitAddress>
+
+		</testProfile2>
+		
+		
+		
+		<SophionMH profileType="SophionMH">
+			<lowerThreshold>0.0</lowerThreshold>
+			<upperThreshold>69.0</upperThreshold>
+			<sizeMin>0.0</sizeMin>
+			<sizeMax>1.0</sizeMax>
+			<circularityMin>0.5</circularityMin>
+			<circularityMax>1.0</circularityMax>
+			<distance>1.0</distance>
+			<known>1.0</known>
+			<pixel>1.0</pixel>
+			<enterMin>40</enterMin>
+			<enterMax>50</enterMax>
+			<exitMin>40</exitMin>
+			<exitMax>50</exitMax>
+			<blackBackground>true</blackBackground>
+			<holeCount>5</holeCount>
+			<submitAddress>"/jsonsubmit"</submitAddress>
+		</SophionMH>
+
+		<jacob profileType="SophionMH">
+			<lowerThreshold>0.0</lowerThreshold>
+			<upperThreshold>69.0</upperThreshold>
+			<sizeMin>666.0</sizeMin>
+			<sizeMax>1.0</sizeMax>
+			<circularityMin>0.5</circularityMin>
+			<circularityMax>1.0</circularityMax>
+			<distance>1.0</distance>
+			<known>1.0</known>
+			<pixel>1.0</pixel>
+			<enterMin>40</enterMin>
+			<enterMax>50</enterMax>
+			<exitMin>40</exitMin>
+			<exitMax>50</exitMax>
+			<blackBackground>true</blackBackground>
+			<holeCount>5</holeCount>
+			<submitAddress>"/jsonsubmit"</submitAddress>
+		</jacob>
+
+
+	</InspectionProfile>
+	
+</settings>

@@ -1,0 +1,24 @@
+TechID:1258
+Date:2021-01-04 Time:14:11:23.293
+Profile Type:SophionMH
+Profile Name:SophionMH
+Submit Address:"/jsonsubmit"
+Size Min:0.0
+Size Max:1.0
+Circularity Min:0.5
+Circularity Max:1.0
+Distance:1.0
+Known:1.0
+Pixel:1.0
+enterMin:40.0
+enterMax:50.0
+exitMin:40.0
+exitMax:50.0
+lowerThreshold:0.0
+upperThreshold:69.0
+holeCount:5
+
+Data for hole: FrontTopLeft
+  0.0
+
+Data for hole: FrontTopRight
